@@ -1,0 +1,33 @@
+{
+	"pages": [
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登 录"
+			}
+		}
+		,{
+            "path" : "pages/register/register",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "注  册",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+		,{
+            "path" : "pages/home/myJoin",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "white",
+		"navigationBarBackgroundColor": "#5055A8",
+		"backgroundColor": "#f8f8f8"
+	}
+}
