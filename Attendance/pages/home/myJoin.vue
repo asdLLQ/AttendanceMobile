@@ -10,7 +10,48 @@
 				<text>取消</text>
 			</view>
 		</view>
-		我加入的
+		<view class="cu-list menu-avatar">
+			<view class="cu-item">
+				<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view>
+				<view class="content">
+					<view class="text-grey">工程实践</view>
+					<view class="text-gray text-sm flex">任课老师：
+						<view class="text-cut">
+							池芝标
+						</view> 
+					</view>
+					<view class="text-gray text-sm flex">任课周期：
+						<view class="text-cut">
+							1-18周
+						</view> 
+					</view>
+				</view>
+				<view class="action">
+					<view class="text-grey text-xs">签到</view>
+				</view>
+			</view>
+			<view class="cu-item ">
+				<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
+				<view class="content">
+					<view class="text-pink"><view class="text-cut">工程训练</view></view>
+					<view class="text-gray text-sm flex">任课老师：
+						<view class="text-cut">
+							池芝标
+						</view> 
+					</view>
+					<view class="text-gray text-sm flex">任课周期：
+						<view class="text-cut">
+							1-18周
+						</view> 
+					</view>
+				</view>
+				<view class="action">
+					<!-- <image></image> -->
+					<view class="text-grey text-xs">签到</view>
+				</view>
+			</view>
+
+		</view>
 	</view>
 </template>
 

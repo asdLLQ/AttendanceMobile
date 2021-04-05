@@ -1,31 +1,7 @@
 <template>
 	<view class="login">
-		<view class="login-type">
-			<view v-for="(item,index) in loginTypeList" :key="index" @click="loginType = index" :class="{act: loginType === index}"
-			 class="login-type-btn">{{item}}</view>
-		</view>
-		<view class="login-logo">
-			<image class="sun-icon-img" src="../../static/login.jpg"/>
-		</view>	
-		<view class="login-main" v-if="loginType === 0">
-			<view class="login-list flex border-all">
-				<view class="iconfont icon-shoujihao flex"></view>
-				<view class="login-input">
-					<input type="number" maxlength="11" placeholder="请输入手机号" class="is-input1 " v-model="username" />
-				</view>
-			</view>
-			<view class="login-list flex border-all">
-				<view class="iconfont icon-yanzhengma flex"></view>
-				<view class="login-input">
-					<input type="text" maxlength="12" placeholder="请输入密码" password class="is-input1 " v-model="password" />
-				</view>
-			</view>
-			<button class="cu-btn login-btn" @tap="doLogin">登  录</button>
-			<view class="login-tip">
-				<navigator url="../register/register">注册账号</navigator>
-			</view>
-		</view>
-		<view class="login-main" v-else>
+		
+		<view class="login-main">
 			<view class="login-list flex border-all">
 				<view class="iconfont icon-shoujihao flex"></view>
 				<view class="login-input">
@@ -40,21 +16,20 @@
 				<view class="code-sx"></view>
 				<view class="codeimg" @click.stop="getCode()">{{getCodeText}}</view>
 			</view>
-			<button class="cu-btn login-btn">登  录</button>
-			<view class="login-tip">
-				<navigator url="../register/register">注册账号</navigator>
-			</view>
-		</view>
-		<view class="login-footer">
-			<view class="footer-tip flex">其他登录方式</view>
-			<view class="footer-other flex">
-				<view class="other-list">
-					<image src="../../static/loginQQ.png" mode="aspectFill"></image>
-				</view>
-				<view class="other-list">
-					<image src="../../static/loginVX.png" mode="aspectFill"></image>
+			<view class="login-list flex border-all">
+				<view class="iconfont icon-yanzhengma flex"></view>
+				<view class="login-input">
+					<input type="number" maxlength="6" placeholder="请输入修改密码" class="is-input1 " v-model="code" />
 				</view>
 			</view>
+			<view class="login-list flex border-all">
+				<view class="iconfont icon-yanzhengma flex"></view>
+				<view class="login-input">
+					<input type="number" maxlength="6" placeholder="请再次输入密码" class="is-input1 " v-model="code" />
+				</view>
+			</view>
+			<button class="cu-btn login-btn" @tap="doLogin">学生注册</button>
+			<button class="cu-btn login-btn" @tap="doLogin">教师注册</button>
 		</view>
 	</view>
 </template>
@@ -69,22 +44,14 @@
 				key: '',
 				getCodeText: '获取验证码',
 				getCodeBtnColor: "#ffffff",
-				getCodeisWaiting: false,    //判断是否能发送验证码
-				platform: uni.getSystemInfoSync().platform,
-				loginType: 0,
-				loginTypeList: ['密码登录', '免密登录'],
-				hasProvider: false,
-				username: '',
-				password: '',
-				webUrlIP:"http://119.23.34.173:8080"
 			}
 		},
 		onLoad() {
-			//this.checkGuide();
+			this.checkGuide();
 		},
 		methods: {
-			//检测是否有启动缓存，如果没有，就是第一次启动，第一次启动就去 欢迎页
 			checkGuide() {
+				// 思路： 检测是否有启动缓存，如果没有，就是第一次启动，第一次启动就去 启动介绍页面
 				const launchFlag = uni.getStorageSync('launchFlag');
 				if (launchFlag) {
 					this.isLogin();
@@ -103,11 +70,11 @@
 						//有登录信息
 						console.log("已登录用户：", value);
 						uni.switchTab({
-							url: '/pages/login/login'
+							url: '/pages/index/index'
 						});
 					}
 				} catch (e) {
-					console.log("(isLogin)出错了")
+
 				}
 			},
 
@@ -167,39 +134,32 @@
 					holdTime--;
 				}, 1000)
 			},
-			
-			//用户名密码登录
 			doLogin() {
 				let _this = this;
-				uni.hideKeyboard() //隐藏软键盘
-				console.log(this.username+ " " + this.password)
-				console.log(_this.webUrlIP + '/auth/login')
+				uni.hideKeyboard()
 				uni.request({
-					url: _this.webUrlIP + '/auth/login',
+					url: _this.websiteUrl + '/token/sys/login-sms',
 					data: {
-						'account': _this.username,
-						'password': _this.password,
+						'key': _this.key,
+						'code': _this.code,
+						'phone': _this.phone
 					},
 					method: 'POST',
-					
+					header: {
+						'Content-Type': 'application/x-www-form-urlencoded',
+					},
 					success: (res) => {
-						console.log("登录成功1")
-						if (res.statusCode == 200) {
-							console.log("登录成功2")
-							uni.navigateTo({
-							  url: '../../pages/home/myJoin',
-							})
+						if (res.data.code == 200) {
+							_this.login(true, res.data.data, function() {
+								_this.getRongyToken();
+							});
 						} else {
 							uni.showToast({
-								title: '不正确',
+								title: '验证码不正确',
 								icon: "none"
 							});
 							return false;
 						}
-					},
-					fail: (res) => {
-						console.log("登录失败")
-						console.log(res)
 					}
 				});
 			},
@@ -213,20 +173,6 @@
 	page {
 		background-color: #FFFFFF;
 	}
-	.login-type {
-		display: flex;
-		justify-content: center;
-	}
-	
-	.login-type-btn {
-		line-height: 30px;
-		margin: 0px 15px;
-	}
-	
-	.login-type-btn.act {
-		color: #0FAEFF;
-		border-bottom: solid 1px #0FAEFF;
-	}
 	.flex{
 		display: flex;
 	}
@@ -237,19 +183,7 @@
 		display: flex;
 		flex-direction: column;
 	}
-	
-	.login-logo {
-		width: 248upx;
-		height: 242upx;
-		padding-bottom: 50upx;
-		margin: 120upx auto 0 auto;
-	
-		image {
-			width: 100%;
-			height: 100%;
-		}
-	}
-	
+		
 	.login-main {
 		flex: 1;
 		padding: 0 70upx;
@@ -330,47 +264,4 @@
 		}
 	}
 
-	.login-footer {
-		padding: 0 70upx;
-
-		.footer-tip {
-			align-items: center;
-			font-size: 24upx;
-			color: #999999;
-			text-align: center;
-
-			&:before {
-				flex: 1;
-				content: '';
-				height: 2upx;
-				background: #D0D0D0;
-				margin-right: 30upx;
-			}
-
-			&:after {
-				margin-left: 30upx;
-				flex: 1;
-				content: '';
-				height: 2upx;
-				background: #D0D0D0;
-			}
-
-		}
-
-		.footer-other {
-			padding: 40upx 0 100upx 0;
-			justify-content: center;
-
-			.other-list {
-				width: 80upx;
-				height: 80upx;
-				margin: 0 75upx;
-
-				image {
-					width: 100%;
-					height: 100%;
-				}
-			}
-		}
-	}
 </style>

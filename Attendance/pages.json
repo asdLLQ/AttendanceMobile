@@ -19,12 +19,22 @@
             "path" : "pages/home/myJoin",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+				"navigationBarTitleText": "我的班课"
+				//"navigationStyle":"custom" 
+            }
+            
+        }
+        ,{
+            "path" : "pages/forgot/forgot",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "忘记密码",
                 "enablePullDownRefresh": false
             }
             
         }
     ],
+
 	"globalStyle": {
 		"navigationBarTextStyle": "white",
 		"navigationBarBackgroundColor": "#5055A8",
