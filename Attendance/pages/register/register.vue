@@ -134,9 +134,9 @@
 				uni.request({
 					url: _this.websiteUrl + '/token/sys/login-sms',
 					data: {
-						'key': _this.key,
+						'phone': _this.phone,
 						'code': _this.code,
-						'phone': _this.phone
+						'confirmCode': _this.confirmCode
 					},
 					method: 'POST',
 					header: {
