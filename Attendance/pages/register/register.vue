@@ -19,7 +19,7 @@
 			<view class="login-list flex border-all">
 				<view class="iconfont icon-yanzhengma flex"></view>
 				<view class="login-input">
-					<input type="number" maxlength="6" placeholder="请输入密码" class="is-input1 " v-model="code" />
+					<input type="number" maxlength="6" placeholder="请输入密码" class="is-input1 " v-model="confirmCode" />
 				</view>
 			</view>
 			<view class="login-list flex border-all">
@@ -28,7 +28,7 @@
 					<input type="number" maxlength="6" placeholder="请再次输入密码" class="is-input1 " v-model="code" />
 				</view>
 			</view>
-			<button class="cu-btn login-btn" @tap="doLogin">学生注册</button>
+			<button class="cu-btn login-btn" @tap="doRegister">学生注册</button>
 			<button class="cu-btn login-btn" @tap="doLogin">教师注册</button>
 		</view>
 	</view>
@@ -41,6 +41,7 @@
 			return {
 				phone: "",
 				code: '',
+				confirmCode: '',
 				key: '',
 				getCodeText: '获取验证码',
 				getCodeBtnColor: "#ffffff",
@@ -50,34 +51,22 @@
 			this.checkGuide();
 		},
 		methods: {
-			checkGuide() {
-				// 思路： 检测是否有启动缓存，如果没有，就是第一次启动，第一次启动就去 启动介绍页面
-				const launchFlag = uni.getStorageSync('launchFlag');
-				if (launchFlag) {
-					this.isLogin();
-				} else {
-					uni.redirectTo({
-						url: '/pages/guide/list'
-					});
-				}
-			},
-
-			isLogin() {
-				// 判断缓存中是否登录过，直接登录
+			
+			isUser() {
+				// 判断缓存中是否存在此用户
 				try {
 					const value = uni.getStorageSync('access_token');
 					if (value) {
-						//有登录信息
-						console.log("已登录用户：", value);
+						//有用户信息
+						console.log("已注册用户：", value);
 						uni.switchTab({
-							url: '/pages/index/index'
+							url: '/pages/login/login'
 						});
 					}
 				} catch (e) {
-
+					console.log("isUser出错了")
 				}
 			},
-
 			Timer() {},
 			getCode() {
 				let _this = this;
@@ -95,7 +84,6 @@
 				_this.getCodeText = "发送中..."
 				_this.getCodeisWaiting = true;
 				_this.getCodeBtnColor = "rgba(255,255,255,0.5)"
-
 				uni.request({
 					url: _this.websiteUrl + '/sms/notification-sms/codes',
 					data: {
@@ -134,7 +122,7 @@
 					holdTime--;
 				}, 1000)
 			},
-			doLogin() {
+			doRegister() {
 				let _this = this;
 				uni.hideKeyboard()
 				//模板示例部分验证规则
@@ -269,6 +257,5 @@
 			}
 		}
 	}
-
 
 </style>
