@@ -2,7 +2,7 @@ import store from "@/store/index.js";
 
 // API 请求根路径
 var root = "http://127.0.0.1:8080"; //本地
-// var root = "http://119.23.34.173:8080"; //服务器
+// var root = "http://119.23.34.173:8080";  //服务器
 
 var system = "auth";
 var api = "api";
