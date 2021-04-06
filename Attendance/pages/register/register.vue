@@ -132,7 +132,7 @@
 				// } 
 
 				uni.request({
-					url: _this.websiteUrl + '/token/sys/login-sms',
+					url: _this.websiteUrl + '/auth/register',
 					data: {
 						'phone': _this.phone,
 						'code': _this.code,
@@ -144,9 +144,10 @@
 					},
 					success: (res) => {
 						if (res.data.code == 200) {
-							_this.login(true, res.data.data, function() {
-								_this.getRongyToken();
-							});
+							console.log("注册成功")
+							uni.navigateTo({
+							  url: '../../pages/home/myJoin',
+							})
 						} else {
 							uni.showToast({
 								title: '验证码不正确',
