@@ -1,5 +1,12 @@
 <template>
 	<view>
+		<scroll-view scroll-x class="bg-white nav">
+			<view class="flex text-center">
+				<view class="cu-item flex-sub" :class="index==TabCur?'text-orange cur':''" v-for="(item,index) in 2" :key="index" @tap="tabSelect" :data-id="index">
+					Tab{{index}}
+				</view>                                                                                                                                                                                                            
+			</view>
+		</scroll-view>
 		<view class="cu-bar bg-cyan search">
 			<view class="search-form radius">
 				<text class="cuIcon-search"></text>

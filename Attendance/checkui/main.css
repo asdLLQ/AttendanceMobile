@@ -3429,7 +3429,7 @@ scroll-view.cu-steps .cu-item {
 }
 
 .bg-cyan {
-	background-color: #5055a8;
+	background-color: #1CBBB4;
 	color: #ffffff;
 }
 
@@ -3887,11 +3887,16 @@ scroll-view.cu-steps .cu-item {
 	color: #a5673f;
 }
 
-.text-grey,
 .line-grey,
 .lines-grey {
-	color: #8799a3;
+	color: black;
 }
+
+.text-grey {
+	color: black;
+	font-size: 40upx;
+}
+
 
 .text-gray,
 .line-gray,

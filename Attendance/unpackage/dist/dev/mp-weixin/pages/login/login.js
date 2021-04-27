@@ -208,6 +208,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 var _default =
 {
   data: function data() {
@@ -323,17 +324,22 @@ var _default =
       console.log(this.username + " " + this.password);
       console.log(_this.webUrlIP + '/auth/login');
       uni.request({
-        url: _this.webUrlIP + '/auth/login',
+        // url: _this.webUrlIP + '/auth/login',
+        url: "http://121.5.233.173:80/login",
         data: {
-          'account': _this.username,
-          'password': _this.password },
+          // 'account': _this.username,
+          // 'password': _this.password,
+          'phone': _this.username,
+          'passwd': _this.password },
 
         method: 'POST',
 
         success: function success(res) {
-          console.log("登录成功1");
+          console.log("进入函数");
           if (res.statusCode == 200) {
-            console.log("登录成功2");
+            console.log("登录成功");
+            console.log(JSON.stringify(res));
+            console.log(res);
             uni.navigateTo({
               url: '../../pages/home/myJoin' });
 

@@ -1,35 +1,34 @@
 <template>
-	<view class="login">
-		
-		<view class="login-main">
-			<view class="login-list flex border-all">
-				<view class="iconfont icon-shoujihao flex"></view>
-				<view class="login-input">
-					<input type="number" maxlength="11" placeholder="请输入手机号" class="is-input1 " v-model="phone" />
-				</view>
+	<view>
+		<view class="progress">
+			<view class="cu-progress xs">
+				<view class="bg-blue" :style="[{ width:'33.3%'}]"></view>
 			</view>
-			<view class="login-list flex border-all">
-				<view class="iconfont icon-yanzhengma flex"></view>
-				<view class="login-input">
-					<input type="number" maxlength="6" placeholder="请输入验证码" class="is-input1 " v-model="code" />
-				</view>
-				<view class="code-sx"></view>
-				<view class="codeimg" @click.stop="getCode()">{{getCodeText}}</view>
+		</view>
+		<view class="login">
+			<view class="back">
+				<text class="cuIcon-back"></text>
 			</view>
-			<view class="login-list flex border-all">
-				<view class="iconfont icon-yanzhengma flex"></view>
-				<view class="login-input">
-					<input type="number" maxlength="6" placeholder="请输入密码" class="is-input1 " v-model="confirmCode" />
-				</view>
+			<view class='login-title'>
+				<text>SIGN UP</text>
 			</view>
-			<view class="login-list flex border-all">
-				<view class="iconfont icon-yanzhengma flex"></view>
-				<view class="login-input">
-					<input type="number" maxlength="6" placeholder="请再次输入密码" class="is-input1 " v-model="code" />
+			<view class="login-main">
+				<view class="login-list flex border-all">
+					<view class="iconfont icon-shoujihao flex"></view>
+					<view class="login-input">
+						<input type="number" maxlength="11" placeholder="请输入手机号" v-model="phone" />
+					</view>
 				</view>
+				<view class="login-list flex border-all">
+					<view class="iconfont icon-yanzhengma flex"></view>
+					<view class="login-input">
+						<input type="number" maxlength="6" placeholder="请输入验证码" v-model="code" />
+					</view>
+					<view class="code-sx"></view>
+					<view class="codeimg" @click.stop="onGetCode()">{{getCodeText}}</view>
+				</view>
+				<button class="cu-btn login-btn" @tap="onNext()">下一步</button>
 			</view>
-			<button class="cu-btn login-btn" @tap="doRegister">学生注册</button>
-			<button class="cu-btn login-btn" @tap="doLogin">教师注册</button>
 		</view>
 	</view>
 </template>
@@ -41,34 +40,18 @@
 			return {
 				phone: "",
 				code: '',
-				confirmCode: '',
-				key: '',
+				confirm_pwd:'',
+				password:'',
 				getCodeText: '获取验证码',
 				getCodeBtnColor: "#ffffff",
 			}
 		},
 		onLoad() {
-			this.checkGuide();
+			
 		},
 		methods: {
-			
-			isUser() {
-				// 判断缓存中是否存在此用户
-				try {
-					const value = uni.getStorageSync('access_token');
-					if (value) {
-						//有用户信息
-						console.log("已注册用户：", value);
-						uni.switchTab({
-							url: '/pages/login/login'
-						});
-					}
-				} catch (e) {
-					console.log("isUser出错了")
-				}
-			},
 			Timer() {},
-			getCode() {
+			async onGetCode() {
 				let _this = this;
 				uni.hideKeyboard()
 				if (_this.getCodeisWaiting) {
@@ -84,22 +67,30 @@
 				_this.getCodeText = "发送中..."
 				_this.getCodeisWaiting = true;
 				_this.getCodeBtnColor = "rgba(255,255,255,0.5)"
-				uni.request({
-					url: _this.websiteUrl + '/sms/notification-sms/codes',
-					data: {
-						'phone': _this.phone
+				
+				const res = await _this.$myRequest({
+					url:'/sms',
+					data:{
+						'type':"register",
+						'phone':this.phone
 					},
 					method: 'POST',
-					header: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-						//自定义请求头信息
-					},
-					success: (res) => {
-						_this.key = res.data.data.key;
-						//TODO 开发模式
-						_this.code = res.data.data.code;
-					}
 				});
+				_this.code = res.data.code;
+				console.log(_this.code);
+				/*uni.request({
+					url: "http://attendance.keepdev.top/api/sms",
+					data: {
+						'type':"register",
+						'phone':this.phone
+					},
+					method: 'POST',
+					success: (res) => {
+						console.log(res);
+						_this.code = res.data.code;
+						console.log(_this.code);
+					}
+				});*/
 				//示例用定时器模拟请求效果
 				setTimeout(() => {
 					//uni.showToast({title: '验证码已发送',icon:"none"});
@@ -122,41 +113,43 @@
 					holdTime--;
 				}, 1000)
 			},
-			doRegister() {
+			async onNext() {
 				let _this = this;
 				uni.hideKeyboard()
-				//模板示例部分验证规则
-				// if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone))){ 
-				// 	uni.showToast({title: '请填写正确手机号码',icon:"none"});
-				// 	return false; 
-				// } 
-
-				uni.request({
-					url: _this.websiteUrl + '/auth/register',
+				console.log(_this.phone+_this.code);
+				const res = await _this.$myRequest({
+					url:'/sms/register/'+_this.phone+'/'+_this.code,
+					method: 'POST',
+				});
+				if (res.statusCode == 200) {
+					console.log("校验验证码成功")
+					uni.navigateTo({
+						url:"./register-role?phone="+_this.phone+'&code='+_this.code
+					});
+				}
+				
+				/*uni.request({
+					url: 'http://attendance.keepdev.top/api/sms/register/'+_this.phone+'/'+_this.code,
 					data: {
-						'phone': _this.phone,
-						'code': _this.code,
-						'confirmCode': _this.confirmCode
 					},
 					method: 'POST',
-					header: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-					},
 					success: (res) => {
-						if (res.data.code == 200) {
-							console.log("注册成功")
+						console.log("校验验证码"+res);
+						if (res.statusCode == 200) {
+							console.log("校验验证码成功")
 							uni.navigateTo({
-							  url: '../../pages/home/myJoin',
-							})
+								url:"./register-role?phone="+_this.phone+'&code='+_this.code
+							});
 						} else {
 							uni.showToast({
-								title: '验证码不正确',
+								title: '验证码错误失败',
 								icon: "none"
 							});
+							console.log(res);
 							return false;
 						}
 					}
-				});
+				});*/
 			},
 		}
 	}
@@ -165,9 +158,23 @@
 
 
 <style lang="scss">
-	page {
-		background-color: #FFFFFF;
+	@import "/checkui/main.css";
+	@import "/checkui/icon.css";
+	
+	.progress {
+		margin-top: 0rpx;
 	}
+	
+	.back {
+		font-size: 60rpx;
+		margin: 20rpx 0 0 30rpx;
+	}
+	
+	.login-title {
+		font-size: 70rpx;
+		margin: 70rpx 0 0 100rpx;
+	}
+	
 	.flex{
 		display: flex;
 	}
@@ -181,11 +188,11 @@
 		
 	.login-main {
 		flex: 1;
-		padding: 0 70upx;
+		padding: 20rpx 70upx;
 
 		.login-list {
 			margin-top: 35upx;
-			height: 100upx;
+			height: 90upx;
 			align-items: center;
 			padding: 0 30upx;
 
@@ -220,7 +227,7 @@
 					padding-left: 20upx;
 				}
 			}
-
+			
 			.code-sx {
 				content: '';
 				width: 2upx;
@@ -239,24 +246,10 @@
 			margin-top: 70upx;
 			height: 96upx;
 			width: 100%;
-			background: linear-gradient(-90deg, rgba(80, 85, 168, 1), rgba(104, 110, 210, 1));
+			background: $theme-color;
 			border-radius: 47upx;
 			font-size: 34upx;
 			color: #ffffff;
 		}
-
-		.login-tip {
-			padding-top: 26upx;
-			font-size: 22upx;
-			color: #666666;
-			text-align: center;
-
-			navigator {
-				margin-left: 10upx;
-				display: inline-block;
-				color: #5055A8;
-			}
-		}
 	}
-
 </style>
