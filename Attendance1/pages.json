@@ -67,11 +67,19 @@
 			} 
 		},
 		{
-		    "path" : "pages/course/homework",
-			"style" :
-			{
-				"navigationBarTitleText": "zuoye"
-			} 
+		    "path" : "pages/course/course-activity"
+		},
+		{
+		    "path" : "pages/course/course-detail"
+		},
+		{
+		    "path" : "pages/course/course-message"
+		},
+		{
+		    "path" : "pages/course/course-resource"
+		},
+		{
+		    "path" : "pages/course/course-students"
 		}
     ],
 
@@ -81,6 +89,13 @@
 		"backgroundColor": "#f8f8f8"
 	},
 	"tabBar": {
+		"midButton": {  
+			"width":"120rpx",  
+			"height":"130rpx",  
+			"iconWidth":"80rpx",  
+			"iconPath": "static/tab_add.png"  ,
+			"text": "创建班课"
+		},
 		"list": [
 			{
 			    "pagePath" : "pages/course/course",

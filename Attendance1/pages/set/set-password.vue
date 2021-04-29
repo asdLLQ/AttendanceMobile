@@ -86,8 +86,6 @@
 
 
 <style lang="scss">
-	@import "/checkui/main.css";
-	@import "/checkui/icon.css";
 	
 	.progress {
 		margin-top: 0rpx;

@@ -85,9 +85,6 @@
 </script>
 
 <style>
-	@import "/checkui/main.css";
-	@import "/checkui/icon.css";
-	@import "/checkui/iconCourse.css";
 	.choose{
 		display: flex;
 		align-items: center;

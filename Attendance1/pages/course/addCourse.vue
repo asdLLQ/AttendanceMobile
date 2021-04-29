@@ -134,8 +134,6 @@
 </script>
 
 <style>
-	@import "/checkui/main.css";
-	@import "/checkui/icon.css";
 	.cu-form-group .title {
 		min-width: calc(4em + 15px);
 	}

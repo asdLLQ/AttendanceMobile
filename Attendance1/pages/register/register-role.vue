@@ -97,8 +97,6 @@
 
 
 <style lang="scss">
-	@import "/checkui/main.css";
-	@import "/checkui/icon.css";
 
 	.title {
 		font-size: 70rpx;

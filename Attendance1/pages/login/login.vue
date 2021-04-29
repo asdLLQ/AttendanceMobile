@@ -203,7 +203,9 @@
 					url:'/auth/login',
 					data,
 					method: 'POST',
-				})
+				})/*.then((res)=>{
+					
+				})*/
 				
 				if (res.statusCode == 200) {
 					console.log("登录成功")

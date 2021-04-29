@@ -15,6 +15,7 @@ export const myRequest = (options)=>{
 				resolve(res)
 			},
 			fali:(err)=>{
+				//if(err)
 				console.log(err)
 				uni.showToast({
 					title:'请求接口失败'
