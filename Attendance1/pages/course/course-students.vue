@@ -15,7 +15,7 @@
 				</view>
 			</view>
 		</view>
-		
+		<!-- 成员列表 -->
 		<view class="stu-list flex">
 			<view class="stu-item flex">
 				<view class="number flex">1</view>
@@ -143,7 +143,7 @@
 			.content {
 				margin-left: 30rpx;
 				font-size: 35rpx;
-				width:320rpx;
+				width:350rpx;
 				line-height: 50rpx;
 			}
 			

@@ -80,6 +80,9 @@
 		},
 		{
 		    "path" : "pages/course/course-students"
+		},
+		{
+		    "path" : "pages/course/stu-detail"
 		}
     ],
 
