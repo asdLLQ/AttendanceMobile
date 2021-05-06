@@ -15,28 +15,57 @@
 				</view>
 			</view>
 		</view>
-		<view class="cu-list menu-avatar">
-			<view class="cu-item ">
-				<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
+		
+		<view class="stu-list flex">
+			<view class="stu-item flex">
+				<view class="number flex">1</view>
+				<view class="flex"><image :src="imageUrl"></image></view>
+				
 				<view class="content">
-					<view class="text-pink"><view class="text-cut">莫甘娜</view></view>
-					<view class="text-gray text-sm flex"> <view class="text-cut">200327062</view></view>
+					<view >莫甘娜</view>
+					<view>200327062</view>
 				</view>
-				<view class="action">
-					<view class="text-gray">22:20</view>
-				</view>
-			</view>
-			<view class="cu-item ">
-				<view class="cu-avatar radius lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
-				<view class="content">
-					<view class="text-pink"><view class="text-cut">莫甘娜</view></view>
-					<view class="text-gray text-sm flex"> <view class="text-cut">200327062</view></view>
-				</view>
-				<view class="action">
-					<view class="text-gray">22:20</view>
+				<view class="score flex">
+					<view class="text-gray flex">22经验值
+						<view class="cuIcon-right"></view>
+					</view>
 				</view>
 			</view>
 		</view>
+		<view class="stu-list flex">
+			<view class="stu-item flex">
+				<view class="number flex">1</view>
+				<view class="flex"><image :src="imageUrl"></image></view>
+				
+				<view class="content">
+					<view >莫甘娜</view>
+					<view>200327062</view>
+				</view>
+				<view class="score flex">
+					<view class="text-gray flex">22经验值
+						<view class="cuIcon-right"></view>
+					</view>
+				</view>
+			</view>
+		</view>
+		
+		<view class="stu-list flex">
+			<view class="stu-item flex">
+				<view class="number flex">1</view>
+				<view class="flex"><image :src="imageUrl"></image></view>
+				
+				<view class="content">
+					<view >莫甘娜</view>
+					<view>200327062</view>
+				</view>
+				<view class="score flex">
+					<view class="text-gray flex">22经验值
+						<view class="cuIcon-right"></view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 底部状态栏 -->
 		<view>
 			<view-tabbar tabIndex=2></view-tabbar>
 		</view>
@@ -58,6 +87,7 @@
 				num: 0,
 				array: ['经验值','学号'],
 				index: 0,
+				imageUrl:"../../static/default.png"
 			}
 		},
 		methods: {
@@ -74,34 +104,54 @@
 		display: flex;
 	}
 	
-   .title {
-	   background-color:#DCDFE6;
-	   border-radius: 30rpx;
-	   justify-content: space-around;
-	   margin: 20rpx;
-	   font-size: 40rpx;
-	   padding:20rpx;
+	.title {
+		background-color:#DCDFE6;
+		border-radius: 30rpx;
+		justify-content: space-around;
+		margin-top: 20rpx;
+		font-size: 40rpx;
+		padding:20rpx;
 	   
-	   .orderItem {
-		   padding:5rpx;
-		   font-size: 35rpx;
-		   background-color:white;
-		   border-radius: 20rpx;
-	   }
+		.orderItem {
+			padding:5rpx;
+			font-size: 35rpx;
+			background-color:white;
+			border-radius: 20rpx;
+		}
    }
    
-   .stu-list {
-	   background-color: white;
-	   border:5upx solid #fff;
-	   border-radius: 5%;
-	   margin:10rpx;
+	.stu-list {
+		background-color: white;
+		margin:20rpx 0;
+		padding:20rpx 0rpx;
+
+		.stu-item {
+			
+			
+		   .number {
+				align-items:center;
+				font-size: 40rpx;
+				padding: 20rpx;
+			}
 	   
-	   image {
-		   margin-left: 50upx;
-		   width: 100upx;
-		   height: 100upx;
-		   
-		   border-radius: 0%;
-	   }
-   }
+			image {
+				width: 100upx;
+				height: 100upx;
+				border-radius: 20%;
+			}
+			
+			.content {
+				margin-left: 30rpx;
+				font-size: 35rpx;
+				width:320rpx;
+				line-height: 50rpx;
+			}
+			
+			.score {
+				//align-items:center;
+				line-height: 100rpx;
+				font-size: 35rpx;
+			}
+		}
+	}
 </style>
