@@ -1,10 +1,12 @@
 <template>
     <view>
+		
+		
 		详情页
+		<!-- 底部状态栏 -->
 		<view>
 			<view-tabbar tabIndex=5></view-tabbar>
 		</view>
-        
     </view>
 </template>
 

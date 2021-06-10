@@ -15,11 +15,17 @@
 		
 		<view class="sign-info border-set">
 			<view class="title">签到统计信息</view>
-			<view class="content">
-				<view>经验值：89/100</view>
-				<view>出勤等级：L1</view>
+			<view class="content flex">
+				<view class="describe">
+					<view>经验值：89/100</view>
+					<view>出勤等级：L1</view>
+				</view>
+				<view class="pie-chart">
+					<canvas id="myCanvas" class="chart" canvas-id="myCanvas"></canvas>
+				</view>
 			</view>
 		</view>
+			
 		
 		<view class="sign-detail border-set">
 			<view class="title">经验值明细</view>
@@ -48,14 +54,56 @@
 		},
 		data() {
 			return {
-				title: '',
 				index: 0,
-				imageUrl:"../../static/default.png"
+				imageUrl:"../../static/default.png",
+				title: 'Hello',
+				animationData: {},
+				routeHistory: 0
 			}
 		},
 		methods: {
-			
-		}
+			createCavans() {
+				const ctx = uni.createCanvasContext('myCanvas')
+				const query = uni.createSelectorQuery().in(this);
+				let width = 0,
+					height = 0
+				query.select('#myCanvas').boundingClientRect(data => {
+					width = data.width;
+					height = data.height;
+				}).exec();
+				console.log(width+" "+height)
+				// 扇形个数
+				let num=[{
+					prent:70,
+					color:'#aa55ff'
+				},{
+					prent:30,
+					color:'#aaffff'
+				}]
+				let angle = Math.PI*2/100
+				let isAngel = 0
+				//
+				for(let i =0;i<num.length;i++){
+					let sAngle = i==0?0:isAngel
+					let eAngle = angle*num[i].prent+isAngel
+					isAngel = eAngle
+					ctx.beginPath()
+					ctx.moveTo(width / 2, height / 2);
+					let r = Math.random()*255
+					let g = Math.random()*255
+					let b = Math.random()*255
+					ctx.fillStyle=num[i].color
+					ctx.arc(width / 2, height / 2, 50,sAngle, eAngle);
+					ctx.fill()
+				}
+				ctx.draw()
+			},
+		},
+		onShow() {
+			setTimeout(res => {
+				this.createCavans()
+			})
+		},
 	}
 </script>
 
@@ -90,15 +138,23 @@
 		}
 	}
 	
-	.sign-info {		
+	.sign-info {
 		.content {
-			margin-left: 10rpx;
-			font-size: 35rpx;
-			line-height: 100rpx;
+			.describe {
+				margin-left: 20rpx;
+				font-size: 35rpx;
+				line-height: 100rpx;
+			}
+			.chart {
+				margin-left: 150rpx;
+				width: 200rpx;
+				height: 200rpx;
+			}
 		}
 	}
 	
 	.sign-detail {
+		margin-bottom: 100rpx;
 		.content {
 			margin-left: 10rpx;
 			font-size: 35rpx;

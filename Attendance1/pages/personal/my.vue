@@ -56,21 +56,17 @@
 			
 			<view class="history-section icon">
 				<list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="课程记录"></list-cell>
-				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="地址管理" ></list-cell>
-				<list-cell icon="icon-share" iconColor="#9789f7" title="分享" tips="邀请好友赢10万大礼"></list-cell>
-				<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="晒单" tips="晒单抢红包"></list-cell>
+				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="忘记密码" ></list-cell>
+				<list-cell icon="icon-share" iconColor="#9789f7" title="设置" tips=""></list-cell>
 				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏"></list-cell>
-				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
+				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="退出登录" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
 		</view>	
     </view>  
 </template>  
 <script>  
 	import listCell from '@/components/mix-list-cell';
- //    import {  
- //        mapState 
- //    } from 'vuex';  
-	// let startY = 0, moveY = 0, pageAtTop = true;
+
     export default {
 		components: {
 			listCell

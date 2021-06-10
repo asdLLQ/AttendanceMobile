@@ -5,14 +5,15 @@
 		</view>
 		<view class='login-area'>
 			<view class="login-type">
-				<view v-for="(item,index) in loginTypeList" :key="index" @click="loginType = index" :class="{act: loginType === index}"
-				 class="login-type-btn">{{item}}</view>
+				<view v-for="(item,index) in loginTypeList" :key="index" @click="loginType = index" 
+					:class="{act: loginType === index}" class="login-type-btn">{{item}}</view>
 			</view>
 			<view class="login-main" v-if="loginType === 0">
 				<view class="login-list flex border-all">
 					<view class="iconfont icon-shoujihao flex"></view>
 					<view class="login-input">
-						<input type="number" maxlength="11" placeholder="请输入手机号" class="is-input1 " v-model="username" />
+						<input type="number" maxlength="11" placeholder="请输入手机号" 
+								class="is-input1 " v-model="phone" @blur="validate(phone)" />
 					</view>
 				</view>
 				<view class="login-list flex border-all">
@@ -40,6 +41,7 @@
 				</view>
 				<button class="cu-btn login-btn" @tap="onLogin(2)">登  录</button>
 			</view>
+			<view class="msg-err">{{msgErr}}</view>
 			<view class="zhuce">
 				<view class="login-tip">
 					<navigator url="../register/register">注册账号</navigator>
@@ -73,7 +75,9 @@
 			return {
 				phone: "",
 				code: '',
-				key: '',
+				password: '',
+				
+				msgErr: '',
 				getCodeText: '获取验证码',
 				getCodeBtnColor: "#ffffff",
 				getCodeisWaiting: false,    //判断是否能发送验证码
@@ -81,9 +85,19 @@
 				loginType: 0,
 				loginTypeList: ['密码登录', '免密登录'],
 				hasProvider: false,
-				username: '',
-				password: '',
 				data:[],
+				//验证的规则
+				rules:{
+					phone:{
+						rule:/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+						msg:"手机号错误"
+					},
+					password:{
+						rule:/^[0-9a-zA-Z]{6,16}$/,
+						msg:"密码应该为6-16位"
+					},
+					
+				}
 			}
 		},
 		onLoad() {
@@ -101,7 +115,19 @@
 					});
 				}
 			},
-
+			//验证手机号
+			validate(phone) {
+				if(!this.rules['phone'].rule.test(phone)){
+					//提示信息
+					uni.showToast({
+						title:this.rules['phone'].msg,
+					})
+					this.msgErr = this.rules['phone'].msg
+					console.log("validate(phone)")
+				} else {
+					this.msgErr = ''
+				}
+			},
 			isLogin() {
 				// 判断缓存中是否登录过，直接登录
 				try {
@@ -186,7 +212,7 @@
 			onLogin(num){
 				let _this = this;
 				if(num === 1) {
-					_this.data = {'account':_this.username,'password':_this.password};
+					_this.data = {'account':_this.phone,'password':_this.password};
 				}
 				else {
 					_this.data = {'account':_this.phone,'smsCode':_this.code};
@@ -198,7 +224,7 @@
 			async login(data) {
 				let _this = this;
 				uni.hideKeyboard() //隐藏软键盘
-				console.log(this.username+ " " + this.password)
+				console.log(this.phone+ " " + this.password)
 				const res = await _this.$myRequest({
 					url:'/auth/login',
 					data,
@@ -381,7 +407,7 @@
 		justify-content: space-around;
 		
 		.login-tip {
-			padding-top: 26upx;
+			padding-top: 20upx;
 			font-size: 25upx;
 			color: #666666;
 			text-align: center;
@@ -392,6 +418,12 @@
 				color: #0FAEFF;
 			}
 		}
+	}
+	
+	.msg-err {
+		color: red;
+		text-align: center;
+		line-height: 2em;
 	}
 
 	.login-footer {

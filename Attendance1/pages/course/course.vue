@@ -3,50 +3,80 @@
 		<view class="cu-bar bg-cyan search">
 			<view class="search-form radius">
 				<text class="cuIcon-search"></text>
-				<input @focus="InputFocus" @blur="InputBlur" :adjust-position="false" type="text" placeholder="搜索班课" confirm-type="search"></input>
+				<!-- @blur="InputBlur" :adjust-position="false" -->
+				<input @focus="InputFocus" type="text" placeholder="搜索班课" confirm-type="search"></input>
 			</view>
 			<view class="action">
 				<text class="cuIcon-add" @click="showModal" data-target="bottomModal"></text>				
 			</view>
 		</view>
-		<view class="cu-list menu-avatar">
-			<view class="cu-item">
-				<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg);"></view>
-				<view class="content">
-					<view class="text-grey  text-sm flex">工程实践</view>
-					<view class="text-gray text-sm flex">任课老师：
-						<text>池芝标 </text>
-					</view>	
-					<view class="choose text-gray  text-sm flex">
-						<view><text class="icon-qiandao"></text>签到</view>
-						<view><text class="icon-jushou"></text>举手</view>
-						<view><text class="icon-xiaoxi"></text>抢答</view>
+		<view v-if="role === 0">
+			<view class="cu-list menu-avatar">
+				<view class="cu-item">
+					<view class="cu-avatar round lg">
+						<image :src="imageUrl"></image>
+					</view>
+					<view class="content">
+						<view class="text-grey text-lg flex">工程实践</view>
+						<view class="text-gray text-df flex">任课老师：
+							<text>池芝标 </text>
+						</view>
+					</view>
+					<view class="action">
+						<button class="text-grey text-sm">查看详情</button>
+						<button class="text-grey text-sm">签到</button>
 					</view>
 				</view>
-				<view class="action">
-					<!-- <view class="text-grey text-xs">签到</view> -->
-					<text class="cuIcon-jiantou"></text>
-				</view>
-			</view>
-			<view class="cu-item ">
-				<view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/img/champion/Morgana.png);"></view>
-				<view class="content">
-					<view class="text-grey  text-sm flex">工程实践</view>
-					<view class="text-gray text-sm flex">任课老师：
-						<text>池芝标 </text>
-					</view>	
-					<view class="choose text-gray  text-sm flex">
-						<view><text class="icon-qiandao"></text>签到</view>
-						<view><text class="icon-jushou"></text>举手</view>
-						<view><text class="icon-xiaoxi"></text>抢答</view>
+				<view class="cu-item margin-top">
+					<view class="cu-avatar round lg">
+						<image :src="imageUrl"></image>
+					</view>
+					<view class="content">
+						<view class="text-grey  text-xsl flex">工程训练</view>
+						<view class="text-gray text-df flex">任课老师：
+							<text>池芝标 </text>
+						</view>
+					</view>
+					<view class="action">
+						<button class="text-grey text-sm">查看详情</button>
+						<button class="text-grey text-sm">签到</button>
 					</view>
 				</view>
-				<view class="action">
-					<!-- <view class="text-grey text-xs">签到</view> -->
-					<text class="cuIcon-jiantou"></text>
+			</view>
+		</view>
+		<view v-else>
+			<view class="cu-list menu-avatar">
+				<view class="cu-item">
+					<view class="cu-avatar round lg">
+						<image :src="imageUrl"></image>
+					</view>
+					<view class="content">
+						<view class="text-grey text-lg flex">工程实践</view>
+						<view class="text-gray text-df flex">任课老师：
+							<text>池芝标 </text>
+						</view>
+					</view>
+					<view class="action">
+						<button class="text-grey text-sm">查看详情</button>
+						<button class="text-grey text-sm">发起签到</button>
+					</view>
+				</view>
+				<view class="cu-item margin-top">
+					<view class="cu-avatar round lg">
+						<image :src="imageUrl"></image>
+					</view>
+					<view class="content">
+						<view class="text-grey  text-df flex">工程训练</view>
+						<view class="text-gray text-df flex">任课老师：
+							<text>池芝标 </text>
+						</view>
+					</view>
+					<view class="action">
+						<button class="text-grey text-sm">查看详情</button>
+						<button class="text-grey text-sm" @click="showModal">发起签到</button>
+					</view>
 				</view>
 			</view>
-
 		</view>
 	</view>
 </template>
@@ -55,40 +85,53 @@
 	export default {
 		data() {
 			return {
+				// 0代表学生，1代表教师
+				role: 1,
 				modalName: null,
+				imageUrl:"../../static/course-default.png",
+				
 			}
 		},
+		// onLoad (options) {
+		// 	role = option
+		// },
 		methods: {
 			showModal(e) {
 				uni.showActionSheet({
-				    itemList: ['创建班课', '通过班课号加入班课', '扫码加入班课'],
+				    itemList: ['一键签到', '限时签到', '手势签到'],
 				    success: function (res) {
 				        console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
 						if(res.tapIndex === 0) {
-							console.log("A");
+							console.log("A1");
+							uni.navigateTo({
+								url: '../course/addCourse',
+							})
 						} else if(res.tapIndex === 1) {
-							console.log("B");
+							console.log("B1");
 						} else {
-							console.log("B");
+							console.log("C1");
 						}
 				    },
 				    fail: function (res) {
 				        console.log(res.errMsg);
 				    }
 				});
-			},
-			hideModal(e) {
-				this.modalName = null
-			},
+			}
 		}
 	}
 </script>
 
 <style>
-	.choose{
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
+	image {
+		width: 100upx;
+		height: 100upx;
+		border-radius: 20%;
+	}
+	
+	button {
+		width:160upx;
+		height: 50upx;
+		margin-top: 20upx;
 	}
 </style>
 

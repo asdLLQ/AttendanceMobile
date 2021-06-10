@@ -46,18 +46,18 @@
 		    }
 		},
 		{
-            "path" : "pages/course/course",
+		    "path" : "pages/personal/my",
+			"style" :
+			{
+				"navigationBarTitleText": "个人中心"
+			} 
+		},
+		{
+		    "path" : "pages/course/course",
 			"style" :
 			{
 				"navigationBarTitleText": "我的班课"
 			}  
-        },
-		{
-		    "path" : "pages/my/my",
-			"style" :
-			{
-				"navigationBarTitleText": "我的"
-			} 
 		},
 		{
 		    "path" : "pages/course/addCourse",
@@ -67,23 +67,50 @@
 			} 
 		},
 		{
-		    "path" : "pages/course/course-activity"
+		    "path" : "pages/course/courseDatail/course-activity"
 		},
 		{
-		    "path" : "pages/course/course-detail"
+		    "path" : "pages/course/courseDatail/course-detail"
 		},
 		{
-		    "path" : "pages/course/course-message"
+		    "path" : "pages/course/courseDatail/course-message"
 		},
 		{
-		    "path" : "pages/course/course-resource"
+		    "path" : "pages/course/courseDatail/course-resource"
 		},
 		{
-		    "path" : "pages/course/course-students"
+		    "path" : "pages/course/courseDatail/course-students"
 		},
 		{
-		    "path" : "pages/course/stu-detail"
+		    "path" : "pages/course/courseDatail/stu-detail"
 		}
+        ,{
+            "path" : "pages/course/signup/gesture",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/course/signup/onekey",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/course/signup/tlimit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 
 	"globalStyle": {
@@ -92,9 +119,10 @@
 		"backgroundColor": "#f8f8f8"
 	},
 	"tabBar": {
+		"selectedColor":"#1CBBB4",//底部文字点击之后的颜色
 		"midButton": {  
 			"width":"120rpx",  
-			"height":"130rpx",  
+			"height":"125rpx",  
 			"iconWidth":"80rpx",  
 			"iconPath": "static/tab_add.png"  ,
 			"text": "创建班课"
@@ -107,7 +135,7 @@
 			    "text" : "课程"
 			},
 			{
-			    "pagePath" : "pages/my/my",
+			    "pagePath" : "pages/personal/my",
 			    "iconPath" : "static/tab_person.png",
 			    "selectedIconPath" : "static/tab_person_active.png",
 			    "text" : "我的"

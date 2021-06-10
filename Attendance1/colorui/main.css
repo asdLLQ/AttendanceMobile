@@ -899,8 +899,8 @@ button.cuIcon.lg {
 }
 
 .cu-avatar.lg {
-	width: 96upx;
-	height: 96upx;
+	width: 100upx;
+	height: 100upx;
 	font-size: 2em;
 }
 
@@ -1212,7 +1212,7 @@ button.cuIcon.lg {
 	position: relative;
 	display: flex;
 	padding-right: 10upx;
-	height: 200upx;
+	height: 170upx;
 	background-color: #ffffff;
 	justify-content: flex-end;
 	align-items: center
@@ -1229,9 +1229,9 @@ button.cuIcon.lg {
 
 .cu-list.menu-avatar>.cu-item .content {
 	position: absolute;
-	left: 146upx;
+	left: 150upx;
 	width: calc(100% - 96upx - 60upx - 120upx - 20upx);
-	line-height: 1.6em;
+	line-height: 2em;
 }
 
 .cu-list.menu-avatar>.cu-item .content.flex-sub {
@@ -1240,6 +1240,7 @@ button.cuIcon.lg {
 
 .cu-list.menu-avatar>.cu-item .content>view:first-child {
 	font-size: 30upx;
+	font-weight: 550;
 	display: flex;
 	align-items: center
 }
@@ -1253,7 +1254,7 @@ button.cuIcon.lg {
 }
 
 .cu-list.menu-avatar>.cu-item .action {
-	width: 100upx;
+	width: 180upx;
 	text-align: center
 }
 
@@ -3894,7 +3895,6 @@ scroll-view.cu-steps .cu-item {
 
 .text-grey {
 	color: black;
-	font-size: 40upx;
 }
 
 

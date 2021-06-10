@@ -19,8 +19,8 @@
 		<view class="stu-list flex">
 			<view class="stu-item flex">
 				<view class="number flex">1</view>
-				<view class="flex"><image :src="imageUrl"></image></view>
-				
+				<view class="flex"><image :src="imageUrl"></image>
+				</view>
 				<view class="content">
 					<view >莫甘娜</view>
 					<view>200327062</view>
