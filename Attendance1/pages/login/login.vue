@@ -13,7 +13,7 @@
 					<view class="iconfont icon-shoujihao flex"></view>
 					<view class="login-input">
 						<input type="number" maxlength="11" placeholder="请输入手机号" 
-								class="is-input1 " v-model="phone" @blur="validate(phone)" />
+								class="is-input1 " v-model="phone" @blur="validate('phone')" />
 					</view>
 				</view>
 				<view class="login-list flex border-all">
@@ -41,7 +41,7 @@
 				</view>
 				<button class="cu-btn login-btn" @tap="onLogin(2)">登  录</button>
 			</view>
-			<view class="msg-err">{{msgErr}}</view>
+			<view class="msg-err" v-show="msgShow">asd{{msgErr}}</view>
 			<view class="zhuce">
 				<view class="login-tip">
 					<navigator url="../register/register">注册账号</navigator>
@@ -78,6 +78,7 @@
 				password: '',
 				
 				msgErr: '',
+				msgShow: false,
 				getCodeText: '获取验证码',
 				getCodeBtnColor: "#ffffff",
 				getCodeisWaiting: false,    //判断是否能发送验证码
@@ -116,13 +117,15 @@
 				}
 			},
 			//验证手机号
-			validate(phone) {
-				if(!this.rules['phone'].rule.test(phone)){
+			validate(key) {
+				console.log('enter function')
+				console.log(key)
+				if(!this.rules[key].rule.test(this[key])){
 					//提示信息
 					uni.showToast({
-						title:this.rules['phone'].msg,
+						title:this.rules[key].msg,
 					})
-					this.msgErr = this.rules['phone'].msg
+					this.msgErr = this.rules[key].msg
 					console.log("validate(phone)")
 				} else {
 					this.msgErr = ''
@@ -302,9 +305,28 @@
 	.login-area {
 		margin:65rpx 7%;
 		width:86%;
+		height: 680rpx;
 		background: white;
 		border-radius: 60upx;
 		padding:50rpx 0rpx;
+		
+		.zhuce {
+			display: flex; 
+			justify-content: space-around;
+			
+			.login-tip {
+				margin-bottom: 20rpx;
+				font-size: 25upx;
+				color: #666666;
+				text-align: center;
+			
+				navigator {
+					margin-left: 10upx;
+					display: inline-block;
+					color: #0FAEFF;
+				}
+			}
+		}
 	}
 	
 	.login-type {
@@ -402,28 +424,11 @@
 		}
 	}
 	
-	.zhuce {
-		display: flex; 
-		justify-content: space-around;
-		
-		.login-tip {
-			padding-top: 20upx;
-			font-size: 25upx;
-			color: #666666;
-			text-align: center;
-		
-			navigator {
-				margin-left: 10upx;
-				display: inline-block;
-				color: #0FAEFF;
-			}
-		}
-	}
-	
 	.msg-err {
 		color: red;
 		text-align: center;
-		line-height: 2em;
+		line-height: 1em;
+		margin-top: 30rpx;
 	}
 
 	.login-footer {
