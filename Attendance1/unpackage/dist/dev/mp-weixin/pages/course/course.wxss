@@ -6,7 +6,8 @@ image {
 }
 button {
 	width:160rpx;
-	height: 50rpx;
-	margin-top: 20rpx;
+	height: 60rpx;
+	margin-bottom: 15rpx;
+	line-height: 60rpx;
 }
 

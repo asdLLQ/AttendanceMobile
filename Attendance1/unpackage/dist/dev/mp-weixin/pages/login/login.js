@@ -380,9 +380,8 @@ var _api = _interopRequireDefault(__webpack_require__(/*! @/util/api.js */ 11));
                   if (res.statusCode == 200) {
                     console.log("登录成功");
                     console.log(JSON.stringify(res));
-                    console.log(res);
-                    console.log(res.data.data.token);
                     uni.setStorageSync('token', res.data.data.token);
+                    uni.setStorageSync('uid', res.data.data.uid);
                     uni.switchTab({
                       url: '../../pages/course/course' });
 

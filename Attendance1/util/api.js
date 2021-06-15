@@ -1,4 +1,5 @@
-const BASR_URL = 'https://attendance.keepdev.top/api'
+//const BASR_URL = 'https://attendance.keepdev.top/api'
+const BASR_URL = 'http://172.17.169.27:8080'
 /*export const myRequest = (options)=>{
 	return new Promise((resolve,reject)=>{
 		uni.request({

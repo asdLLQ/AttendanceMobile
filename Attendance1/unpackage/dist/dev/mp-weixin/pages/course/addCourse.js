@@ -203,81 +203,64 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 var _default =
 {
+  onLoad: function onLoad(option) {var _this = this;
+    uni.$on("CHOOSE_SCHOOL", function (schoolMajor) {
+      _this.schoolMajorID = schoolMajor.id;
+      _this.schoolMajorName = schoolMajor.parents + '-' + schoolMajor.name;
+    });
+  },
   data: function data() {
     return {
       index: -1,
+      name: '',
+      address: '',
+      time: '',
+      number: '',
+      descirption: '',
       picker: ['2020-2021-1', '2020-2021-2', '2021-2022-1', '2021-2022-2'],
-      multiArray: [
-      ['福州大学', '福建师范大学'],
-      ['数学与计算机科学学院', '物信学院', '经管学院', '外语学院']],
-
-      objectMultiArray: [
-      [{
-        id: 0,
-        name: '福州大学' },
-
-      {
-        id: 1,
-        name: '福建师范大学' }],
-
-
-      [{
-        id: 0,
-        name: '数学与计算机科学学院' },
-
-      {
-        id: 1,
-        name: '物信学院' },
-
-      {
-        id: 2,
-        name: '经管学院' },
-
-      {
-        id: 3,
-        name: '外语学院' }]],
-
-
-
-      multiIndex: [0, 0, 0],
       date: '2020-09-01',
       imgList: [],
-      modalName: null };
+      modalName: null,
+      schoolMajorID: 0,
+      schoolMajorName: "点击选择" };
 
   },
   methods: {
-    addCourse: function addCourse() {
-      uni.redirectTo({
-        url: "./course" });
 
+    addCourse: function addCourse() {
+      var data = {
+        name: this.name,
+        description: this.descirption,
+        state: 0,
+        semester: this.picker[this.index > 0 ? this.index : 1],
+        location: this.address,
+        schoolMajorID: this.schoolMajorID };
+
+      var url = '/courses/';
+      console.log("courseData:" + this.picker[this.index > 0 ? this.index : 1]);
+      console.log("courseData:" + data);
+      this.$myRequest.requestWithToken(url,
+      data, 'POST', function (res) {
+        if (res.statusCode == 200) {
+          console.log("添加课程结果", res);
+          var code = res.data.data.code;
+          uni.navigateTo({
+            url: './addCourse/add-success?cno=' + code });
+
+        } else {
+          console.log("fails");
+        }
+      });
     },
     PickerChange: function PickerChange(e) {
       this.index = e.detail.value;
     },
-    MultiChange: function MultiChange(e) {
-      this.multiIndex = e.detail.value;
-    },
-    MultiColumnChange: function MultiColumnChange(e) {
-      var data = {
-        multiArray: this.multiArray,
-        multiIndex: this.multiIndex };
+    chooseSchool: function chooseSchool() {
+      uni.navigateTo({
+        url: './orgnization/school' });
 
-      data.multiIndex[e.detail.column] = e.detail.value;
-      switch (e.detail.column) {
-        case 0:
-          data.multiArray[1] = ['数学与计算机科学学院', '物信学院', '经管学院', '外语学院'];
-          data.multiIndex[1] = 0;
-          data.multiIndex[2] = 0;
-          break;}
-
-      this.multiArray = data.multiArray;
-      this.multiIndex = data.multiIndex;
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

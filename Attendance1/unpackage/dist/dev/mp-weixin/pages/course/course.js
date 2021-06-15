@@ -183,36 +183,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 var _default =
 {
   data: function data() {
@@ -220,13 +190,15 @@ var _default =
       // 0代表学生，1代表教师
       role: 1,
       modalName: null,
-      imageUrl: "../../static/course-default.png" };
-
+      imageUrl: "../../static/course-default.png",
+      uid: '',
+      courseList: '' };
 
   },
-  // onLoad (options) {
-  // 	role = option
-  // },
+  onLoad: function onLoad() {
+    this.uid = uni.getStorageSync('uid');
+    this.showCourse();
+  },
   methods: {
     showModal: function showModal(e) {
       uni.showActionSheet({
@@ -248,6 +220,23 @@ var _default =
           console.log(res.errMsg);
         } });
 
+    },
+    showCourse: function showCourse() {var _this = this;
+      var url = '/courses/';
+      console.log("uid:" + this.uid);
+      this.$myRequest.requestWithToken(url,
+      '', 'GET', function (res) {
+        if (res.statusCode == 200) {
+          console.log("显示课程", res.data.data.content);
+          _this.courseList = res.data.data.content;
+          /*cno = res.data.data.cno
+                                                    uni.navigateTo({
+                                                    	url: './add-success?cno=' + cno
+                                                    })*/
+        } else {
+          console.log("fails");
+        }
+      });
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

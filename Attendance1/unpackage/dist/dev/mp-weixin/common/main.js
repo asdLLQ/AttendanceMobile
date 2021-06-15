@@ -107,8 +107,21 @@ __webpack_require__.r(__webpack_exports__);
 
           } else if (res.tapIndex === 1) {
             console.log("B1");
+            uni.navigateTo({
+              url: '../course/join/input-id' });
+
           } else {
             console.log("C1");
+            uni.scanCode({
+              scanType: ['qrCode', 'barCode'],
+              success: function success(res) {
+                var cno = JSON.stringify(res.result);
+                console.log('条码类型：' + res.scanType);
+                uni.navigateTo({
+                  url: 'join-class?cno=' + cno });
+
+              } });
+
           }
         },
         fail: function fail(res) {

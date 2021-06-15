@@ -151,6 +151,9 @@ __webpack_require__.r(__webpack_exports__);
 var _default =
 {
   onLoad: function onLoad() {
+    uni.showLoading({
+      title: "loading" });
+
     this.getSchool();
   },
   data: function data() {
@@ -163,24 +166,31 @@ var _default =
     getSchool: function getSchool() {var _arguments = arguments,_this2 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {var item, _this, url;return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:item = _arguments.length > 0 && _arguments[0] !== undefined ? _arguments[0] : null;
                 _this = _this2;
                 uni.hideKeyboard(); //隐藏软键盘
-                console.log(_this2.stack);
                 url = '/organizations/';
                 if (item) {
+                  _this2.stack.push(item.id);
                   url += item.id;
+                  //倘若无下一级，则返回原页面
+                  if (item.childrenCount == 0) {
+                    console.log("****" + _this2.stack[_this2.stack.length - 1]);
+                    uni.$emit("CHOOSE_SCHOOL", item);
+                    uni.navigateBack();
+                  }
                 } else {
                   url += 1000;
                 }
-                _this2.stack.push();
                 console.log(url);
+                console.log("stack:" + _this2.stack);
                 _this.$myRequest.requestWithToken(url,
                 '', 'GET', function (res) {
+                  uni.hideLoading();
                   if (res.statusCode == 200) {
                     console.log(res);
                     _this2.list = res.data.data.children;
                   } else {
                     console.log("fails");
                   }
-                });case 9:case "end":return _context.stop();}}}, _callee);}))();
+                });case 8:case "end":return _context.stop();}}}, _callee);}))();
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

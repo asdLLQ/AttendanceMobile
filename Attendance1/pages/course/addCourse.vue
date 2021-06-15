@@ -22,19 +22,19 @@
 				</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">课程名称</view>
-				<input placeholder="请输入" name="name"></input>
+				<input placeholder="请输入" name="name" v-model="name"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">上课地点</view>
-				<input placeholder="请输入" name="address"></input>
+				<input placeholder="请输入" name="address" v-model="address"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">上课时间</view>
-				<input placeholder="请输入" name="time"></input>
+				<input placeholder="请输入" name="time" v-model="time"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">上课人数</view>
-				<input placeholder="请输入" name="number"></input>
+				<input placeholder="请输入" name="number" v-model="number"></input>
 			</view>
 			
 			<view class="cu-form-group">
@@ -46,13 +46,9 @@
 				</picker>
 			</view>
 
-			<view class="cu-form-group margin-top">
+			<view class="cu-form-group margin-top" @click="chooseSchool()">
 				<view class="title">学校院系</view>
-				<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray">
-					<view class="picker">
-						{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
-					</view>
-				</picker>
+				<view>{{schoolMajorName}}</view>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">考试安排</view>
@@ -63,9 +59,9 @@
 					</view>
 				</picker>
 			</view>
-			<view class="cu-form-group">
+			<view class="cu-form-group" >
 				<view class="title">学习要求</view>
-				<input maxlength="-1" placeholder="请输入"></textarea>
+				<input maxlength="-1" placeholder="请输入" v-model="descirption"></textarea>
 			</view>
 			</view>
 		</form>
@@ -77,75 +73,62 @@
 
 <script>
 	export default {
+		onLoad(option){
+			uni.$on("CHOOSE_SCHOOL",(schoolMajor)=>{
+				this.schoolMajorID=schoolMajor.id;
+				this.schoolMajorName=schoolMajor.parents + '-' + schoolMajor.name;
+			})
+		},
 		data() {
 			return {
 				index: -1,
+				name: '',
+				address: '',
+				time: '',
+				number: '',
+				descirption: '',
 				picker: ['2020-2021-1', '2020-2021-2', '2021-2022-1', '2021-2022-2'],
-				multiArray: [
-					['福州大学', '福建师范大学'],
-					['数学与计算机科学学院', '物信学院', '经管学院', '外语学院'],
-				],
-				objectMultiArray: [
-					[{
-							id: 0,
-							name: '福州大学'
-						},
-						{
-							id: 1,
-							name: '福建师范大学'
-						}
-					],
-					[{
-							id: 0,
-							name: '数学与计算机科学学院'
-						},
-						{
-							id: 1,
-							name: '物信学院'
-						},
-						{
-							id: 2,
-							name: '经管学院'
-						},
-						{
-							id: 3,
-							name: '外语学院'
-						}
-					]
-				],
-				multiIndex: [0, 0, 0],
 				date: '2020-09-01',
 				imgList: [],
-				modalName: null
+				modalName: null,
+				schoolMajorID:0,
+				schoolMajorName:"点击选择"
 			};
 		},
 		methods: {
+			
 			addCourse() {
-				uni.redirectTo({
-					url:"./course"
+				var data = {
+					name: this.name,
+					description: this.descirption,
+					state: 0,
+					semester: this.picker[this.index>0?this.index:1],
+					location: this.address,				
+					schoolMajorID: this.schoolMajorID,
+				}
+				let url = '/courses/';
+				console.log("courseData:" + this.picker[this.index>0?this.index:1])
+				console.log("courseData:" + data)
+				this.$myRequest.requestWithToken(url ,
+					data, 'POST', (res) => {
+					if (res.statusCode == 200) {
+						console.log("添加课程结果" , res)
+						let code = res.data.data.code
+						uni.navigateTo({
+							url: './addCourse/add-success?cno=' + code
+						})
+					} else{
+						console.log("fails")
+					} 
 				})
 			},
 			PickerChange(e) {
 				this.index = e.detail.value
 			},
-			MultiChange(e) {
-				this.multiIndex = e.detail.value
-			},
-			MultiColumnChange(e) {
-				let data = {
-					multiArray: this.multiArray,
-					multiIndex: this.multiIndex
-				};
-				data.multiIndex[e.detail.column] = e.detail.value;
-				switch (e.detail.column) {
-					case 0:
-						data.multiArray[1] = ['数学与计算机科学学院', '物信学院', '经管学院', '外语学院'];
-						data.multiIndex[1] = 0;
-						data.multiIndex[2] = 0;
-						break;
-				}
-				this.multiArray = data.multiArray;
-				this.multiIndex = data.multiIndex;
+			chooseSchool() {
+				uni.navigateTo({
+					url: './orgnization/school'
+				})
 			},
 		}
 	}
@@ -158,10 +141,6 @@
 	
 	input {
 		text-align: right;
-	}
-	
-	textarea {
-		text-align: ;
 	}
 	
 	.creat-button {

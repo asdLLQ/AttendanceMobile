@@ -127,6 +127,24 @@
             }
             
         }
+        ,{
+            "path" : "pages/course/addCourse/add-success",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/course/showModal",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 
 	"globalStyle": {
@@ -140,16 +158,21 @@
 			"width":"120rpx",  
 			"height":"125rpx",  
 			"iconWidth":"80rpx",  
-			"iconPath": "static/tab_add.png"  ,
-			"text": "创建班课"
+			"iconPath": "static/tab_add.png" 
 		},
 		"list": [
 			{
 			    "pagePath" : "pages/course/course",
-			    "iconPath" : "static/tab_course.png",
+				"iconPath" : "static/tab_course.png",
 			    "selectedIconPath" : "static/tab_course_active.png",
 			    "text" : "课程"
 			},
+			// {
+			//     "pagePath" : "pages/course/showModal",
+			//     "iconPath" : "static/tab_add.png" ,
+			//     "selectedIconPath" : "static/tab_add.png" ,
+			//     "text" : "课程"
+			// },
 			{
 			    "pagePath" : "pages/personal/my",
 			    "iconPath" : "static/tab_person.png",

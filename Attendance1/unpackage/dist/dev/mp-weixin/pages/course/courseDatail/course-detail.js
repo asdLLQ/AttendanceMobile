@@ -142,9 +142,38 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
 
 
 
+
 {
   components: {
-    'view-tabbar': Tabbar } };exports.default = _default;
+    'view-tabbar': Tabbar },
+
+  data: function data() {
+    return {
+      courseID: '',
+      courseName: '' };
+
+  },
+  onLoad: function onLoad(option) {
+    this.courseID = options.id;
+  },
+  methods: {
+    searchCourse: function searchCourse() {var _this = this;
+      var url = '/courses/' + this.courseID;
+      console.log("uid:" + this.uid);
+      this.$myRequest.requestWithToken(url,
+      '', 'GET', function (res) {
+        if (res.statusCode == 200) {
+          console.log("显示课程详情", res.data.data);
+          _this.courseList = res.data.data;
+          /*cno = res.data.data.cno
+                                            uni.navigateTo({
+                                            	url: './add-success?cno=' + cno
+                                            })*/
+        } else {
+          console.log("fails");
+        }
+      });
+    } } };exports.default = _default;
 
 /***/ })
 

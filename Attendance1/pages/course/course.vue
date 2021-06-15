@@ -12,29 +12,14 @@
 		</view>
 		<view v-if="role === 0">
 			<view class="cu-list menu-avatar">
-				<view class="cu-item">
+				<view class="cu-item margin-top" v-for="item in courseList" :key="item.id">
 					<view class="cu-avatar round lg">
 						<image :src="imageUrl"></image>
 					</view>
 					<view class="content">
-						<view class="text-grey text-lg flex">工程实践</view>
+						<view class="text-grey  text-xsl flex">{{item.name}}</view>
 						<view class="text-gray text-df flex">任课老师：
-							<text>池芝标 </text>
-						</view>
-					</view>
-					<view class="action">
-						<button class="text-grey text-sm">查看详情</button>
-						<button class="text-grey text-sm">签到</button>
-					</view>
-				</view>
-				<view class="cu-item margin-top">
-					<view class="cu-avatar round lg">
-						<image :src="imageUrl"></image>
-					</view>
-					<view class="content">
-						<view class="text-grey  text-xsl flex">工程训练</view>
-						<view class="text-gray text-df flex">任课老师：
-							<text>池芝标 </text>
+							<text>{{item.teacherName}}</text>
 						</view>
 					</view>
 					<view class="action">
@@ -46,29 +31,14 @@
 		</view>
 		<view v-else>
 			<view class="cu-list menu-avatar">
-				<view class="cu-item">
+				<view class="cu-item margin-top" v-for="item in courseList" :key="item.id">
 					<view class="cu-avatar round lg">
 						<image :src="imageUrl"></image>
 					</view>
 					<view class="content">
-						<view class="text-grey text-lg flex">工程实践</view>
+						<view class="text-grey  text-df flex">{{item.name}}</view>
 						<view class="text-gray text-df flex">任课老师：
-							<text>池芝标 </text>
-						</view>
-					</view>
-					<view class="action">
-						<button class="text-grey text-sm">查看详情</button>
-						<button class="text-grey text-sm">发起签到</button>
-					</view>
-				</view>
-				<view class="cu-item margin-top">
-					<view class="cu-avatar round lg">
-						<image :src="imageUrl"></image>
-					</view>
-					<view class="content">
-						<view class="text-grey  text-df flex">工程训练</view>
-						<view class="text-gray text-df flex">任课老师：
-							<text>池芝标 </text>
+							<text>{{item.teacherName}}</text>
 						</view>
 					</view>
 					<view class="action">
@@ -89,12 +59,14 @@
 				role: 1,
 				modalName: null,
 				imageUrl:"../../static/course-default.png",
-				
+				uid: '',
+				courseList:'',
 			}
 		},
-		// onLoad (options) {
-		// 	role = option
-		// },
+		onLoad () {
+			this.uid = uni.getStorageSync('uid')
+		 	this.showCourse()
+		},
 		methods: {
 			showModal(e) {
 				uni.showActionSheet({
@@ -116,7 +88,24 @@
 				        console.log(res.errMsg);
 				    }
 				});
-			}
+			},
+			showCourse() {
+				let url = '/courses/';
+				console.log("uid:" + this.uid)
+				this.$myRequest.requestWithToken(url ,
+					'', 'GET', (res) => {
+					if (res.statusCode == 200) {
+						console.log("显示课程" , res.data.data.content)
+						this.courseList = res.data.data.content
+						/*cno = res.data.data.cno
+						uni.navigateTo({
+							url: './add-success?cno=' + cno
+						})*/
+					} else{
+						console.log("fails")
+					} 
+				})
+			},
 		}
 	}
 </script>
@@ -130,8 +119,9 @@
 	
 	button {
 		width:160upx;
-		height: 50upx;
-		margin-top: 20upx;
+		height: 60upx;
+		margin-bottom: 15upx;
+		line-height: 60rpx;
 	}
 </style>
 

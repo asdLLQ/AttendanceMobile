@@ -6,7 +6,7 @@
 				<view class="content">
 					<view >{{item.name}}</view>
 				</view>
-				<view class="score flex" v-if="item.childrenCount!=0">
+				<view class="score flex" v-if="item.childrenCount != 0">
 					<view class="text-gray flex">
 						<view class="cuIcon-right"></view>
 					</view>
@@ -19,29 +19,39 @@
 <script>
 	export default {
 		onLoad() {
+			uni.showLoading({
+				title:"loading"
+			})
 			this.getSchool()
 		},
 		data() {
 			return {
 				list: "",
-				stack:[]
+				stack:[],
 			}
 		},
 		methods: {
-			async getSchool (item=null) {
+			async getSchool (item = null) {
 				let _this = this;
 				uni.hideKeyboard() //隐藏软键盘
-				console.log(this.stack)
 				let url = '/organizations/';
 				if(item){
-					url +=item.id;
-				}else{
-					url +=1000;
+					this.stack.push(item.id)
+					url += item.id;
+					//倘若无下一级，则返回原页面
+					if(item.childrenCount == 0) {
+						console.log("****" + this.stack[this.stack.length-1])
+						uni.$emit("CHOOSE_SCHOOL",item)
+						uni.navigateBack()
+					}
+				} else {
+					url += 1000;
 				}
-				this.stack.push()
 				console.log(url)
+				console.log("stack:" + this.stack)
 				_this.$myRequest.requestWithToken(url ,
 					'', 'GET', (res) => {
+					uni.hideLoading()
 					if (res.statusCode == 200) {
 						console.log(res)
 						this.list = res.data.data.children

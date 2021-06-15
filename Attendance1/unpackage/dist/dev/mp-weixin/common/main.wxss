@@ -4962,7 +4962,6 @@ image {
 		-webkit-transition: .6s;
 		transition: .6s;
 		opacity: 0;
-	}
 &.loaded {
 			opacity: 1;
 }
