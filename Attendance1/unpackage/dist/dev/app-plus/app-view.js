@@ -3223,7 +3223,12 @@ var render = function() {
                             "v-uni-button",
                             {
                               staticClass: _vm._$g("17-" + $30, "sc"),
-                              attrs: { _i: "17-" + $30 }
+                              attrs: { _i: "17-" + $30 },
+                              on: {
+                                click: function($event) {
+                                  return _vm.$handleViewEvent($event)
+                                }
+                              }
                             },
                             [_vm._v("查看详情")]
                           ),
@@ -3322,7 +3327,12 @@ var render = function() {
                             "v-uni-button",
                             {
                               staticClass: _vm._$g("29-" + $31, "sc"),
-                              attrs: { _i: "29-" + $31 }
+                              attrs: { _i: "29-" + $31 },
+                              on: {
+                                click: function($event) {
+                                  return _vm.$handleViewEvent($event)
+                                }
+                              }
                             },
                             [_vm._v("查看详情")]
                           ),
@@ -4404,8 +4414,12 @@ var render = function() {
         "v-uni-view",
         { attrs: { _i: 1 } },
         [
-          _c("v-uni-view", { attrs: { _i: 2 } }, [_vm._v("班课号：")]),
-          _c("v-uni-view", { attrs: { _i: 3 } }, [_vm._v("班课")])
+          _c("v-uni-view", { attrs: { _i: 2 } }, [
+            _vm._v("班课号：" + _vm._$g(2, "t0-0"))
+          ]),
+          _c("v-uni-view", { attrs: { _i: 3 } }, [
+            _vm._v("班课:" + _vm._$g(3, "t0-0"))
+          ])
         ],
         1
       ),

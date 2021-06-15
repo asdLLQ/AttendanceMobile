@@ -1,8 +1,8 @@
 <template>
     <view>
 		<view>
-			<view>班课号：</view>
-			<view>班课</view>
+			<view>班课号：{{courseID}}</view>
+			<view>班课:{{course.name}}</view>
 		</view>
 		<!-- 底部状态栏 -->
 		<view>
@@ -20,25 +20,24 @@
 		data() {
 			return {
 				courseID: '',
-				courseName:'',
+				course:'',
 			}
 		},
 		onLoad(option) {
-			this.courseID = options.id
+			this.courseID = option.id
+			console.log(this.courseID)
+			this.searchCourse()
 		},
 		methods: {
 			searchCourse() {
-				let url = '/courses/' + this.courseID;
+				let url = '/courses/code/' + this.courseID;
 				console.log("uid:" + this.uid)
 				this.$myRequest.requestWithToken(url ,
-					'', 'GET', (res) => {
+					null, 'GET', (res) => {
 					if (res.statusCode == 200) {
 						console.log("显示课程详情" , res.data.data)
-						this.courseList = res.data.data
-						/*cno = res.data.data.cno
-						uni.navigateTo({
-							url: './add-success?cno=' + cno
-						})*/
+						this.course = res.data.data
+						
 					} else{
 						console.log("fails")
 					} 

@@ -150,25 +150,24 @@ Object.defineProperty(exports, "__esModule", { value: true });exports.default = 
   data: function data() {
     return {
       courseID: '',
-      courseName: '' };
+      course: '' };
 
   },
   onLoad: function onLoad(option) {
-    this.courseID = options.id;
+    this.courseID = option.id;
+    console.log(this.courseID);
+    this.searchCourse();
   },
   methods: {
     searchCourse: function searchCourse() {var _this = this;
-      var url = '/courses/' + this.courseID;
+      var url = '/courses/code/' + this.courseID;
       console.log("uid:" + this.uid);
       this.$myRequest.requestWithToken(url,
-      '', 'GET', function (res) {
+      null, 'GET', function (res) {
         if (res.statusCode == 200) {
           console.log("显示课程详情", res.data.data);
-          _this.courseList = res.data.data;
-          /*cno = res.data.data.cno
-                                            uni.navigateTo({
-                                            	url: './add-success?cno=' + cno
-                                            })*/
+          _this.course = res.data.data;
+
         } else {
           console.log("fails");
         }

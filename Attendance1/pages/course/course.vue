@@ -23,7 +23,7 @@
 						</view>
 					</view>
 					<view class="action">
-						<button class="text-grey text-sm">查看详情</button>
+						<button class="text-grey text-sm" @tap="detail(item.code)">查看详情</button>
 						<button class="text-grey text-sm">签到</button>
 					</view>
 				</view>
@@ -42,7 +42,7 @@
 						</view>
 					</view>
 					<view class="action">
-						<button class="text-grey text-sm">查看详情</button>
+						<button class="text-grey text-sm" @tap="detail(item.code)">查看详情</button>
 						<button class="text-grey text-sm" @click="showModal">发起签到</button>
 					</view>
 				</view>
@@ -69,7 +69,7 @@
 		},
 		methods: {
 			showModal(e) {
-				uni.showActionSheet({
+				/*uni.showActionSheet({
 				    itemList: ['一键签到', '限时签到', '手势签到'],
 				    success: function (res) {
 				        console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
@@ -82,6 +82,38 @@
 							console.log("B1");
 						} else {
 							console.log("C1");
+						}
+				    },
+				    fail: function (res) {
+				        console.log(res.errMsg);
+				    }
+				});*/
+				uni.showActionSheet({
+				    itemList: ['创建班课', '通过班课号加入班课', '扫码加入班课'],
+				    success: function (res) {
+				        console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+						if(res.tapIndex === 0) {
+							console.log("A1");
+							uni.navigateTo({
+								url: './addCourse',
+							})
+						} else if(res.tapIndex === 1) {
+							console.log("B1");
+							uni.navigateTo({
+								url: './join/input-id',
+							})
+						} else {
+							console.log("C1");
+							uni.scanCode({
+								scanType: ['qrCode','barCode'],
+								success: function (res) {
+									const cno = JSON.stringify(res.result);
+									console.log('条码类型：' + res.scanType);
+									uni.navigateTo({
+										url:'join-class?cno='+cno
+									})
+								}
+							});
 						}
 				    },
 				    fail: function (res) {
@@ -105,6 +137,12 @@
 						console.log("fails")
 					} 
 				})
+			},
+			detail(code) {
+				console.log("查看详情",code)
+				uni.navigateTo({
+					url:'courseDatail/course-detail?id=' + code
+				});
 			},
 		}
 	}

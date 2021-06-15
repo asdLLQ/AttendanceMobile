@@ -201,19 +201,51 @@ var _default =
   },
   methods: {
     showModal: function showModal(e) {
+      /*uni.showActionSheet({
+                                          itemList: ['一键签到', '限时签到', '手势签到'],
+                                          success: function (res) {
+                                              console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+                                      		if(res.tapIndex === 0) {
+                                      			console.log("A1");
+                                      			uni.navigateTo({
+                                      				url: '../course/addCourse',
+                                      			})
+                                      		} else if(res.tapIndex === 1) {
+                                      			console.log("B1");
+                                      		} else {
+                                      			console.log("C1");
+                                      		}
+                                          },
+                                          fail: function (res) {
+                                              console.log(res.errMsg);
+                                          }
+                                      });*/
       uni.showActionSheet({
-        itemList: ['一键签到', '限时签到', '手势签到'],
+        itemList: ['创建班课', '通过班课号加入班课', '扫码加入班课'],
         success: function success(res) {
           console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
           if (res.tapIndex === 0) {
             console.log("A1");
             uni.navigateTo({
-              url: '../course/addCourse' });
+              url: './addCourse' });
 
           } else if (res.tapIndex === 1) {
             console.log("B1");
+            uni.navigateTo({
+              url: './join/input-id' });
+
           } else {
             console.log("C1");
+            uni.scanCode({
+              scanType: ['qrCode', 'barCode'],
+              success: function success(res) {
+                var cno = JSON.stringify(res.result);
+                console.log('条码类型：' + res.scanType);
+                uni.navigateTo({
+                  url: 'join-class?cno=' + cno });
+
+              } });
+
           }
         },
         fail: function fail(res) {
@@ -237,6 +269,12 @@ var _default =
           console.log("fails");
         }
       });
+    },
+    detail: function detail(code) {
+      console.log("查看详情", code);
+      uni.navigateTo({
+        url: 'courseDatail/course-detail?id=' + code });
+
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
