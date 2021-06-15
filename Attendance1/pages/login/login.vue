@@ -70,6 +70,8 @@
 
 
 <script>
+	import api from "@/util/api.js"
+	
 	export default {
 		data() {
 			return {
@@ -166,30 +168,26 @@
 				_this.getCodeisWaiting = true;
 				_this.getCodeBtnColor = "rgba(255,255,255,0.5)"
 				
-				const res = await _this.$myRequest({
-					url:'/sms',
-					data:{
-						'type':"login",
-						'phone':this.phone
-					},
-					method: 'POST',
+				var data = {
+					'type':"login",
+					'phone':this.phone
+				}
+				
+				this.$myRequest.request('/sms',data, 'POST', (res) => {
+					if (res.statusCode == 200) {
+						console.log("sms成功")
+						console.log(JSON.stringify(res))
+						console.log(res)
+						console.log(res.data.data.token)
+						uni.switchTab({
+						  url: '../../pages/course/course',
+						})
+					} 
 				});
+
 				_this.code = res.data.code;
 				console.log(_this.code);
 				
-				/*uni.request({
-					url: "http://attendance.keepdev.top/api/sms",
-					data: {
-						'type':"login",
-						'phone':this.phone
-					},
-					method: 'POST',
-					success: (res) => {
-						console.log(res);
-						_this.code = res.data.code;
-						console.log(_this.code);
-					}
-				});*/
 				//示例用定时器模拟请求效果
 				setTimeout(() => {
 					//uni.showToast({title: '验证码已发送',icon:"none"});
@@ -223,27 +221,25 @@
 				console.log(_this.data);
 				_this.login(_this.data);
 			},
-			//用户名密码登录
+			//用户名密码(验证码)登录
 			async login(data) {
 				let _this = this;
 				uni.hideKeyboard() //隐藏软键盘
 				console.log(this.phone+ " " + this.password)
-				const res = await _this.$myRequest({
-					url:'/auth/login',
-					data,
-					method: 'POST',
-				})/*.then((res)=>{
-					
-				})*/
+				_this.$myRequest.request('/auth/login',
+					data, 'POST', (res) => {
+					if (res.statusCode == 200) {
+						console.log("登录成功")
+						console.log(JSON.stringify(res))
+						console.log(res)
+						console.log(res.data.data.token)
+						uni.setStorageSync('token', res.data.data.token)
+						uni.switchTab({
+						  url: '../../pages/course/course',
+						})
+					} 
+				})
 				
-				if (res.statusCode == 200) {
-					console.log("登录成功")
-					console.log(JSON.stringify(res))
-					console.log(res)
-					uni.switchTab({
-					  url: '../../pages/course/course',
-					})
-				} 
 				/*uni.request({
 					url:"http://attendance.keepdev.top/api/auth/login",
 					data,

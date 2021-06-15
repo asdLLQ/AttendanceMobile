@@ -2,18 +2,39 @@
   "pages": [
     "pages/login/login",
     "pages/register/register",
-    "pages/forgot/forgot",
+    "pages/register/register-role",
+    "pages/register/register-info",
+    "pages/set/set-password",
+    "pages/personal/my",
     "pages/course/course",
-    "pages/my/my",
-    "pages/course/addCourse"
+    "pages/course/addCourse",
+    "pages/course/courseDatail/course-activity",
+    "pages/course/courseDatail/course-detail",
+    "pages/course/courseDatail/course-message",
+    "pages/course/courseDatail/course-resource",
+    "pages/course/courseDatail/course-students",
+    "pages/course/courseDatail/stu-detail",
+    "pages/course/signup/gesture",
+    "pages/course/signup/onekey",
+    "pages/course/signup/tlimit",
+    "pages/course/orgnization/school",
+    "pages/course/join/input-id"
   ],
   "subPackages": [],
   "window": {
     "navigationBarTextStyle": "white",
-    "navigationBarBackgroundColor": "#5055A8",
+    "navigationBarBackgroundColor": "#1CBBB4",
     "backgroundColor": "#f8f8f8"
   },
   "tabBar": {
+    "selectedColor": "#1CBBB4",
+    "midButton": {
+      "width": "120rpx",
+      "height": "125rpx",
+      "iconWidth": "80rpx",
+      "iconPath": "static/tab_add.png",
+      "text": "创建班课"
+    },
     "list": [
       {
         "pagePath": "pages/course/course",
@@ -22,7 +43,7 @@
         "text": "课程"
       },
       {
-        "pagePath": "pages/my/my",
+        "pagePath": "pages/personal/my",
         "iconPath": "static/tab_person.png",
         "selectedIconPath": "static/tab_person_active.png",
         "text": "我的"

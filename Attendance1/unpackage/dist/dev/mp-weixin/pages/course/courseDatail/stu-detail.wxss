@@ -1,0 +1,59 @@
+@charset "UTF-8";
+/* 页面左右间距 */
+/* 文字尺寸 */
+/*文字颜色*/
+/* 边框颜色 */
+/* 图片加载中颜色 */
+/* 行为相关颜色 */
+/*颜色*/
+.flex.data-v-18e46276 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+.border-set.data-v-18e46276 {
+  background-color: white;
+  width: 700rpx;
+  margin: 50rpx 25rpx;
+  border-radius: 4%;
+}
+.border-set .title.data-v-18e46276 {
+  padding: 20rpx;
+  font-size: 50rpx;
+}
+.basic-info image.data-v-18e46276 {
+  margin: 30rpx;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+}
+.basic-info .content.data-v-18e46276 {
+  margin-left: 50rpx;
+  font-size: 35rpx;
+  line-height: 60rpx;
+}
+.sign-info .content .describe.data-v-18e46276 {
+  margin-left: 20rpx;
+  font-size: 35rpx;
+  line-height: 100rpx;
+}
+.sign-info .content .chart.data-v-18e46276 {
+  margin-left: 150rpx;
+  width: 200rpx;
+  height: 200rpx;
+}
+.sign-detail.data-v-18e46276 {
+  margin-bottom: 100rpx;
+}
+.sign-detail .content.data-v-18e46276 {
+  margin-left: 10rpx;
+  font-size: 35rpx;
+  line-height: 70rpx;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
+}
+.sign-detail .content .date-info.data-v-18e46276 {
+  padding-left: 10rpx;
+  width: 350rpx;
+}
+

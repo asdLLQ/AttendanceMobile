@@ -5,6 +5,7 @@
 /* 边框颜色 */
 /* 图片加载中颜色 */
 /* 行为相关颜色 */
+/*颜色*/
 .icon .mix-list-cell.b-b:after {
   left: 90rpx;
 }
