@@ -24,21 +24,22 @@
 		},
 		methods: {
 			searchCourse() {
-				let _this = this;
-				uni.hideKeyboard() //隐藏软键盘
-				var uid = uni.getStorageSync('uid')
-				let url = '/organizations/courses/student/' + uid + '/' + this.courseID;
-				
-				console.log(url)
-				_this.$myRequest.requestWithToken(url ,
-					'', 'POST', (res) => {
+				console.log("asd",this.courseID)
+				let url = '/courses/code/' + this.courseID;
+				console.log("uid:" + this.uid)
+				this.$myRequest.requestWithToken(url ,
+					null, 'GET', (res) => {
 					if (res.statusCode == 200) {
-						console.log("searchCourse")
+						console.log("显示课程详情" , res.data.data)
+						uni.navigateTo({
+							url:'../courseDatail/course-detail?id=' + this.courseID
+						});
 					} else{
 						console.log("fails")
 					} 
 				})
-			}
+				
+			},
 		}
 	}
 </script>

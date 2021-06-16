@@ -107,11 +107,11 @@
 							uni.scanCode({
 								scanType: ['qrCode','barCode'],
 								success: function (res) {
-									const cno = JSON.stringify(res.result);
-									console.log('条码类型：' + res.scanType);
+									const cno = res.result;
 									uni.navigateTo({
-										url:'join-class?cno='+cno
-									})
+										url:'./courseDatail/course-detail?id=' + cno
+									});
+			
 								}
 							});
 						}
@@ -122,7 +122,7 @@
 				});
 			},
 			showCourse() {
-				let url = '/courses/';
+				let url = '/courses/joined/'+this.uid;
 				console.log("uid:" + this.uid)
 				this.$myRequest.requestWithToken(url ,
 					'', 'GET', (res) => {

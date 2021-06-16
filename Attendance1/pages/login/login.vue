@@ -104,14 +104,16 @@
 			}
 		},
 		onLoad() {
-			//this.checkGuide();
+			// this.checkGuide();
 		},
 		methods: {
 			//检测是否有启动缓存，如果没有，就是第一次启动，第一次启动就去 欢迎页
 			checkGuide() {
-				const launchFlag = uni.getStorageSync('launchFlag');
-				if (launchFlag) {
-					this.isLogin();
+				const token = uni.getStorageSync('token');
+				if (token) {
+					uni.switchTab({
+					  url: '../../pages/course/course',
+					})
 				} else {
 					uni.redirectTo({
 						url: '/pages/login/login'

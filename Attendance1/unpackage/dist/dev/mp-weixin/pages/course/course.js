@@ -239,10 +239,10 @@ var _default =
             uni.scanCode({
               scanType: ['qrCode', 'barCode'],
               success: function success(res) {
-                var cno = JSON.stringify(res.result);
-                console.log('条码类型：' + res.scanType);
+                var cno = res.result;
                 uni.navigateTo({
-                  url: 'join-class?cno=' + cno });
+                  url: './courseDatail/course-detail?id=' + cno });
+
 
               } });
 
@@ -254,7 +254,7 @@ var _default =
 
     },
     showCourse: function showCourse() {var _this = this;
-      var url = '/courses/';
+      var url = '/courses/joined/' + this.uid;
       console.log("uid:" + this.uid);
       this.$myRequest.requestWithToken(url,
       '', 'GET', function (res) {

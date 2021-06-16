@@ -79,6 +79,10 @@ const BASR_URL = 'http://172.17.169.27:8080'
 			},
 			fail: (err) => {
 				console.log(method, url, "fail");
+				uni.showToast({
+					icon:"none",
+					title:err.data.message
+				});
 			}
 		});
 	},

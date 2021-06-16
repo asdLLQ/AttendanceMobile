@@ -253,14 +253,16 @@ var _api = _interopRequireDefault(__webpack_require__(/*! @/util/api.js */ 11));
 
   },
   onLoad: function onLoad() {
-    //this.checkGuide();
+    // this.checkGuide();
   },
   methods: {
     //检测是否有启动缓存，如果没有，就是第一次启动，第一次启动就去 欢迎页
     checkGuide: function checkGuide() {
-      var launchFlag = uni.getStorageSync('launchFlag');
-      if (launchFlag) {
-        this.isLogin();
+      var token = uni.getStorageSync('token');
+      if (token) {
+        uni.switchTab({
+          url: '../../pages/course/course' });
+
       } else {
         uni.redirectTo({
           url: '/pages/login/login' });

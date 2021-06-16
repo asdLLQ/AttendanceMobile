@@ -155,21 +155,22 @@ var _default =
 
   },
   methods: {
-    searchCourse: function searchCourse() {
-      var _this = this;
-      uni.hideKeyboard(); //隐藏软键盘
-      var uid = uni.getStorageSync('uid');
-      var url = '/organizations/courses/student/' + uid + '/' + this.courseID;
-
-      console.log(url);
-      _this.$myRequest.requestWithToken(url,
-      '', 'POST', function (res) {
+    searchCourse: function searchCourse() {var _this = this;
+      console.log("asd", this.courseID);
+      var url = '/courses/code/' + this.courseID;
+      console.log("uid:" + this.uid);
+      this.$myRequest.requestWithToken(url,
+      null, 'GET', function (res) {
         if (res.statusCode == 200) {
-          console.log("searchCourse");
+          console.log("显示课程详情", res.data.data);
+          uni.navigateTo({
+            url: '../courseDatail/course-detail?id=' + _this.courseID });
+
         } else {
           console.log("fails");
         }
       });
+
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 

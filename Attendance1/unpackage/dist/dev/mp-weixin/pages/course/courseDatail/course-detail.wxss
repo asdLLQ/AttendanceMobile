@@ -1,0 +1,22 @@
+@charset "UTF-8";
+/* 页面左右间距 */
+/* 文字尺寸 */
+/*文字颜色*/
+/* 边框颜色 */
+/* 图片加载中颜色 */
+/* 行为相关颜色 */
+/*颜色*/
+.center.data-v-13dab407 {
+  margin-top: 100rpx;
+  text-align: center;
+  font-size: 50rpx;
+}
+image.data-v-13dab407 {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 20%;
+}
+.setColor.data-v-13dab407 {
+  background: #1CBBB4;
+}
+

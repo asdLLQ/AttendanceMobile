@@ -25,7 +25,7 @@
 				<input placeholder="请输入" name="name" v-model="name"></input>
 			</view>
 			<view class="cu-form-group">
-				<view class="title">上课地点</view>
+				<view class="title">班级名称</view>
 				<input placeholder="请输入" name="address" v-model="address"></input>
 			</view>
 			<view class="cu-form-group">
@@ -41,7 +41,7 @@
 				<view class="title">上课学期</view>
 				<picker @change="PickerChange" :value="index" :range="picker">
 					<view class="picker">
-						{{index>-1?picker[index]:picker[1]}}
+						{{index>-1?picker[index]:picker[2]}}
 					</view>
 				</picker>
 			</view>
@@ -102,12 +102,12 @@
 					name: this.name,
 					description: this.descirption,
 					state: 0,
-					semester: this.picker[this.index>0?this.index:1],
+					semester: this.picker[this.index>0?this.index:0],
 					location: this.address,				
 					schoolMajorID: this.schoolMajorID,
 				}
 				let url = '/courses/';
-				console.log("courseData:" + this.picker[this.index>0?this.index:1])
+				console.log("courseData:" + this.picker[this.index>0?this.index:3])
 				console.log("courseData:" + data)
 				this.$myRequest.requestWithToken(url ,
 					data, 'POST', (res) => {

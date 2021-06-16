@@ -2088,6 +2088,10 @@ var myRequest = {
       },
       fail: function fail(err) {
         console.log(method, url, "fail");
+        uni.showToast({
+          icon: "none",
+          title: err.data.message });
+
       } });
 
   },

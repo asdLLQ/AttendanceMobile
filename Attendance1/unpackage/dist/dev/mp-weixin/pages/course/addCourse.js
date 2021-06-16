@@ -234,12 +234,12 @@ var _default =
         name: this.name,
         description: this.descirption,
         state: 0,
-        semester: this.picker[this.index > 0 ? this.index : 1],
+        semester: this.picker[this.index > 0 ? this.index : 0],
         location: this.address,
         schoolMajorID: this.schoolMajorID };
 
       var url = '/courses/';
-      console.log("courseData:" + this.picker[this.index > 0 ? this.index : 1]);
+      console.log("courseData:" + this.picker[this.index > 0 ? this.index : 3]);
       console.log("courseData:" + data);
       this.$myRequest.requestWithToken(url,
       data, 'POST', function (res) {
