@@ -1,0 +1,167 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationStyle": "custom",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/register/register",
+      "style": {
+        // "navigationBarBackgroundColor": "white",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/register/register-role",
+      "style": {
+        "navigationStyle": "custom",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/register/register-info",
+      "style": {
+        "navigationStyle": "custom",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/set/set-password",
+      "style": {
+        "navigationStyle": "custom",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/personal/my",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    },
+    {
+      "path": "pages/course/course",
+      "style": {
+        "navigationBarTitleText": "我的班课"
+      }
+    },
+    {
+      "path": "pages/course/addCourse",
+      "style": {
+        "navigationBarTitleText": "创建班课"
+      }
+    },
+    {
+      "path": "pages/course/courseDatail/course-activity"
+    },
+    {
+      "path": "pages/course/courseDatail/course-detail"
+    },
+    {
+      "path": "pages/course/courseDatail/course-message"
+    },
+    {
+      "path": "pages/course/courseDatail/course-resource"
+    },
+    {
+      "path": "pages/course/courseDatail/course-students"
+    },
+    {
+      "path": "pages/course/courseDatail/stu-detail"
+    },
+    {
+      "path": "pages/course/signup/gesture",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/course/signup/onekey",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/course/signup/tlimit",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/course/orgnization/school",
+      "style": {
+        "navigationBarTitleText": "选择院校"
+      }
+    },
+    {
+      "path": "pages/course/join/input-id",
+      "style": {
+        "navigationBarTitleText": "加入班课"
+      }
+    },
+    {
+      "path": "pages/course/addCourse/add-success",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/course/showModal",
+      "style": {
+        "navigationBarTitleText": "",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#1CBBB4",
+    "backgroundColor": "#f8f8f8"
+  },
+  "tabBar": {
+    "selectedColor": "#1CBBB4", //底部文字点击之后的颜色
+    "midButton": {
+      "width": "120rpx",
+      "height": "125rpx",
+      "iconWidth": "80rpx",
+      "iconPath": "static/tab_add.png"
+    },
+    "list": [
+      {
+        "pagePath": "pages/course/course",
+        "iconPath": "static/tab_course.png",
+        "selectedIconPath": "static/tab_course_active.png",
+        "text": "课程"
+      },
+      // {
+      //     "pagePath" : "pages/course/showModal",
+      //     "iconPath" : "static/tab_add.png" ,
+      //     "selectedIconPath" : "static/tab_add.png" ,
+      //     "text" : "课程"
+      // },
+      {
+        "pagePath": "pages/personal/my",
+        "iconPath": "static/tab_person.png",
+        "selectedIconPath": "static/tab_person_active.png",
+        "text": "我的"
+      }
+    ]
+  }
+}

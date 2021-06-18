@@ -1,0 +1,47 @@
+{
+  "_from": "@uni-plugs/uni-code",
+  "_id": "@uni-plugs/uni-code@1.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-va04G1EntccA3RulMVKavabEn7If/9sjrUuiG8H/irRb6kA/rzKh86fDlWJ6QPiCKTYNMjXlWeKwHo4F7lYfLQ==",
+  "_location": "/@uni-plugs/uni-code",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@uni-plugs/uni-code",
+    "name": "@uni-plugs/uni-code",
+    "escapedName": "@uni-plugs%2funi-code",
+    "scope": "@uni-plugs",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@uni-plugs/uni-code/-/uni-code-1.1.0.tgz",
+  "_shasum": "d60adc3de6e3e872c3f64d131d3db0684c0924d5",
+  "_spec": "@uni-plugs/uni-code",
+  "_where": "E:\\HbuilderX文件\\01-练手\\components",
+  "author": {
+    "name": "wmf"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "<p align=\"center\">   <a href=\"https://ext.dcloud.net.cn/plugin?id=4662\" target=\"_blank\">     <img width=\"120\" src=\"http://img.lovewmf.com/meet-ui.png\">   </a> </p>",
+  "keywords": [
+    "QR code",
+    "barcode",
+    "BarCode",
+    "QRCode",
+    "uni-code"
+  ],
+  "license": "ISC",
+  "main": "lib/wmf.min.js",
+  "name": "@uni-plugs/uni-code",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.1.0"
+}
