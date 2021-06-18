@@ -1,3 +1,6 @@
+/**
+ * 注册页面，手机号和角色必填
+ */
 <template>
 	<view>
 		<view class="progress">

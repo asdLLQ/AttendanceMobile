@@ -1,3 +1,6 @@
+/**
+ * 班课创建成功页面，显示班课的二维码、班课号和返回按钮
+ */
 <template>
 	<view class="content">
 		<cu-custom bgColor="bg-gradual-blue" :isBack="true"><block slot="backText" @tap="onBack">返回</block><block slot="content">创建成功</block></cu-custom>

@@ -1,6 +1,9 @@
+/**
+ * 一键签到页面:
+ */
 <template>
 	<view>
-		显示签到
+		一键签到
 	</view>
 </template>
 

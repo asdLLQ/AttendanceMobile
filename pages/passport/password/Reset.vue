@@ -1,3 +1,6 @@
+/**
+ * 设置密码/ 
+ */
 <template>
 	<view>
 		<view class="progress">

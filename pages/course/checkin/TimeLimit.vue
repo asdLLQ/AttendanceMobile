@@ -1,6 +1,10 @@
+/**
+ * 限时签到页面:
+ */
+
 <template>
 	<view>
-		手势签到
+		限时签到
 	</view>
 </template>
 

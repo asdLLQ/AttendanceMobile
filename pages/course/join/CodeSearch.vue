@@ -1,3 +1,7 @@
+/** 
+ * 加入班课前搜索页面，通过班课号搜索，下方显示搜索结果
+ */
+
 <template>
 	<view class="login-main">
 		<view class="personal-info">

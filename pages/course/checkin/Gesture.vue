@@ -1,6 +1,9 @@
+/**
+ * 手势签到页面:
+ */
 <template>
 	<view>
-		一键签到
+		手势签到
 	</view>
 </template>
 

@@ -1,3 +1,7 @@
+/**  
+  班课成员页面
+
+ */
 <template>
     <view>
 		<view class="title flex">
