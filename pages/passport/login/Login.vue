@@ -44,10 +44,10 @@
 			<view class="msg-err" v-show="msgShow">asd{{msgErr}}</view>
 			<view class="zhuce">
 				<view class="login-tip">
-					<navigator url="../register/register">注册账号</navigator>
+					<navigator url="../register/Register">注册账号</navigator>
 				</view>
 				<view class="login-tip">
-					<navigator url="../register/register">忘记密码</navigator>
+					<navigator url="../password/Reset">忘记密码</navigator>
 				</view>
 			</view>
 		</view>
@@ -55,13 +55,13 @@
 			<view class="footer-tip flex">第三方登录</view>
 			<view class="footer-other flex">
 				<view class="other-list">
-					<image src="../../static/loginQQ.png" mode="aspectFill" @click="loginQQ"></image>
+					<image src="../../../static/img/passport/login/loginQQ.png" mode="aspectFill" @click="loginQQ"></image>
 				</view>
 				<view class="other-list">
-					<image src="../../static/loginVX.png" mode="aspectFill"></image>
+					<image src="../../../static/img/passport/login/loginVX.png" mode="aspectFill"></image>
 				</view>
 				<view class="other-list">
-					<image src="../../static/loginWb.png" mode="aspectFill"></image>
+					<image src="../../../static/img/passport/login/loginWb.png" mode="aspectFill"></image>
 				</view>
 			</view>
 		</view>
@@ -241,33 +241,7 @@
 					} 
 				})
 				
-				/*uni.request({
-					url:"http://attendance.keepdev.top/api/auth/login",
-					data,
-					method: 'POST',
-					
-					success: (res) => {
-						console.log("进入函数")
-						if (res.statusCode == 200) {
-							console.log("登录成功")
-							console.log(JSON.stringify(res))
-							console.log(res)
-							uni.switchTab({
-							  url: '../../pages/course/course',
-							})
-						} else {
-							uni.showToast({
-								title: '用户名或密码不正确',
-								icon: "none"
-							});
-							return false;
-						}
-					},
-					fail: (res) => {
-						console.log("登录失败")
-						console.log(res)
-					}
-				});*/
+				
 			},
 			loginQQ() {
 				uni.login({

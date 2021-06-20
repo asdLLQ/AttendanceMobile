@@ -1,3 +1,6 @@
+/**
+ * 班课列表页面，显示登陆人员的所有列表
+ */
 <template>
 	<view>
 		<view class="cu-bar bg-cyan search">
@@ -43,10 +46,13 @@
 					</view>
 					<view class="action">
 						<button class="text-grey text-sm" @tap="detail(item.code)">查看详情</button>
-						<button class="text-grey text-sm" @click="showModal">发起签到</button>
+						<button class="text-grey text-sm" @click="showCheckinModal()">发起签到</button>
 					</view>
 				</view>
 			</view>
+		</view>
+		<view class="button-add-location" @click="showCourseModal()">
+			<image src="../../static/img/tabbar/tab_add.png"></image>
 		</view>
 	</view>
 </template>
@@ -58,7 +64,7 @@
 				// 0代表学生，1代表教师
 				role: 1,
 				modalName: null,
-				imageUrl:"../../static/course-default.png",
+				imageUrl:"../../static/img/course/default.png",
 				uid: '',
 				courseList:'',
 			}
@@ -68,8 +74,8 @@
 		 	this.showCourse()
 		},
 		methods: {
-			showModal(e) {
-				/*uni.showActionSheet({
+			showCheckinModal(e) {
+				uni.showActionSheet({
 				    itemList: ['一键签到', '限时签到', '手势签到'],
 				    success: function (res) {
 				        console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
@@ -87,7 +93,9 @@
 				    fail: function (res) {
 				        console.log(res.errMsg);
 				    }
-				});*/
+				});
+			},
+			showCourseModal(e) {
 				uni.showActionSheet({
 				    itemList: ['创建班课', '通过班课号加入班课', '扫码加入班课'],
 				    success: function (res) {
@@ -95,12 +103,12 @@
 						if(res.tapIndex === 0) {
 							console.log("A1");
 							uni.navigateTo({
-								url: './addCourse',
+								url: './creation/Creation',
 							})
 						} else if(res.tapIndex === 1) {
 							console.log("B1");
 							uni.navigateTo({
-								url: './join/input-id',
+								url: './join/CodeSearch',
 							})
 						} else {
 							console.log("C1");
@@ -109,7 +117,7 @@
 								success: function (res) {
 									const cno = res.result;
 									uni.navigateTo({
-										url:'./courseDatail/course-detail?id=' + cno
+										url: './detail/Detail?id=' + cno
 									});
 			
 								}
@@ -129,10 +137,6 @@
 					if (res.statusCode == 200) {
 						console.log("显示课程" , res.data.data.content)
 						this.courseList = res.data.data.content
-						/*cno = res.data.data.cno
-						uni.navigateTo({
-							url: './add-success?cno=' + cno
-						})*/
 					} else{
 						console.log("fails")
 					} 
@@ -154,12 +158,16 @@
 		height: 100upx;
 		border-radius: 20%;
 	}
-	
 	button {
 		width:160upx;
 		height: 60upx;
 		margin-bottom: 15upx;
 		line-height: 60rpx;
+	}
+	.button-add-location {
+		position:fixed;
+		right: 0rpx;
+		bottom: 100rpx
 	}
 </style>
 

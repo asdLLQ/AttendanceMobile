@@ -54,7 +54,7 @@
 			},
 			classBegin(e){
 				uni.switchTab({
-					url:'../course'
+					url:'../List'
 				})
 			}
 		}

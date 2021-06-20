@@ -5,11 +5,11 @@
 		</view>
 		<view class="role-image" >
 			<view class="role-size">
-				<image src="../../static/role-teacher.png"></image>
+				<image src="../../../static/img/passport/register/role-teacher.png"></image>
 				<button @tap="onRegister(0)">我是教师</button>
 			</view>
 			<view class="role-size">
-				<image src="../../static/role-student.png"></image>
+				<image src="../../../static/img/passport/register/role-student.png"></image>
 				<button @tap="onRegister(1)">我是学生</button>
 			</view>
 		</view>

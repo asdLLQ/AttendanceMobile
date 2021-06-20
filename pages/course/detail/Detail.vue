@@ -1,11 +1,9 @@
 <template>
     <view>
 		<view class="center">
-			
 			<image :src="imageUrl"></image>
 			<view>班课号：{{courseID}}</view>
-			<view>班课：{{course.name}}</view>
-			
+			<view>班课：{{course.name}}</view>	
 		</view>
 		<view class="padding flex flex-direction">
 			<button class="cu-btn bg-blue margin-tb-sm lg setColor" @tap="classJoin()">加入班课</button>
@@ -58,7 +56,7 @@
 					if (res.statusCode == 200) {
 						console.log("显示课程详情" , res.data)
 						uni.showToast({
-							title:"加入班课成功"
+							title:"加入班课成功！"
 						})
 						
 					} else{

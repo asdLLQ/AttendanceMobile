@@ -127,7 +127,7 @@
 						console.log("添加课程结果" , res)
 						let code = res.data.data.code
 						uni.navigateTo({
-							url: './addCourse/add-success?cno=' + code
+							url: './Success?cno=' + code
 						})
 					} else{
 						console.log("fails")
