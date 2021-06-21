@@ -82,18 +82,7 @@
 		},
 
         methods: {
-			/**
-			 * 统一跳转接口,拦截未登录路由
-			 * navigator标签现在默认没有转场动画，所以用view
-			 */
-			// navTo(url){
-			// 	if(!this.hasLogin){
-			// 		url = '/pages/public/login';
-			// 	}
-			// 	uni.navigateTo({  
-			// 		url
-			// 	})  
-			// }, 
+			
         }  
     }  
 </script>  

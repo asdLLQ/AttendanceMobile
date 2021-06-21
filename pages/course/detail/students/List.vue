@@ -1,6 +1,6 @@
 /**  
   班课成员页面
-
+  
  */
 <template>
     <view>
@@ -36,39 +36,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="stu-list flex">
-			<view class="stu-item flex">
-				<view class="number flex">1</view>
-				<view class="flex"><image :src="imageUrl"></image></view>
-				
-				<view class="content">
-					<view >莫甘娜</view>
-					<view>200327062</view>
-				</view>
-				<view class="score flex">
-					<view class="text-gray flex">22经验值
-						<view class="cuIcon-right"></view>
-					</view>
-				</view>
-			</view>
-		</view>
-		
-		<view class="stu-list flex">
-			<view class="stu-item flex">
-				<view class="number flex">1</view>
-				<view class="flex"><image :src="imageUrl"></image></view>
-				
-				<view class="content">
-					<view >莫甘娜</view>
-					<view>200327062</view>
-				</view>
-				<view class="score flex">
-					<view class="text-gray flex">22经验值
-						<view class="cuIcon-right"></view>
-					</view>
-				</view>
-			</view>
-		</view>
+		<stu-list name="张三" number="200327062" descrip="22经验值"></stu-list>
 		<!-- 底部状态栏 -->
 		<view>
 			<view-tabbar tabIndex=2></view-tabbar>
@@ -78,9 +46,11 @@
 
 <script>
 	import Tabbar from '@/components/tab-course.vue'
+	import StuList from '@/components/stu-list/Stu-list.vue'
 	export default {
 		components: {
-			'view-tabbar': Tabbar
+			'view-tabbar': Tabbar,
+			'stu-list': StuList
 		},
 		onload(options) {
 			
@@ -113,12 +83,12 @@
 		border-radius: 30rpx;
 		justify-content: space-around;
 		margin-top: 20rpx;
-		font-size: 40rpx;
-		padding:20rpx;
+		font-size: 30rpx;
+		padding:10rpx;
 	   
 		.orderItem {
 			padding:5rpx;
-			font-size: 35rpx;
+			font-size: 25rpx;
 			background-color:white;
 			border-radius: 20rpx;
 		}
@@ -126,15 +96,13 @@
    
 	.stu-list {
 		background-color: white;
-		margin:20rpx 0;
-		padding:20rpx 0rpx;
+		margin:10rpx 0;
+		padding:10rpx 0rpx;
 
 		.stu-item {
-			
-			
 		   .number {
 				align-items:center;
-				font-size: 40rpx;
+				font-size: 30rpx;
 				padding: 20rpx;
 			}
 	   
@@ -146,15 +114,15 @@
 			
 			.content {
 				margin-left: 30rpx;
-				font-size: 35rpx;
-				width:350rpx;
+				font-size: 30rpx;
+				width:400rpx;
 				line-height: 50rpx;
 			}
 			
 			.score {
 				//align-items:center;
 				line-height: 100rpx;
-				font-size: 35rpx;
+				font-size: 30rpx;
 			}
 		}
 	}

@@ -22,7 +22,8 @@
 						<input type="text" maxlength="12" placeholder="请输入密码" password class="is-input1 " v-model="password" />
 					</view>
 				</view>
-				<button class="cu-btn login-btn" @tap="onLogin(1)">登  录</button>
+				<button class="cu-btn login-btn" @click="onLogin(1)">登  录</button>
+				<view class="msg-err">{{msgErr}}</view>
 			</view>			
 			<view class="login-main" v-else>
 				<view class="login-list flex border-all">
@@ -39,9 +40,9 @@
 					<view class="code-sx"></view>
 					<view class="codeimg" @click.stop="onGetCode()">{{getCodeText}}</view>
 				</view>
-				<button class="cu-btn login-btn" @tap="onLogin(2)">登  录</button>
+				<button class="cu-btn login-btn" @click="onLogin(2)">登  录</button>
+				<view class="msg-err">{{msgErr}}</view>
 			</view>
-			<view class="msg-err" v-show="msgShow">asd{{msgErr}}</view>
 			<view class="zhuce">
 				<view class="login-tip">
 					<navigator url="../register/Register">注册账号</navigator>
@@ -53,7 +54,7 @@
 		</view>
 		<view class="login-footer">
 			<view class="footer-tip flex">第三方登录</view>
-			<view class="footer-other flex">
+			<view class="footer-icon flex">
 				<view class="other-list">
 					<image src="../../../static/img/passport/login/loginQQ.png" mode="aspectFill" @click="loginQQ"></image>
 				</view>
@@ -112,11 +113,11 @@
 				const token = uni.getStorageSync('token');
 				if (token) {
 					uni.switchTab({
-					  url: '../../pages/course/course',
+					  url: '../../course/List',
 					})
 				} else {
 					uni.redirectTo({
-						url: '/pages/login/login'
+						url: '/pages/passport/login/Login'
 					});
 				}
 			},
@@ -127,6 +128,7 @@
 				if(!this.rules[key].rule.test(this[key])){
 					//提示信息
 					uni.showToast({
+						icon: "none",
 						title:this.rules[key].msg,
 					})
 					this.msgErr = this.rules[key].msg
@@ -159,13 +161,6 @@
 					return;
 				}
 				
-				if (!(/^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/.test(_this.phone))) {
-					uni.showToast({
-						title: '请填写正确手机号码',
-						icon: "none"
-					});
-					return false;
-				}
 				_this.getCodeText = "发送中..."
 				_this.getCodeisWaiting = true;
 				_this.getCodeBtnColor = "rgba(255,255,255,0.5)"
@@ -182,7 +177,7 @@
 						console.log(res)
 						console.log(res.data.data.token)
 						uni.switchTab({
-						  url: '../../pages/course/course',
+						  url: '../../course/List',
 						})
 					} 
 				});
@@ -220,7 +215,7 @@
 				else {
 					_this.data = {'account':_this.phone,'smsCode':_this.code};
 				}
-				console.log(_this.data);
+				console.log("登录方式:"+num,  _this.data);
 				_this.login(_this.data);
 			},
 			//用户名密码(验证码)登录
@@ -236,7 +231,7 @@
 						uni.setStorageSync('token', res.data.data.token)
 						uni.setStorageSync('uid', res.data.data.uid)
 						uni.switchTab({
-						  url: '../../pages/course/course',
+						  url: '../../course/List',
 						})
 					} 
 				})
@@ -268,53 +263,6 @@
 
 
 <style lang="scss">
-	.login-title {
-		font-size: 70rpx;
-		margin: 150rpx 0 0 120rpx;
-	}
-	
-	.login-area {
-		margin:65rpx 7%;
-		width:86%;
-		height: 680rpx;
-		background: white;
-		border-radius: 60upx;
-		padding:50rpx 0rpx;
-		
-		.zhuce {
-			display: flex; 
-			justify-content: space-around;
-			
-			.login-tip {
-				margin-bottom: 20rpx;
-				font-size: 25upx;
-				color: #666666;
-				text-align: center;
-			
-				navigator {
-					margin-left: 10upx;
-					display: inline-block;
-					color: #0FAEFF;
-				}
-			}
-		}
-	}
-	
-	.login-type {
-		display: flex;
-		justify-content: center;
-	}
-	
-	.login-type-btn {
-		line-height: 30px;
-		margin: 0rpx 70rpx;
-	}
-	
-	.login-type-btn.act {
-		color: #0FAEFF;
-		border-bottom: solid 5rpx #0FAEFF;
-	}
-	
 	.flex{
 		display: flex;
 	}
@@ -326,9 +274,46 @@
 		flex-direction: column;
 		background: #eee;
 	}
+	.login-title {
+		font-size: 70rpx;
+		margin: 150rpx 0 0 120rpx;
+	}
+	.login-area {
+		margin:65rpx 7%;
+		width:86%;
+		height: 680rpx;
+		background: white;
+		border-radius: 60upx;
+		padding:50rpx 0rpx;
+		
+		.login-type {
+			display: flex;
+			justify-content: center;
+			
+			.login-type-btn {
+				line-height: 30px;
+				margin: 0rpx 70rpx;
+			}
+			.login-type-btn.act {
+				color: #0FAEFF;
+				border-bottom: solid 5rpx #0FAEFF;
+			}
+		}
+		
+		.zhuce {
+			display: flex; 
+			justify-content: space-around;
+
+			.login-tip {
+				font-size: 25upx;
+				color: #666666;
+				text-align: center;
+				color: #0FAEFF;
+			}
+		}
+	}
 	
 	.login-main {
-		// flex: 1;
 		padding: 0 70upx;
 
 		.login-list {
@@ -399,7 +384,7 @@
 		color: red;
 		text-align: center;
 		line-height: 1em;
-		margin-top: 30rpx;
+		margin-top: 40rpx;
 	}
 
 	.login-footer {
@@ -429,7 +414,7 @@
 
 		}
 
-		.footer-other {
+		.footer-icon {
 			padding: 40upx 0 100upx 0;
 			justify-content: center;
 

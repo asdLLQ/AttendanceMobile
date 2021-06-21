@@ -99,7 +99,7 @@
     {
       "path": "pages/course/checkin/Gesture",
       "style": {
-        "navigationBarTitleText": "",
+        "navigationBarTitleText": "手势签到设置",
         "enablePullDownRefresh": false
       }
     },
@@ -117,6 +117,22 @@
         "enablePullDownRefresh": false
       }
     },
+	{
+		"path" : "pages/course/checkin/ChickinIng",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "签到中",
+			"enablePullDownRefresh": false
+		} 
+	},
+	{
+		"path" : "pages/course/checkin/ChickinResult",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "签到结果",
+			"enablePullDownRefresh": false
+		} 
+	},
 	//组织结构页
     {
       "path": "pages/orgnization/School",
@@ -130,8 +146,16 @@
 	  "style": {
 	    "navigationBarTitleText": "个人中心"
 	  }
-	}
-  ],
+	},
+    {
+		"path" : "components/stu-list/Stu-list",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+    }
+    ],
 
   "globalStyle": {
     "navigationBarTextStyle": "white",
