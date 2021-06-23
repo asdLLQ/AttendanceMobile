@@ -1211,8 +1211,7 @@ button.cuIcon.lg {
 .cu-list.menu-avatar>.cu-item {
 	position: relative;
 	display: flex;
-	padding-right: 10upx;
-	height: 170upx;
+	padding: 30rpx 20rpx;
 	background-color: #ffffff;
 	justify-content: flex-end;
 	align-items: center
@@ -3897,6 +3896,9 @@ scroll-view.cu-steps .cu-item {
 	color: black;
 }
 
+.text-white {
+	color: white;
+}
 
 .text-gray,
 .line-gray,
@@ -3914,4 +3916,29 @@ scroll-view.cu-steps .cu-item {
 .line-white,
 .lines-white {
 	color: #ffffff;
+}
+
+.footer-tip {
+	margin-top: 40rpx;
+	align-items: center;
+	font-size: 24upx;
+	color: #999999;
+	text-align: center;
+
+	&:before {
+		flex: 1;
+		content: '';
+		height: 2upx;
+		background: #D0D0D0;
+		margin-right: 30rpx;
+	}
+
+	&:after {
+		margin-left: 30upx;
+		flex: 1;
+		content: '';
+		height: 2upx;
+		background: #D0D0D0;
+	}
+
 }

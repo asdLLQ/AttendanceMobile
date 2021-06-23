@@ -3,17 +3,11 @@
  */
 <template>
 	<view>
-		<view class="cu-bar bg-cyan search">
-			<view class="search-form radius">
-				<text class="cuIcon-search"></text>
-				<!-- @blur="InputBlur" :adjust-position="false" -->
-				<input @focus="InputFocus" type="text" placeholder="搜索班课" confirm-type="search"></input>
-			</view>
-			<view class="action">
-				<text class="cuIcon-add" @click="showModal" data-target="bottomModal"></text>				
-			</view>
+		<view class="role-type flex">
+			<view v-for="(item,index) in roleList" :key="index" @click="role = index" 
+				:class="{act: role === index}" class="role-type-btn">{{item}}</view>
 		</view>
-		<view v-if="role === 0">
+		<view v-if="role === 1">
 			<view class="cu-list menu-avatar">
 				<view class="cu-item margin-top" v-for="item in courseList" :key="item.id">
 					<view class="cu-avatar round lg">
@@ -26,8 +20,8 @@
 						</view>
 					</view>
 					<view class="action">
-						<button class="text-grey text-sm" @tap="detail(item.code)">查看详情</button>
-						<button class="text-grey text-sm">签到</button>
+						<button class="text-grey text-sm" @click="detail(item.code)">查看详情</button>
+						<button class="text-grey text-sm" @click="singnUp(item.id)">签到</button>
 					</view>
 				</view>
 			</view>
@@ -35,59 +29,102 @@
 		<view v-else>
 			<view class="cu-list menu-avatar">
 				<view class="cu-item margin-top" v-for="item in courseList" :key="item.id">
+					<view>{{item.courseClass}}</view>
 					<view class="cu-avatar round lg">
 						<image :src="imageUrl"></image>
 					</view>
 					<view class="content">
 						<view class="text-grey  text-df flex">{{item.name}}</view>
-						<view class="text-gray text-df flex">任课老师：
-							<text>{{item.teacherName}}</text>
-						</view>
+						<!-- <view class="text-gray text-df flex">教师：{{item.teacherName}}</view> -->
+						
+						<view class="text-gray text-df flex">学期：{{item.semester}}</view>
+						<view class="text-gray text-df flex courseId">班课号：{{item.code}}</view>
 					</view>
 					<view class="action">
-						<button class="text-grey text-sm" @tap="detail(item.code)">查看详情</button>
-						<button class="text-grey text-sm" @click="showCheckinModal()">发起签到</button>
+						<button class="bg-cyan text-white text-sm" @click="detail(item.code)">查看详情</button>
+						<button class="bg-cyan text-white text-sm" @click="showCheckinModal(item.id)">发起签到</button>
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="button-add-location" @click="showCourseModal()">
+
+		<view class="button-add-location" @click="showCourseModal()" v-show="role === 0">
 			<image src="../../static/img/tabbar/tab_add.png"></image>
 		</view>
 	</view>
 </template>
 
 <script>
+	import {getMyLocation} from '../../util/util.js'
 	export default {
+		async onLoad () {
+			this.uid = uni.getStorageSync('uid')
+		 	this.showCourse()
+			this.address = await getMyLocation();
+		},
 		data() {
 			return {
-				// 0代表学生，1代表教师
-				role: 1,
+				// 0代表教师，1代表学生
+				role: 0,
+				roleList: ['我创建的', '我加入的'],
 				modalName: null,
 				imageUrl:"../../static/img/course/default.png",
 				uid: '',
 				courseList:'',
+				address: [],
 			}
 		},
-		onLoad () {
-			this.uid = uni.getStorageSync('uid')
-		 	this.showCourse()
-		},
 		methods: {
-			showCheckinModal(e) {
+			showCheckinModal(courseID) {
+				const that = this
 				uni.showActionSheet({
 				    itemList: ['一键签到', '限时签到', '手势签到'],
 				    success: function (res) {
-				        console.log('选中了第' + (res.tapIndex + 1) + '个按钮');
+				        console.log('选中了第' + (res.tapIndex + 1) + '个签到按钮');
+						// 一键签到
 						if(res.tapIndex === 0) {
-							console.log("A1");
+							console.log("一键签到");
+							uni.showModal({
+							    title: '提示',
+							    content: '一键签到将马上开始，请让学生做好准备',
+								confirmText: '好的',
+							    success: function (res) {
+							        if (res.confirm) {
+							            console.log('用户点击确定,发起一键签到');
+										var data = {
+											courseId: courseID,
+											longitude: that.address[0],
+											latitude: that.address[1],
+											type: 0,
+										}
+										console.log(data)
+										that.$myRequest.requestWithToken("/checkin-tasks",
+											data, 'POST', (res) => {
+											if (res.statusCode == 200) {
+												console.log("发起一键签到结果：" , res)
+												console.log(res.data.data.id)
+												uni.navigateTo({
+													url: 'checkin/ChickinIng?id=' + res.data.data.id
+												})
+											} else{
+												console.log("fails")
+											} 
+										})
+							        }
+							    }
+							});
+						} // 限时签到
+						else if(res.tapIndex === 1) {
+							console.log("限时签到");
 							uni.navigateTo({
-								url: '../course/addCourse',
+								url: 'checkin/TimeLimit'
 							})
-						} else if(res.tapIndex === 1) {
-							console.log("B1");
-						} else {
-							console.log("C1");
+						} // 手势签到
+						else {
+							console.log("手势签到");
+							uni.navigateTo({
+								url: "checkin/Gesture"
+							})
 						}
 				    },
 				    fail: function (res) {
@@ -130,7 +167,11 @@
 				});
 			},
 			showCourse() {
-				let url = '/courses/joined/'+this.uid;
+				let url
+				if(this.role === 0 )
+					url = '/courses/joined/'+this.uid;
+				else
+					url = '/courses/taught/'+this.uid;
 				console.log("uid:" + this.uid)
 				this.$myRequest.requestWithToken(url ,
 					'', 'GET', (res) => {
@@ -142,17 +183,31 @@
 					} 
 				})
 			},
-			detail(code) {
-				console.log("查看详情",code)
+			detail(cid) {
 				uni.navigateTo({
-					url:'courseDatail/course-detail?id=' + code
+					url:'./detail/Detail?cid=' + cid
 				});
 			},
+			singnUp(courseId) {
+				let url = "/checkin-tasks/courses/" + courseId + "/current"
+				this.$myRequest.requestWithToken (url ,
+					courseId, 'GET', (res) => {
+					if (res.statusCode == 200) {
+						console.log("学生签到结果：" , res)
+						console.log("taskId：" , res.data.data.id)
+						uni.navigateTo({
+							url: './checkin/Checkin?taskId='+ res.data.data.id
+						})
+					} else{
+						console.log("fails")
+					} 
+				})
+			}
 		}
 	}
 </script>
 
-<style>
+<style lang="scss">
 	image {
 		width: 100upx;
 		height: 100upx;
@@ -168,6 +223,23 @@
 		position:fixed;
 		right: 0rpx;
 		bottom: 100rpx
+	}
+	.courseId {
+		color: #1CBBB4;
+	}
+	.role-type {
+		display: flex;
+		justify-content:space-evenly;
+		font-size: 35rpx;
+		
+		.role-type-btn {
+			line-height: 40px;
+			margin: 0rpx 70rpx;
+		}
+		.role-type-btn.act {
+			color: #0FAEFF;
+			border-bottom: solid 5rpx #0FAEFF;
+		}
 	}
 </style>
 

@@ -77,7 +77,10 @@
 	},
 	//班课详情
     {
-      "path": "pages/course/detail/Detail"
+      "path": "pages/course/detail/Detail",
+	  "style": {
+	    "navigationBarTitleText": "班课详情"
+	  }
     },
 	//班课详情-签到列表
 	{
@@ -113,7 +116,7 @@
     {
       "path": "pages/course/checkin/TimeLimit",
       "style": {
-        "navigationBarTitleText": "",
+        "navigationBarTitleText": "限时签到",
         "enablePullDownRefresh": false
       }
     },
@@ -154,7 +157,16 @@
 			"navigationBarTitleText": "",
 			"enablePullDownRefresh": false
 		}
-    }
+    },
+	{
+		"path" : "pages/course/checkin/Checkin",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "签到",
+			"enablePullDownRefresh": false
+		}
+		
+	}
     ],
 
   "globalStyle": {

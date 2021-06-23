@@ -1,41 +1,98 @@
 <template>
     <view>
-		<view class="center">
-			<image :src="imageUrl"></image>
-			<view>班课号：{{courseID}}</view>
-			<view>班课：{{course.name}}</view>	
+		<view class="nav flex">
+			<view class="nav-item" @click="getStudents()">
+				<view class="cuIcon-group person"></view>
+				<text>成员列表</text>
+			</view>
+			<view class="nav-item" @click="getTasks()">
+				<view class="cuIcon-edit checkin"></view>
+				<text>签到任务</text>
+			</view>
+			<view class="nav-item" @click="getDetail()">
+				<view class="cuIcon-calendar detail"></view>
+				<text>班课详情</text>
+			</view>
 		</view>
-		<view class="padding flex flex-direction">
-			<button class="cu-btn bg-blue margin-tb-sm lg setColor" @tap="classJoin()">加入班课</button>
+		<!-- 成员列表 -->
+		<view v-if="page === 0">
+			<view class="describe">成员</view>
+			<view v-for="(item,index) in students" :key="item.id">
+				<stu :index="index" :name="item.realName" :number="item.academicId" descrip="已签到"></stu>
+			</view>
+			<!-- <stu :index="index" :name="students.realName" :number="students.number" descrip="22经验值"></stu>
+			<stu :index="++index" name="张三" number="200327062" descrip="22经验值"></stu>
+			<stu :index="++index" name="张三" number="200327062" descrip="22经验值"></stu> -->
 		</view>
-		<!-- 底部状态栏 -->
-		<view>
-			<view-tabbar tabIndex=5></view-tabbar>
+		<!-- 签到记录 -->
+		<view v-if="page === 1">
+			<view class="describe">签到任务统计</view>
+			<view v-for="(item,index) in tasks" :key="item.id" class="flex">
+				<view>{{item.deadline}}</view>
+				<view v-if="item.type == 0">一键签到</view>
+				<view v-if="item.type == 1">限时签到</view>
+				<view v-if="item.type == 2">手势签到</view>
+			</view>
 		</view>
+		<!-- 班课详情 -->
+		<view v-if="page === 2">
+			<view class="describe">班课详情</view>
+			<view class="cu-list menu" :class="'card-menu margin-top'">
+				<view class="cu-form-group">
+					<view>班课</view>
+					<view class="text-gray">{{course.name}}</view>
+				</view>
+				<view class="cu-form-group">
+					<view>班课号</view>
+					<view class="text-gray">{{course.code}}</view>
+				</view>
+				<view class="cu-form-group">
+					<view>允许加入</view>
+					<view> <switch @change="SwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch></view>
+				</view>
+				<view class="cu-form-group">
+					<view>学期</view>
+					<view class="text-gray">{{course.semester}}</view>
+				</view>
+				<view class="cu-form-group">
+					<view>任课老师</view>
+					<view class="text-gray">{{course.teacherName}}</view>
+				</view>
+				<view class="cu-form-group">
+					<view>学院</view>
+					<view class="text-gray">{{course.schoolMajorName}}</view>
+				</view>
+			</view>
+		</view>
+
     </view>
 </template>
 
 <script>
-	import Tabbar from '@/components/tab-course.vue'
+	import Stu from '@/components/stu-list/Stu-list.vue'
 	export default {
 		components: {
-			'view-tabbar': Tabbar
-		}, 
+			'stu': Stu
+		},
 		data() {
 			return {
-				imageUrl:"../../../static/course-default.png",
-				courseID: '',
+				imageUrl:"../../../static/img/course/default.png",
+				cid: '',
 				course:'',
+				page: 0,
+				students: '',
+				tasks: '',
+				switchA: true,
 			}
 		},
 		onLoad(option) {
-			this.courseID = option.id
+			this.cid = option.cid
 			console.log(this.courseID)
 			this.searchCourse()
 		},
 		methods: {
 			searchCourse() {
-				let url = '/courses/code/' + this.courseID;
+				let url = '/courses/code/' + this.cid;
 				console.log("uid:" + this.uid)
 				this.$myRequest.requestWithToken(url ,
 					null, 'GET', (res) => {
@@ -48,21 +105,41 @@
 					} 
 				})
 			},
-			classJoin() {
-				let uid = uni.getStorageSync('uid')
-				let url = '/courses/student/' + uid +'/'+ this.courseID;
+			getStudents() {
+				const that = this
+				that.page = 0;
+				let url = '/courses/' + this.course.id + '/students';
+				console.log("uid:" + url)
 				this.$myRequest.requestWithToken(url ,
-					null, 'POST', (res) => {
+					null, 'GET', (res) => {
 					if (res.statusCode == 200) {
-						console.log("显示课程详情" , res.data)
-						uni.showToast({
-							title:"加入班课成功！"
-						})
-						
+						that.students = res.data.data.content
+						console.log("班课成员" , that.students)
 					} else{
 						console.log("fails")
 					} 
 				})
+			},
+			getTasks() {
+				const that = this
+				that.page = 1;
+				let url = '/checkin-tasks/courses/' + this.course.id;
+				console.log("uid:" + url)
+				this.$myRequest.requestWithToken(url ,
+					null, 'GET', (res) => {
+					if (res.statusCode == 200) {
+						that.tasks = res.data.data.content
+						console.log("签到任务列表：" , that.tasks)
+					} else{
+						console.log("fails")
+					} 
+				})
+			},
+			getDetail() {
+				this.page = 2;
+			},
+			SwitchA(e) {
+				this.switchA = e.detail.value
 			},
 		}
 	}
@@ -75,12 +152,32 @@
 		text-align: center;
 		font-size: 50rpx;
 	}
-	image {
-		width: 120upx;
-		height: 120upx;
-		border-radius: 20%;
+	.nav {
+		background-color: #FFFFFF;
+		padding: 20rpx;
+		.nav-item{
+			width: 33.33%;
+			text-align: center;
+			view{
+				width: 100rpx;
+				height: 100rpx;
+				border-radius: 50%;
+				line-height: 100rpx;
+				font-size: 50rpx;
+				margin:10rpx auto;
+			}
+			.checkin{background-color: #169fe6;}
+			.person{background-color: #ed6e5d;}
+			.detail{background-color: #f4ea2a;}
+		}
 	}
-	.setColor {
-		background: #1CBBB4;
+	image {
+		width: 50upx;
+		height: 50upx;
+		border-radius: 50%;
+	}
+	.describe {
+		font-size: 30rpx;
+		line-height: 50rpx;
 	}
 </style>

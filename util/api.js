@@ -70,6 +70,7 @@ const BASR_URL = 'http://172.17.169.27:8080'
 						icon:"none",
 						title:res.data.message
 					});
+					console.log(res.data.message)
 					if(fail){
 						fail(res);
 					}
@@ -78,7 +79,8 @@ const BASR_URL = 'http://172.17.169.27:8080'
 				success(res);
 			},
 			fail: (err) => {
-				console.log(method, url, "fail");
+				console.log(method, url, "fail")
+				console.log(res.data.message)
 				uni.showToast({
 					icon:"none",
 					title:err.data.message
@@ -128,8 +130,6 @@ const BASR_URL = 'http://172.17.169.27:8080'
 	del(url, data, success, fail) {
 		this.request(url, data, 'DELETE', success, fail);
 	},
-
-
 	// 退出登录
 	logout() {
 		var url = urls.logout;

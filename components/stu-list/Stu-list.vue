@@ -5,15 +5,15 @@
 <template>
 	<view class="stu-list flex">
 		<view class="stu-item flex">
-			<view class="number flex">1</view>
+			<view class="number flex">{{index}}</view>
 			<view class="flex"><image :src="imageUrl"></image>
 			</view>
 			<view class="content">
-				<view >莫甘娜</view>
-				<view>200327062</view>
+				<view >{{name}}</view>
+				<view>{{number}}</view>
 			</view>
 			<view class="score flex">
-				<view class="text-gray flex">22经验值
+				<view class="text-gray flex">{{descrip}}
 					<!-- <view class="cuIcon-right"></view> -->
 				</view>
 			</view>
@@ -24,6 +24,10 @@
 <script>
 	export default {
 		props: {
+			index: {
+				type: String,
+				default: ''
+			},
 			name: {
 				type: String,
 				default: ''
@@ -35,11 +39,16 @@
 			descrip: {
 				type: String,
 				default: ''
-			}
+			},
+			imageUrl: {
+				type: String,
+				default: '/static/default.png'
+			},
+			
 		},
 		data() {
 			return {
-				imageUrl: '../../static/img/default.png'
+				// imageUrl: '/static/default.png'
 			}
 		},
 		methods: {
@@ -55,8 +64,10 @@
 	
 	.stu-list {
 		background-color: white;
-		margin:10rpx 0;
 		padding:10rpx 0rpx;
+		border-bottom-style: solid;
+		border-width: 0.5rpx; 
+		border-color: #DCDFE6;
 	
 		.stu-item {
 		   .number {

@@ -28,34 +28,22 @@
 				tabList:[{
 						id:1,
 	                    text: '资源',  
-	                    icon: '/static/tabbar/resource.png',  //未选中图标
-	                    icon_a: '/static/tabbar/resource_active.png',  //选中图片
+	                    icon: '/static/img/tabbar/resource.png',  //未选中图标
+	                    icon_a: '/static/img/tabbar/resource_active.png',  //选中图片
 	                    url: "/pages/course/course-resource",  //页面路径
 	                },{
 						id:2,
 	                    text: '成员',
-	                    icon: '/static/tabbar/students.png',
-	                    icon_a: '/static/tabbar/students_active.png',
+	                    icon: '/static/img/tabbar/students.png',
+	                    icon_a: '/static/img/tabbar/students_active.png',
 	                    url: "/pages/course/course-students",
 	                }
 	                ,{
 						id:3,
-	                    text: '活动',
-	                    icon: '/static/tabbar/activity.png',
-	                    icon_a: '/static/tabbar/activity_active.png',
-	                    url: "/pages/course/course-activity",
-	                },{
-						id:4,
-	                    text: '消息',
-	                    icon: '/static/tabbar/message.png',
-	                    icon_a: '/static/tabbar/message_active.png',
-	                    url: "/pages/course/course-message",
-	                },{
-						id:5,
 	                    text: '详情',
-	                    icon: '/static/tabbar/detail.png',
-	                    icon_a: '/static/tabbar/detail_active.png',
-	                    url: "/pages/course/course-detail",
+	                    icon: '/static/img/tabbar/activity.png',
+	                    icon_a: '/static/img/tabbar/activity_active.png',
+	                    url: "/pages/course/detail/Detail",
 	                },
 	            ]
 				

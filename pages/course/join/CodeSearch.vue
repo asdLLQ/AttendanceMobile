@@ -10,8 +10,21 @@
 				</view>
 			</view>
 		</view>
-		<button class="cu-btn login-btn" @tap="searchCourse()">搜索</button>
+		<button class="cu-btn login-btn" @click="searchCourse()">搜索</button>
 		
+		<view class="footer-tip flex" v-show="res">结果</view>
+		<view class="result"  v-for="item in course" :key="item.id">
+			<view class="round lg center">
+				<image :src="imageUrl"></image>
+			</view>
+			<view class="content">
+				<view class="center flex weight">{{item.name}}</view>
+				<view class="flex center">教师：{{item.teacherName}}</view> 
+				<view class="flex center">学期：{{item.semester}}</view>
+				<view class="flex center">班课号：{{item.code}}</view>
+			</view>
+			<button class="cu-btn login-btn" @tap="joinCourse(item.id)">加入班课</button>
+		</view>
 	</view>
 </template>
 
@@ -21,6 +34,9 @@
 		data() {
 			return {
 				courseID: "",
+				course:'',
+				imageUrl:"/static/img/course/default.png",
+				res: false,
 			}
 		},
 		onLoad() {
@@ -28,6 +44,7 @@
 		},
 		methods: {
 			searchCourse() {
+				const that = this
 				console.log("asd",this.courseID)
 				let url = '/courses/code/' + this.courseID;
 				console.log("uid:" + this.uid)
@@ -35,15 +52,31 @@
 					null, 'GET', (res) => {
 					if (res.statusCode == 200) {
 						console.log("显示课程详情" , res.data.data)
-						uni.navigateTo({
-							url:'../courseDatail/course-detail?id=' + this.courseID
-						});
+						that.course = [res.data.data]
+						that.hideKeyboard()
+						that.res = true
 					} else{
 						console.log("fails")
 					} 
 				})
 				
 			},
+			joinCourse(courseID) {
+				let uid = uni.getStorageSync('uid')
+				let url = '/courses/student/' + uid +'/'+ courseID;
+				this.$myRequest.requestWithToken(url ,
+					null, 'POST', (res) => {
+					if (res.statusCode == 200) {
+						console.log("显示课程详情" , res.data)
+						uni.showToast({
+							title:"加入班课成功！"
+						})
+						
+					} else{
+						console.log("fails")
+					} 
+				})
+			}
 		}
 	}
 </script>
@@ -51,31 +84,25 @@
 
 
 <style lang="scss">
-	
 	.flex{
 		display: flex;
-	}
-		
+	}	
 	.login-main {
 		flex: 1;
 		padding: 0 60upx;
-
 		.login-list {
-			margin-top: 80upx;
-			height: 90upx;
+			margin-top: 70upx;
+			height: 80upx;
 			align-items: center;
 			padding: 0 30upx;
-
 			&.border-all {
 				&:after {
 					border: 2px solid #888888;
 					border-radius: 100upx;
 				}
 			}
-
 			.login-input {
 				flex: 1;
-
 				input {
 					font-size: 28upx;
 					color: #333333;
@@ -83,10 +110,9 @@
 				}
 			}
 		}
-
 		.login-btn {
-			margin-top: 70upx;
-			height: 96upx;
+			margin-top: 60upx;
+			height: 86upx;
 			width: 100%;
 			background: #1CBBB4;
 			border-radius: 47upx;
@@ -94,4 +120,29 @@
 			color: #ffffff;
 		}
 	}
+	image {
+		width: 120upx;
+		height: 120upx;
+		border-radius: 20%;
+	}
+	.result {
+		margin-top: 50rpx;
+		padding-top: 20rpx;
+		background-color: white;
+		padding: 30rpx auto;
+		border-radius: 50upx;
+		border: solid 3rpx #1CBBB4;
+		justify-content: center;
+		.content {
+			font-size: 35rpx;
+			line-height: 60rpx;
+			.weight {font-weight: bolder;}
+		}
+	}
+	.center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
 </style>

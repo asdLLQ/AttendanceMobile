@@ -139,7 +139,7 @@
 			},
 			chooseSchool() {
 				uni.navigateTo({
-					url: './orgnization/school'
+					url: '../../orgnization/School'
 				})
 			},
 		}

@@ -17,7 +17,7 @@
 			</view>
 		</view>
 		<view class="padding flex flex-direction">
-			<button class="cu-btn bg-blue margin-tb-sm lg setColor" @tap="classBegin">开始班课</button>
+			<button class="cu-btn bg-cyan margin-tb-sm lg setColor" @tap="classBegin">开始班课</button>
 		</view>
 	</view>
 </template>

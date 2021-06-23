@@ -169,16 +169,15 @@
 					'type':"login",
 					'phone':this.phone
 				}
-				
 				this.$myRequest.request('/sms',data, 'POST', (res) => {
 					if (res.statusCode == 200) {
 						console.log("sms成功")
 						console.log(JSON.stringify(res))
 						console.log(res)
 						console.log(res.data.data.token)
-						uni.switchTab({
-						  url: '../../course/List',
-						})
+						// uni.switchTab({
+						//   url: '../../course/List',
+						// })
 					} 
 				});
 
@@ -235,9 +234,8 @@
 						})
 					} 
 				})
-				
-				
 			},
+			//第三方登录--QQ
 			loginQQ() {
 				uni.login({
 					provider: 'qq',	//微信:wx   QQ:qq
@@ -417,12 +415,10 @@
 		.footer-icon {
 			padding: 40upx 0 100upx 0;
 			justify-content: center;
-
 			.other-list {
 				width: 80upx;
 				height: 80upx;
 				margin: 0 50upx;
-
 				image {
 					width: 100%;
 					height: 100%;

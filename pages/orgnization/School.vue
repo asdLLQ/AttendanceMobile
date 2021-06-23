@@ -48,7 +48,7 @@
 						uni.navigateBack()
 					}
 				} else {
-					url += 1000;
+					url += 1;
 				}
 				console.log(url)
 				console.log("stack:" + this.stack)
