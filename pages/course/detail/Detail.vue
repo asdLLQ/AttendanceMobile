@@ -1,15 +1,15 @@
 <template>
     <view>
 		<view class="nav flex">
-			<view class="nav-item" @click="getStudents()">
+			<view class="nav-item" @click="onGetStudents()">
 				<view class="cuIcon-group person"></view>
 				<text>成员列表</text>
 			</view>
-			<view class="nav-item" @click="getTasks()">
+			<view class="nav-item" @click="onGetTasks()">
 				<view class="cuIcon-edit checkin"></view>
 				<text>签到任务</text>
 			</view>
-			<view class="nav-item" @click="getDetail()">
+			<view class="nav-item" @click="onGetDetail()">
 				<view class="cuIcon-calendar detail"></view>
 				<text>班课详情</text>
 			</view>
@@ -35,34 +35,44 @@
 		<view v-if="page === 2">
 			<view class="edit flex">
 				<view class="describe">班课详情</view>
-				<view class="describe" @click="edit()"><text>编辑</text></view>
+				<view class="describe" @click="onEdit()"><text>编辑</text></view>
 			</view>
 			<view class="cu-list menu">
 				<view class="cu-form-group">
 					<view>班课</view>
-					<input v-model="course"></input>
-				</view>
-				<view class="cu-form-group">
-					<view>班课号</view>
-					<view class="text-gray">{{course.code}}</view>
-				</view>
-				<view class="cu-form-group">
-					<view>允许加入</view>
-					<view> <switch @change="SwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch></view>
+					<input :value="course.name" :disabled="edit" v-model="course.name"></input>
 				</view>
 				<view class="cu-form-group">
 					<view>学期</view>
-					<view class="text-gray">{{course.semester}}</view>
+					<input :value="course.semester" :disabled="edit" v-model="course.semester"></input>
+					<!-- <picker @change="onPickerChange" :value="semesterIndex" :range="picker" :disabled="edit">
+					1</picker> -->
+					
+					<!-- <view class="text-gray">{{course.semester}}</view> -->
+				</view>
+				
+				<view class="cu-form-group margin-top">
+					<view>允许加入</view>
+					<view> <switch @change="onSwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch></view>
+				</view>
+				<view class="cu-form-group">
+					<view>班课号</view>
+					<!-- <input :value="course.code" :disabled="edit"></input> -->
+					<view class="text-gray">{{course.code}}</view>
 				</view>
 				<view class="cu-form-group">
 					<view>任课老师</view>
+					<!-- <input :value="course.teacherName" :disabled="edit"></input> -->
 					<view class="text-gray">{{course.teacherName}}</view>
 				</view>
 				<view class="cu-form-group">
 					<view>学院</view>
+					<!-- <input :value="course.schoolMajorName" :disabled="edit"></input> -->
 					<view class="text-gray">{{course.schoolMajorName}}</view>
 				</view>
 			</view>
+			<button class="margin-top bg-cyan lg" v-show="!edit" @click="onSubmitEdit()">完成编辑</button>
+			<button class="margin-top bg-cyan lg" v-show="edit" @click="onFinishCourse()">结束班课</button>
 		</view>
 
     </view>
@@ -83,6 +93,9 @@
 				students: '',
 				tasks: '',
 				switchA: true,
+				edit: true,
+				picker: ['2020-2021-1', '2020-2021-2', '2021-2022-1', '2021-2022-2'],
+				semesterIndex: '',
 			}
 		},
 		onLoad(option) {
@@ -105,7 +118,7 @@
 					} 
 				})
 			},
-			getStudents() {
+			onGetStudents() {
 				const that = this
 				that.page = 0;
 				let url = '/courses/' + this.course.id + '/students';
@@ -120,7 +133,7 @@
 					} 
 				})
 			},
-			getTasks() {
+			onGetTasks() {
 				const that = this
 				that.page = 1;
 				let url = '/checkin-tasks/courses/' + this.course.id;
@@ -135,12 +148,43 @@
 					} 
 				})
 			},
-			getDetail() {
+			onGetDetail() {
 				this.page = 2;
 			},
-			SwitchA(e) {
+			onSwitchA(e) {
 				this.switchA = e.detail.value
 			},
+			onPickerChange(e) {
+				this.semesterIndex = e.detail.value
+				console.log(this.picker[this.semesterIndex])
+			},
+			onEdit() {
+				this.edit = false
+			},
+			onSubmitEdit() {
+				const that = this
+				var data = {
+					name: that.course.name,
+					semester: this.course.semester,
+				}
+				let url = '/courses/'+  this.course.id;
+				console.log("courseData:" , data)
+				this.$myRequest.requestWithToken(url ,
+					data, 'PATCH', (res) => {
+					if (res.statusCode == 200) {
+						console.log("修改课程结果" , res.data)
+						that.searchCourse()
+						this.edit = true
+					} else{
+						console.log("fails")
+					} 
+				})
+				
+				
+			},
+			onFinishCourse() {
+				
+			}
 		}
 	}
 	
@@ -183,4 +227,5 @@
 		font-size: 30rpx;
 		line-height: 70rpx;
 	}
+	input {text-align: right;font-size: 28rpx;color: #aaaaaa;}
 </style>
