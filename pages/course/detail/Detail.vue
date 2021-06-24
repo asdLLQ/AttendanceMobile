@@ -18,11 +18,8 @@
 		<view v-if="page === 0">
 			<view class="describe">成员</view>
 			<view v-for="(item,index) in students" :key="item.id">
-				<stu :index="index" :name="item.realName" :number="item.academicId" descrip="已签到"></stu>
+				<stu :index="index" :name="item.stuName" :number="item.stuId" :descrip="item.experience + '经验值'"></stu>
 			</view>
-			<!-- <stu :index="index" :name="students.realName" :number="students.number" descrip="22经验值"></stu>
-			<stu :index="++index" name="张三" number="200327062" descrip="22经验值"></stu>
-			<stu :index="++index" name="张三" number="200327062" descrip="22经验值"></stu> -->
 		</view>
 		<!-- 签到记录 -->
 		<view v-if="page === 1">
@@ -36,11 +33,14 @@
 		</view>
 		<!-- 班课详情 -->
 		<view v-if="page === 2">
-			<view class="describe">班课详情</view>
-			<view class="cu-list menu" :class="'card-menu margin-top'">
+			<view class="edit flex">
+				<view class="describe">班课详情</view>
+				<view class="describe" @click="edit()"><text>编辑</text></view>
+			</view>
+			<view class="cu-list menu">
 				<view class="cu-form-group">
 					<view>班课</view>
-					<view class="text-gray">{{course.name}}</view>
+					<input v-model="course"></input>
 				</view>
 				<view class="cu-form-group">
 					<view>班课号</view>
@@ -79,7 +79,7 @@
 				imageUrl:"../../../static/img/course/default.png",
 				cid: '',
 				course:'',
-				page: 0,
+				page: 2,
 				students: '',
 				tasks: '',
 				switchA: true,
@@ -166,8 +166,8 @@
 				font-size: 50rpx;
 				margin:10rpx auto;
 			}
-			.checkin{background-color: #169fe6;}
-			.person{background-color: #ed6e5d;}
+			.checkin{background-color: #19c1e6;}
+			.person{background-color: #ff3d46;}
 			.detail{background-color: #f4ea2a;}
 		}
 	}
@@ -176,8 +176,11 @@
 		height: 50upx;
 		border-radius: 50%;
 	}
+	.edit {justify-content:space-between;font-size: 100rpx;
+		text {color:#0FAEFF}
+	}
 	.describe {
 		font-size: 30rpx;
-		line-height: 50rpx;
+		line-height: 70rpx;
 	}
 </style>

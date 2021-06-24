@@ -10,10 +10,10 @@
 			</view>
 			<view class="content">
 				<view >{{name}}</view>
-				<view>{{number}}</view>
+				<view class="text-gray">{{number}}</view>
 			</view>
 			<view class="score flex">
-				<view class="text-gray flex">{{descrip}}
+				<view class="text-orange flex">{{descrip}}
 					<!-- <view class="cuIcon-right"></view> -->
 				</view>
 			</view>

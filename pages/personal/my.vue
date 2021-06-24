@@ -55,8 +55,8 @@
 			</view>
 			
 			<view class="history-section icon">
-				<list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="课程记录"></list-cell>
-				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="忘记密码" ></list-cell>
+				<list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="忘记密码"></list-cell>
+				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="课程记录" ></list-cell>
 				<list-cell icon="icon-share" iconColor="#9789f7" title="设置" tips=""></list-cell>
 				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏"></list-cell>
 				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="退出登录" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
@@ -105,7 +105,7 @@
 		height: 400upx;
 		padding: 100upx 30upx 0;
 		position:relative;
-		background: #5083a8;
+		background: #4aa7a8;
 		.bg{
 			position:absolute;
 			left: 0;

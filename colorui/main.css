@@ -3900,6 +3900,10 @@ scroll-view.cu-steps .cu-item {
 	color: white;
 }
 
+.text-orange {
+	color: #f4a300;
+}
+
 .text-gray,
 .line-gray,
 .lines-gray {
