@@ -20,8 +20,8 @@
 						</view>
 					</view>
 					<view class="action">
-						<button class="text-grey text-sm" @click="detail(item.code)">查看详情</button>
-						<button class="text-grey text-sm" @click="singnUp(item.id)">签到</button>
+						<button class="bg-cyan text-white text-sm" @click="detail(item.code)">查看详情</button>
+						<button class="bg-cyan text-white text-sm" @click="singnUp(item.id)">签到</button>
 					</view>
 				</view>
 			</view>
@@ -77,6 +77,19 @@
 		methods: {
 			showCheckinModal(courseID) {
 				const that = this
+				if (that.getCurrentTask(courseID) != '') {
+					uni.showToast({
+						title:"有签到任务了"
+					})
+				}
+					
+				var data = {
+					courseId: courseID,
+					longitude: that.address[0],
+					latitude: that.address[1],
+					type: 1,
+				}
+				console.log("发起签到的信息：",data)
 				uni.showActionSheet({
 				    itemList: ['一键签到', '限时签到', '手势签到'],
 				    success: function (res) {
@@ -91,24 +104,16 @@
 							    success: function (res) {
 							        if (res.confirm) {
 							            console.log('用户点击确定,发起一键签到');
-										var data = {
-											courseId: courseID,
-											longitude: that.address[0],
-											latitude: that.address[1],
-											type: 0,
-										}
-										console.log(data)
-										that.$myRequest.requestWithToken("/checkin-tasks",
-											data, 'POST', (res) => {
+										that.$myRequest.requestWithToken("/checkin-tasks", that.data, 'POST',(res) => {
 											if (res.statusCode == 200) {
-												console.log("发起一键签到结果：" , res)
+												console.log("发起一键签到结果：")
 												console.log(res.data.data.id)
 												uni.navigateTo({
-													url: 'checkin/ChickinIng?id=' + res.data.data.id
+													url: 'checkin/CheckinIng?id=' + res.data.data.id
 												})
 											} else{
 												console.log("fails")
-											} 
+											}
 										})
 							        }
 							    }
@@ -117,7 +122,7 @@
 						else if(res.tapIndex === 1) {
 							console.log("限时签到");
 							uni.navigateTo({
-								url: 'checkin/TimeLimit'
+								url: 'checkin/TimeLimit?courseId=' + courseID
 							})
 						} // 手势签到
 						else {
@@ -173,8 +178,7 @@
 				else
 					url = '/courses/taught/'+this.uid;
 				console.log("uid:" + this.uid)
-				this.$myRequest.requestWithToken(url ,
-					'', 'GET', (res) => {
+				this.$myRequest.requestWithToken (url, '', 'GET',(res) => {
 					if (res.statusCode == 200) {
 						console.log("显示课程" , res.data.data.content)
 						this.courseList = res.data.data.content
@@ -188,19 +192,24 @@
 					url:'./detail/Detail?cid=' + cid
 				});
 			},
-			singnUp(courseId) {
+			getCurrentTask(courseId) {
 				let url = "/checkin-tasks/courses/" + courseId + "/current"
-				this.$myRequest.requestWithToken (url ,
-					courseId, 'GET', (res) => {
+				let taskId = ''
+				this.$myRequest.requestWithToken (url, courseId, 'GET',(res) => {
 					if (res.statusCode == 200) {
-						console.log("学生签到结果：" , res)
+						console.log("学生点击签到：" , res.data)
 						console.log("taskId：" , res.data.data.id)
-						uni.navigateTo({
-							url: './checkin/Checkin?taskId='+ res.data.data.id
-						})
+						taskId = res.data.data.id
 					} else{
 						console.log("fails")
 					} 
+				})
+				return taskId
+			},
+			singnUp(courseId) {
+				let taskId = this.getCurrentTask(courseId)
+				uni.navigateTo({
+					url: './checkin/Checkin?taskId='+ taskId
 				})
 			}
 		}

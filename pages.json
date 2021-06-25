@@ -121,7 +121,7 @@
       }
     },
 	{
-		"path" : "pages/course/checkin/ChickinIng",
+		"path" : "pages/course/checkin/CheckinIng",
 		"style" :                                                                                    
 		{
 			"navigationBarTitleText": "签到中",
@@ -129,7 +129,7 @@
 		} 
 	},
 	{
-		"path" : "pages/course/checkin/ChickinResult",
+		"path" : "pages/course/checkin/CheckinResult",
 		"style" :                                                                                    
 		{
 			"navigationBarTitleText": "签到结果",

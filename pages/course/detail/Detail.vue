@@ -24,11 +24,15 @@
 		<!-- 签到记录 -->
 		<view v-if="page === 1">
 			<view class="describe">签到任务统计</view>
-			<view v-for="(item,index) in tasks" :key="item.id" class="flex">
-				<view>{{item.deadline}}</view>
-				<view v-if="item.type == 0">一键签到</view>
-				<view v-if="item.type == 1">限时签到</view>
-				<view v-if="item.type == 2">手势签到</view>
+			<view class="cu-list menu" v-for="(item,index) in tasks" :key="item.id">
+				<view class="cu-form-group" @click="onGetTaskDetails(item.id)">
+					<view>{{item.startTime}}
+						<text v-if="item.type == 0">一键签到</text>
+						<text v-if="item.type == 1">限时签到</text>
+						<text v-if="item.type == 2">手势签到</text>
+					</view>
+					<view class="cuIcon-right"></view>
+				</view>
 			</view>
 		</view>
 		<!-- 班课详情 -->
@@ -37,6 +41,7 @@
 				<view class="describe">班课详情</view>
 				<view class="describe" @click="onEdit()"><text>编辑</text></view>
 			</view>
+			
 			<view class="cu-list menu">
 				<view class="cu-form-group">
 					<view>班课</view>
@@ -44,20 +49,21 @@
 				</view>
 				<view class="cu-form-group">
 					<view>学期</view>
-					<input :value="course.semester" :disabled="edit" v-model="course.semester"></input>
-					<!-- <picker @change="onPickerChange" :value="semesterIndex" :range="picker" :disabled="edit">
-					1</picker> -->
-					
+					<view class="text-gray">
+					<picker @change="onPickerChange" :value="semesterIndex" :range="picker" :disabled="edit">
+						{{course.semester}}<!-- <input :value="course.semester" :disabled="edit" v-model="course.semester"></input> -->
+					</picker></view>
 					<!-- <view class="text-gray">{{course.semester}}</view> -->
 				</view>
-				
-				<view class="cu-form-group margin-top">
+			</view>
+			<view class="cu-list menu margin-top">	
+				<view class="cu-form-group">
 					<view>允许加入</view>
 					<view> <switch @change="onSwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch></view>
 				</view>
 				<view class="cu-form-group">
 					<view>班课号</view>
-					<!-- <input :value="course.code" :disabled="edit"></input> -->
+					<!-- <input :value="course.code" :disabled="edit"></input>
 					<view class="text-gray">{{course.code}}</view>
 				</view>
 				<view class="cu-form-group">
@@ -71,6 +77,7 @@
 					<view class="text-gray">{{course.schoolMajorName}}</view>
 				</view>
 			</view>
+			<button class="margin-top bg-cyan lg" v-show="!edit" @click="onCancleEdit()">取消</button>
 			<button class="margin-top bg-cyan lg" v-show="!edit" @click="onSubmitEdit()">完成编辑</button>
 			<button class="margin-top bg-cyan lg" v-show="edit" @click="onFinishCourse()">结束班课</button>
 		</view>
@@ -106,7 +113,7 @@
 		methods: {
 			searchCourse() {
 				let url = '/courses/code/' + this.cid;
-				console.log("uid:" + this.uid)
+				console.log("uid:" + this.cid)
 				this.$myRequest.requestWithToken(url ,
 					null, 'GET', (res) => {
 					if (res.statusCode == 200) {
@@ -157,6 +164,7 @@
 			onPickerChange(e) {
 				this.semesterIndex = e.detail.value
 				console.log(this.picker[this.semesterIndex])
+				this.course.semester = this.picker[this.semesterIndex]
 			},
 			onEdit() {
 				this.edit = false
@@ -179,11 +187,17 @@
 						console.log("fails")
 					} 
 				})
-				
-				
+			},
+			onCancleEdit() {
+				this.edit = !this.edit;
 			},
 			onFinishCourse() {
 				
+			},
+			onGetTaskDetails(taskId) {
+				uni.navigateTo({
+					url: "../checkin/CheckinResult?taskId=" + taskId
+				})
 			}
 		}
 	}

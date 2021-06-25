@@ -19,7 +19,7 @@
 				<view class="login-list flex border-all">
 					<view class="iconfont icon-shoujihao flex"></view>
 					<view class="login-input">
-						<input type="number" maxlength="11" placeholder="请输入手机号" v-model="phone" />
+						<input type="number" maxlength="11" placeholder="请输入手机号" v-model="phone"  @blur="validate('phone')"/>
 					</view>
 				</view>
 				<view class="login-list flex border-all">
@@ -44,9 +44,14 @@
 				phone: "",
 				code: '',
 				confirm_pwd:'',
-				password:'',
 				getCodeText: '获取验证码',
 				getCodeBtnColor: "#ffffff",
+				rules:{
+					phone:{
+						rule:/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+						msg:"手机号错误"
+					},
+				}
 			}
 		},
 		onLoad() {
@@ -54,46 +59,39 @@
 		},
 		methods: {
 			Timer() {},
+			//验证手机号
+			validate(key) {
+				console.log(key)
+				if(!this.rules[key].rule.test(this[key])){
+					//提示信息
+					uni.showToast({
+						icon: "none",
+						title:this.rules[key].msg,
+					})
+					this.msgErr = this.rules[key].msg
+					console.log("validate(phone)")
+				} else {
+					this.msgErr = ''
+				}
+			},
 			async onGetCode() {
 				let _this = this;
 				uni.hideKeyboard()
 				if (_this.getCodeisWaiting) {
 					return;
 				}
-				if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(_this.phone))) {
-					uni.showToast({
-						title: '请填写正确手机号码',
-						icon: "none"
-					});
-					return false;
-				}
+
 				_this.getCodeText = "发送中..."
 				_this.getCodeisWaiting = true;
 				_this.getCodeBtnColor = "rgba(255,255,255,0.5)"
 				
-				const res = await _this.$myRequest({
-					url:'/sms',
-					data:{
-						'type':"register",
-						'phone':this.phone
-					},
-					method: 'POST',
-				});
-				_this.code = res.data.code;
-				console.log(_this.code);
-				/*uni.request({
-					url: "http://attendance.keepdev.top/api/sms",
-					data: {
-						'type':"register",
-						'phone':this.phone
-					},
-					method: 'POST',
-					success: (res) => {
-						console.log(res);
-						_this.code = res.data.code;
-						console.log(_this.code);
-					}
-				});*/
+				let data = {
+					'type':"register",
+					'phone':this.phone
+				}
+				console.log("发送验证码")
+				let res =  _this.http.post('/sms',data)
+
 				//示例用定时器模拟请求效果
 				setTimeout(() => {
 					//uni.showToast({title: '验证码已发送',icon:"none"});
@@ -130,29 +128,6 @@
 						url:"./register-role?phone="+_this.phone+'&code='+_this.code
 					});
 				}
-				
-				/*uni.request({
-					url: 'http://attendance.keepdev.top/api/sms/register/'+_this.phone+'/'+_this.code,
-					data: {
-					},
-					method: 'POST',
-					success: (res) => {
-						console.log("校验验证码"+res);
-						if (res.statusCode == 200) {
-							console.log("校验验证码成功")
-							uni.navigateTo({
-								url:"./register-role?phone="+_this.phone+'&code='+_this.code
-							});
-						} else {
-							uni.showToast({
-								title: '验证码错误失败',
-								icon: "none"
-							});
-							console.log(res);
-							return false;
-						}
-					}
-				});*/
 			},
 		}
 	}

@@ -50,13 +50,19 @@ const BASR_URL = 'http://172.17.169.27:8080'
 	},
 	requestWithToken(url, data1, method, success, fail) {
 		const token = uni.getStorageSync('token')
-		console.log("requestWithToken：" + token)
-		uni.request({
-			url: BASR_URL + url,
-			header: {
+		console.log("method:",method)
+		// console.log("requestWithToken：" + token)
+		let headers = {
 				'content-type': 'application/json',
 				'Authorization': 'Bearer '+token //默认携带token，未登录时，token为''
-			},
+			}
+		if("patch"==method.toLowerCase()){
+			headers['X-HTTP-METHOD-OVERRIDE']='patch'
+			method="POST"
+		}
+		uni.request({
+			url: BASR_URL + url,
+			header: headers,
 			data: data1,
 			method: method,
 			success: (res) => {
@@ -126,6 +132,9 @@ const BASR_URL = 'http://172.17.169.27:8080'
 	},
 	put(url, data, success, fail) {
 		this.request(url, data, 'PUT', success, fail);
+	},
+	patch(url, data, success, fail) {
+		this.requestWithToken(url, data, 'PATCH', success, fail);
 	},
 	del(url, data, success, fail) {
 		this.request(url, data, 'DELETE', success, fail);

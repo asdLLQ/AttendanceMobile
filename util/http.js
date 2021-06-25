@@ -39,6 +39,47 @@ const http = {
 	}
 
 }
+
+//统一异常处理
+const handleError = (status) => {
+	switch (status) {
+		case 400:
+			uni.showToast({
+				icon: 'none',
+				title: '请求描述不正确',
+				duration: 2000
+			});
+			
+		case 401:
+			uni.showToast({
+				icon: 'none',
+				title: '尚未授权',
+				duration: 2000
+			});
+
+		case 404:
+			uni.showToast({
+				icon: 'none',
+				title: '访问路径不存在',
+				duration: 2000
+			});
+			
+		case 403:
+			uni.showToast({
+				icon: 'none',
+				title: '操作不被服务器执行',
+				duration: 2000
+			});	
+			
+		case 500:
+			uni.showToast({
+				icon: 'none',
+				title: '服务器出错了',
+				duration: 2000
+			});
+	}
+}
+
 uni.addInterceptor('request', {
 	/**
 	 * 请求发出前
@@ -73,12 +114,9 @@ uni.addInterceptor('request', {
 	 * 请求成功, 似乎不管状态码是什么都会请求这个
 	 * @param {*} args 
 	 */
-	success({ data, statusCode, header, errMsg }) {
+	success({ data, statusCode, header, errMsg }) {	
 		if (statusCode != 200) {
-			uni.showModal({
-				content: data.message,
-				showCancel: false,
-			})
+			handleError(statusCode)
 		}
 	},
 	/**
@@ -96,4 +134,5 @@ uni.addInterceptor('request', {
 	// 	console.log('interceptor-complete', res)
 	// }
 })
+
 export default http;

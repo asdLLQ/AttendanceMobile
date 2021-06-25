@@ -35,12 +35,12 @@ function resolvingDate(date) {
 	return times
 }
 
-function formateDate(datetime, type) {
+function formateDate_deadline(datetime, h, m, type) {
 	var year = datetime.getFullYear(),
 		month = ("0" + (datetime.getMonth() + 1)).slice(-2),
 		date = ("0" + datetime.getDate()).slice(-2),
-		hour = ("0" + datetime.getHours()).slice(-2),
-		minute = ("0" + datetime.getMinutes()).slice(-2),
+		hour = ("0" + (datetime.getHours() + h)).slice(-2),
+		minute = ("0" + (datetime.getMinutes() + m)).slice(-2),
 		second = ("0" + datetime.getSeconds()).slice(-2);
 	if (type === "Y-M-D h:min:s") {
 		var result = year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
@@ -58,6 +58,6 @@ function formateDate(datetime, type) {
 }
 module.exports = {
 	resolvingDate,
-	formateDate,
+	formateDate_deadline,
 	getMyLocation
 }

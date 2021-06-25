@@ -1,7 +1,7 @@
 <template>
 	<view class="uni-countdown">
-		<text v-if="showDay" :style="{ borderColor: borderColor, color: color, backgroundColor: backgroundColor }" class="uni-countdown__number">{{ d }}</text>
-		<text v-if="showDay" :style="{ color: splitorColor }" class="uni-countdown__splitor">天</text>
+		<!-- <text v-if="showDay" :style="{ borderColor: borderColor, color: color, backgroundColor: backgroundColor }" class="uni-countdown__number">{{ d }}</text>
+		<text v-if="showDay" :style="{ color: splitorColor }" class="uni-countdown__splitor">天</text> -->
 		<text :style="{ borderColor: borderColor, color: color, backgroundColor: backgroundColor }" class="uni-countdown__number">{{ h }}</text>
 		<text :style="{ color: splitorColor }" class="uni-countdown__splitor">{{ showColon ? ':' : '时' }}</text>
 		<text :style="{ borderColor: borderColor, color: color, backgroundColor: backgroundColor }" class="uni-countdown__number">{{ i }}</text>
@@ -20,7 +20,7 @@
 			},
 			showColon: {
 				type: Boolean,
-				default: true
+				default: false
 			},
 			backgroundColor: {
 				type: String,
@@ -159,7 +159,7 @@
 		/* #endif */
 		flex-direction: row;
 		justify-content: center;
-		padding: 2rpx 0;
+		padding: 5rpx 0;
 	}
 
 	.uni-countdown__splitor {
@@ -169,7 +169,7 @@
 		justify-content: center;
 		line-height: $countdown-height;
 		padding: 4rpx;
-		font-size: $uni-font-size-lg;
+		font-size: 35rpx;
 	}
 
 	.uni-countdown__number {

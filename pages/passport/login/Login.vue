@@ -79,7 +79,6 @@
 				phone: "",
 				code: '',
 				password: '',
-				
 				msgErr: '',
 				msgShow: false,
 				getCodeText: '获取验证码',
@@ -105,7 +104,8 @@
 			}
 		},
 		onLoad() {
-			// this.checkGuide();
+			//this.$myRequest.patch('/echo',{data:"content"},(res)=>{console.log("PATCH:",res.data)})
+			this.checkGuide();
 		},
 		methods: {
 			//检测是否有启动缓存，如果没有，就是第一次启动，第一次启动就去 欢迎页
@@ -123,7 +123,6 @@
 			},
 			//验证手机号
 			validate(key) {
-				console.log('enter function')
 				console.log(key)
 				if(!this.rules[key].rule.test(this[key])){
 					//提示信息
@@ -160,30 +159,16 @@
 				if (_this.getCodeisWaiting) {
 					return;
 				}
-				
+
 				_this.getCodeText = "发送中..."
 				_this.getCodeisWaiting = true;
 				_this.getCodeBtnColor = "rgba(255,255,255,0.5)"
 				
 				var data = {
-					'type':"login",
-					'phone':this.phone
+					'type':"login",'phone':_this.phone
 				}
-				this.$myRequest.request('/sms',data, 'POST', (res) => {
-					if (res.statusCode == 200) {
-						console.log("sms成功")
-						console.log(JSON.stringify(res))
-						console.log(res)
-						console.log(res.data.data.token)
-						// uni.switchTab({
-						//   url: '../../course/List',
-						// })
-					} 
-				});
-
-				_this.code = res.data.code;
-				console.log(_this.code);
-				
+				console.log("获取验证码")
+				let res = await this.http.post('/sms',data)
 				//示例用定时器模拟请求效果
 				setTimeout(() => {
 					//uni.showToast({title: '验证码已发送',icon:"none"});
@@ -208,12 +193,10 @@
 			},
 			onLogin(num){
 				let _this = this;
-				if(num === 1) {
+				if(num === 1) 
 					_this.data = {'account':_this.phone,'password':_this.password};
-				}
-				else {
+				else 
 					_this.data = {'account':_this.phone,'smsCode':_this.code};
-				}
 				console.log("登录方式:"+num,  _this.data);
 				_this.login(_this.data);
 			},
@@ -222,17 +205,12 @@
 				let _this = this;
 				uni.hideKeyboard() //隐藏软键盘
 				console.log(this.phone+ " " + this.password)
-				_this.$myRequest.request('/auth/login',
-					data, 'POST', (res) => {
-					if (res.statusCode == 200) {
-						console.log("登录成功")
-						console.log(JSON.stringify(res))
-						uni.setStorageSync('token', res.data.data.token)
-						uni.setStorageSync('uid', res.data.data.uid)
-						uni.switchTab({
-						  url: '../../course/List',
-						})
-					} 
+				let res = await this.http.post('/auth/login', data)
+				console.log(res)
+				uni.setStorageSync('token', res.data.token)
+				uni.setStorageSync('uid', res.data.uid)
+				uni.switchTab({
+				  url: '../../course/List',
 				})
 			},
 			//第三方登录--QQ
