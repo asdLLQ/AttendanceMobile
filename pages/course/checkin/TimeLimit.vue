@@ -77,44 +77,31 @@
 				this.setMin = this.timeList[1][this.timesIndex[1]]
 				
 			},
-			start() {
-				const that = this
+			async start() {
 				let current = new Date()
-				that.deadline = formateDate_deadline(new Date(), that.setHour, that.setMin, "Y-M-D h:min:s")
+				this.deadline = formateDate_deadline(new Date(), this.setHour, this.setMin, "Y-M-D h:min:s")
 				let data = {
-					courseId: that.courseId,
-					longitude: that.address[0],
-					latitude: that.address[1],
+					courseId: this.courseId,
+					longitude: this.address[0],
+					latitude: this.address[1],
 					type: 1,
-					deadline: that.deadline,
+					deadline: this.deadline,
 				}
 				console.log('用户发起限时签到', data);
-				that.$myRequest.requestWithToken("/checkin-tasks",data, 'POST',(res) => {
-					if (res.statusCode == 200) {
-						console.log("发起限时签到结果：" , res.data)
-						console.log(res.data.data.id)
-						
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.post("/checkin-tasks",data)
+				console.log("发起限时签到结果：" , res.data)
+				console.log(res.data.id)
 			},
-			finish() {
+			async finish() {
 				console.log("结束签到")
 				// clearInterval(this.timer)
 				// clearTimeout(this.timer )
 				// console.log("finish:" + this.timer)
-				var url = "/checkin-tasks/" + that.taskId + "/ended"
-				that.$myRequest.requestWithToken(url,
-					null, 'POST', (res) => {
-					if (res.statusCode == 200) {
-						console.log("结束签到：" , res.data)
-						uni.switchTab({
-						  url: '../List',
-						})
-					} else{
-						console.log("fails")
-					} 
+				var url = "/checkin-tasks/" + this.taskId + "/ended"
+				let res = await this.http.post(url,null)
+				console.log("结束签到：" , res.data)
+				uni.switchTab({
+				  url: '../List',
 				})
 			}
 		}

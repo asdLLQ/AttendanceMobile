@@ -34,11 +34,11 @@
 				</view>
 			<view class="cu-form-group margin-top">
 				<view class="title">课程名称</view>
-				<input placeholder="请输入" name="name" v-model="name"></input>
+				<input placeholder="请输入" name="course" v-model="course"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">班级名称</view>
-				<input placeholder="请输入" name="address" v-model="address"></input>
+				<input placeholder="请输入" name="name" v-model="name"></input>
 			</view>
 			<view class="cu-form-group">
 				<view class="title">上课时间</view>
@@ -95,7 +95,7 @@
 			return {
 				index: -1,
 				name: '',
-				address: '',
+				course:'',
 				time: '',
 				number: '',
 				descirption: '',
@@ -108,30 +108,26 @@
 			};
 		},
 		methods: {
-			
-			addCourse() {
+			async addCourse() {
+				let uid = uni.getStorageSync('uid')
 				var data = {
 					name: this.name,
+					"courseClass": this.course,
 					description: this.descirption,
 					state: 0,
 					semester: this.picker[this.index>0?this.index:0],
 					location: this.address,				
 					schoolMajorID: this.schoolMajorID,
+					"teacherId": uid,
 				}
 				let url = '/courses/';
 				console.log("courseData:" + this.picker[this.index>0?this.index:3])
-				console.log("courseData:" + data)
-				this.$myRequest.requestWithToken(url ,
-					data, 'POST', (res) => {
-					if (res.statusCode == 200) {
-						console.log("添加课程结果" , res)
-						let code = res.data.data.code
-						uni.navigateTo({
-							url: './Success?cno=' + code
-						})
-					} else{
-						console.log("fails")
-					} 
+				console.log("courseData:" , data)
+				let res = await this.http.post(url, data)
+				console.log("添加课程结果" , res)
+				let code = res.data.code
+				uni.navigateTo({
+					url: './Success?cno=' + code
 				})
 			},
 			PickerChange(e) {

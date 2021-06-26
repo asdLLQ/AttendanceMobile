@@ -75,17 +75,13 @@
 			this.getUserInfo()
 		},
         methods: {
-			getUserInfo() {
+			async getUserInfo() {
 				let that = this
 				let uid = uni.getStorageSync('uid')
 				let url = '/users/' + uid
-				that.$myRequest.requestWithToken(url, 
-					null, 'GET', (res) => {
-					if (res.statusCode == 200) {
-						console.log("用户信息：", res.data)
-						that.user = res.data.data
-					} 
-				})
+				let res =  await _this.http.get(url,null)
+				console.log("用户信息：", res.data)
+				that.user = res.data.data
 			},
 			onLogout() {
 				uni.removeStorageSync("token")

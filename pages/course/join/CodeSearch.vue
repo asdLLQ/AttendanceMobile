@@ -43,38 +43,25 @@
 			
 		},
 		methods: {
-			searchCourse() {
+			async searchCourse() {
 				const that = this
 				console.log("asd",this.courseID)
 				let url = '/courses/code/' + this.courseID;
 				console.log("uid:" + this.uid)
-				this.$myRequest.requestWithToken(url ,
-					null, 'GET', (res) => {
-					if (res.statusCode == 200) {
-						console.log("显示课程详情" , res.data.data)
-						that.course = [res.data.data]
-						that.hideKeyboard()
-						that.res = true
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.get(url,null)
+				console.log("显示课程详情" , res.data)
+				that.course = [res.data]
+				that.hideKeyboard()
+				that.res = true
 				
 			},
-			joinCourse(courseID) {
+			async joinCourse(courseID) {
 				let uid = uni.getStorageSync('uid')
 				let url = '/courses/student/' + uid +'/'+ courseID;
-				this.$myRequest.requestWithToken(url ,
-					null, 'POST', (res) => {
-					if (res.statusCode == 200) {
-						console.log("显示课程详情" , res.data)
-						uni.showToast({
-							title:"加入班课成功！"
-						})
-						
-					} else{
-						console.log("fails")
-					} 
+				let res = await this.http.post(url, null)
+				console.log("显示课程详情" , res.data)
+				uni.showToast({
+					title:"加入班课成功！"
 				})
 			}
 		}

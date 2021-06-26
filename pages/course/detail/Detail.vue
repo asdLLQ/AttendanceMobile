@@ -18,7 +18,7 @@
 		<view v-if="page === 0">
 			<view class="describe">成员</view>
 			<view v-for="(item,index) in students" :key="item.id">
-				<stu :index="index" :name="item.stuName" :number="item.stuId" :descrip="item.experience + '经验值'"></stu>
+				<stu :name="item.stuName" :number="item.stuId" :descrip="item.experience + '经验值'"></stu>
 			</view>
 		</view>
 		<!-- 签到记录 -->
@@ -111,49 +111,27 @@
 			this.searchCourse()
 		},
 		methods: {
-			searchCourse() {
+			async searchCourse() {
 				let url = '/courses/code/' + this.cid;
 				console.log("uid:" + this.cid)
-				this.$myRequest.requestWithToken(url ,
-					null, 'GET', (res) => {
-					if (res.statusCode == 200) {
-						console.log("显示课程详情" , res.data.data)
-						this.course = res.data.data
-						
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.get(url, null)
+				console.log("显示课程详情" , res.data)
+				this.course = res.data
 			},
-			onGetStudents() {
-				const that = this
-				that.page = 0;
+			async onGetStudents() {
+				this.page = 0;
 				let url = '/courses/' + this.course.id + '/students';
 				console.log("uid:" + url)
-				this.$myRequest.requestWithToken(url ,
-					null, 'GET', (res) => {
-					if (res.statusCode == 200) {
-						that.students = res.data.data.content
-						console.log("班课成员" , that.students)
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.get(url, null)
+				this.students = res.data.content
 			},
-			onGetTasks() {
-				const that = this
-				that.page = 1;
+			async onGetTasks() {
+				this.page = 1;
 				let url = '/checkin-tasks/courses/' + this.course.id;
 				console.log("uid:" + url)
-				this.$myRequest.requestWithToken(url ,
-					null, 'GET', (res) => {
-					if (res.statusCode == 200) {
-						that.tasks = res.data.data.content
-						console.log("签到任务列表：" , that.tasks)
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.get(url, null)
+				this.tasks = res.data.content
+				console.log("签到任务列表：" , this.tasks)
 			},
 			onGetDetail() {
 				this.page = 2;
@@ -169,24 +147,17 @@
 			onEdit() {
 				this.edit = false
 			},
-			onSubmitEdit() {
-				const that = this
+			async onSubmitEdit() {
 				var data = {
-					name: that.course.name,
+					name: this.course.name,
 					semester: this.course.semester,
 				}
 				let url = '/courses/'+  this.course.id;
 				console.log("courseData:" , data)
-				this.$myRequest.requestWithToken(url ,
-					data, 'PATCH', (res) => {
-					if (res.statusCode == 200) {
-						console.log("修改课程结果" , res.data)
-						that.searchCourse()
-						this.edit = true
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.patch(url, data)
+				console.log("修改课程结果" , res.data)
+				this.searchCourse()
+				this.edit = true
 			},
 			onCancleEdit() {
 				this.edit = !this.edit;

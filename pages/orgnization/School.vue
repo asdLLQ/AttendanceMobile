@@ -52,16 +52,10 @@
 				}
 				console.log(url)
 				console.log("stack:" + this.stack)
-				_this.$myRequest.requestWithToken(url ,
-					'', 'GET', (res) => {
-					uni.hideLoading()
-					if (res.statusCode == 200) {
-						console.log(res)
-						this.list = res.data.data.children
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.get(url,'')
+				uni.hideLoading()
+				console.log(res)
+				this.list = res.data.children
 			}
 		}
 	}

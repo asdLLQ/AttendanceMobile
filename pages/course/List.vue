@@ -72,17 +72,19 @@
 				uid: '',
 				courseList:'',
 				address: [],
+				taskId: '',
 			}
 		},
 		methods: {
 			showCheckinModal(courseID) {
 				const that = this
-				if (that.getCurrentTask(courseID) != '') {
-					uni.showToast({
-						title:"有签到任务了"
-					})
-				}
-					
+				// if (that.getCurrentTask(courseID) != '') {
+				// 	uni.showToast({
+				// 		title:"有签到任务了"
+				// 	})
+				// }
+				that.getCurrentTask(courseID)
+				console.log("已有签到任务ID", that.taskId)	
 				var data = {
 					courseId: courseID,
 					longitude: that.address[0],
@@ -104,17 +106,13 @@
 							    success: function (res) {
 							        if (res.confirm) {
 							            console.log('用户点击确定,发起一键签到');
-										that.$myRequest.requestWithToken("/checkin-tasks", that.data, 'POST',(res) => {
-											if (res.statusCode == 200) {
-												console.log("发起一键签到结果：")
-												console.log(res.data.data.id)
-												uni.navigateTo({
-													url: 'checkin/CheckinIng?id=' + res.data.data.id
-												})
-											} else{
-												console.log("fails")
-											}
-										})
+										that.http.post("/checkin-tasks", that.data).then((data) => {
+											console.log("发起一键签到结果：")
+											console.log(data.id)
+											uni.navigateTo({
+												url: 'checkin/CheckinIng?id=' + data.id
+											})
+										})		
 							        }
 							    }
 							});
@@ -171,46 +169,45 @@
 				    }
 				});
 			},
-			showCourse() {
+			async showCourse() {
 				let url
 				if(this.role === 0 )
 					url = '/courses/joined/'+this.uid;
 				else
 					url = '/courses/taught/'+this.uid;
 				console.log("uid:" + this.uid)
-				this.$myRequest.requestWithToken (url, '', 'GET',(res) => {
-					if (res.statusCode == 200) {
-						console.log("显示课程" , res.data.data.content)
-						this.courseList = res.data.data.content
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.get(url,'')
+				console.log("显示课程" , res.data.content)
+				this.courseList = res.data.content
 			},
 			detail(cid) {
 				uni.navigateTo({
 					url:'./detail/Detail?cid=' + cid
 				});
 			},
-			getCurrentTask(courseId) {
+			async getCurrentTask(courseId) {
+				const that = this
+				console.log("签到：")
 				let url = "/checkin-tasks/courses/" + courseId + "/current"
-				let taskId = ''
-				this.$myRequest.requestWithToken (url, courseId, 'GET',(res) => {
-					if (res.statusCode == 200) {
-						console.log("学生点击签到：" , res.data)
-						console.log("taskId：" , res.data.data.id)
-						taskId = res.data.data.id
-					} else{
-						console.log("fails")
-					} 
+				this.http.get(url, courseId).then((data) => {
+					console.log("学生点击签到：" , data)
+					console.log("taskId：" , data.id)
+					that.taskId = res.data.id
 				})
-				return taskId
 			},
 			singnUp(courseId) {
-				let taskId = this.getCurrentTask(courseId)
-				uni.navigateTo({
-					url: './checkin/Checkin?taskId='+ taskId
+				//let taskId = this.getCurrentTask(courseId)
+				let url = "/checkin-tasks/courses/" + courseId + "/current"
+				this.http.get(url, courseId).then((data) => {
+					console.log("学生点击签到：" , data)
+					console.log("taskId：" , data.id)
+					that.taskId = res.data.id
+					if (that.taskId)
+						uni.navigateTo({
+						url: './checkin/Checkin?taskId='+ taskId
+					})
 				})
+				
 			}
 		}
 	}

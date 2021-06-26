@@ -118,16 +118,13 @@
 				let _this = this;
 				uni.hideKeyboard()
 				console.log(_this.phone+_this.code);
-				const res = await _this.$myRequest({
-					url:'/sms/register/'+_this.phone+'/'+_this.code,
-					method: 'POST',
+				let url = '/sms/register/'+_this.phone+'/'+_this.code
+				let res =  await _this.http.post(url,null)
+				console.log("校验验证码成功")
+				uni.navigateTo({
+					url:"./register-role?phone="+_this.phone+'&code='+_this.code
 				});
-				if (res.statusCode == 200) {
-					console.log("校验验证码成功")
-					uni.navigateTo({
-						url:"./register-role?phone="+_this.phone+'&code='+_this.code
-					});
-				}
+				
 			},
 		}
 	}

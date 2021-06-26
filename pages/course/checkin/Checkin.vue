@@ -24,7 +24,7 @@
 			}
 		},
 		methods: {
-			checkin() {
+			async checkin() {
 				const that = this
 				let url = '/checkin-tasks/'+ that.taskId + "/logs";
 				var data = {
@@ -34,17 +34,11 @@
 					latitude: that.address[1],
 				}
 				console.log(data)
-				that.$myRequest.requestWithToken(url,
-					data, 'POST', (res) => {
-					if (res.statusCode == 200) {
-						console.log("签到结果：" , res.data)
-						console.log(res.data.data.id)
-						uni.switchTab({
-							url: '../List'
-						})
-					} else{
-						console.log("fails")
-					} 
+				let res = await this.http.post(url,data)
+				console.log("签到结果：" , res.data)
+				console.log(res.data.id)
+				uni.switchTab({
+					url: '../List'
 				})
 			}
 		}

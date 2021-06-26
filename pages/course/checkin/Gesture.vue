@@ -21,23 +21,74 @@
 </template>
 
 <script>
-	import gesturePassword from '../../../components/gesture/gesture-password.vue';   
-	    export default {
-	        components: {
-	            gesturePassword
-	        },
-	        data() {
-	            return {
-					//角色选择 0-教师   1-学生根据
-					role: 0,
-	            }
-	        },
-	        methods: {
-	            gestureChange(points){
-	                console.log(points)
-	            },
-	        },
-	    }
+	import gesturePassword from '../../../components/gesture/gesture-password.vue';  
+	import {getMyLocation} from '../../../util/util.js'
+	export default {
+		components: {
+			gesturePassword
+		},
+		data() {
+			return {
+				//角色选择 0-教师   1-学生根据
+				role: 0,
+				points: '',
+				courseId:'',
+				address: [],
+			}
+		},
+		async onLoad(option) {
+			this.address = await getMyLocation();
+			this.courseId = option.courseId
+		},
+		methods: {
+			gestureChange(points){
+				console.log(points)
+				this.points = points
+			},
+			async checkin() {
+				let url = '/checkin-tasks/'+ that.taskId + "/logs";
+				var data = {
+					uid: this.uid,
+					taskId: this.taskId,
+					longitude: this.address[0],
+					latitude: this.address[1],
+					pararm: this.points,
+				}
+				console.log(data)
+				let res = await this.http.post(url,data)
+				console.log("签到结果：" , res.data)
+				console.log(res.data.id)
+				uni.switchTab({
+					url: '../List'
+				})
+			},
+			async start() {
+				let current = new Date()
+				let data = {
+					courseId: this.courseId,
+					longitude: this.address[0],
+					latitude: this.address[1],
+					type: 2,
+				}
+				console.log('用户发起限时签到', data);
+				let res = await this.http.post("/checkin-tasks",data)
+				console.log("发起限时签到结果：" , res.data)
+				console.log(res.data.id)
+			},
+			async finish() {
+				console.log("结束签到")
+				// clearInterval(this.timer)
+				// clearTimeout(this.timer )
+				// console.log("finish:" + this.timer)
+				var url = "/checkin-tasks/" + this.taskId + "/ended"
+				let res = await this.http.post(url,null)
+				console.log("结束签到：" , res.data)
+				uni.switchTab({
+				  url: '../List',
+				})
+			}
+		},
+	}
 </script>
 
 <style>

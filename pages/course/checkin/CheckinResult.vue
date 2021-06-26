@@ -44,31 +44,17 @@
 			this.getUncheckedStudents()
 		},
 		methods: {
-			getCheckedStudents() {
-				const that = this
+			async getCheckedStudents() {
 				let url = '/checkin-tasks/'+  this.taskId + '/logs';
-				this.$myRequest.requestWithToken(url ,
-					that.taskId, 'GET', (res) => {
-					if (res.statusCode == 200) {
-						console.log("已签到的学生列表" , res.data.data.content)
-						that.checkStudents = res.data.data.content
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.get(url,this.taskId)
+				this.checkStudents = res.data.content
+				console.log("已签到的学生列表" , res.data.content)
 			},
-			getUncheckedStudents() {
-				const that = this
+			async getUncheckedStudents() {
 				let url = '/checkin-tasks/'+  this.taskId + '/unchecked';
-				this.$myRequest.requestWithToken(url ,
-					that.taskId, 'GET', (res) => {
-					if (res.statusCode == 200) {
-						console.log("未签到的学生列表" , res.data.data.content)
-						that.unCheckStudents = res.data.data.content
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.get(url,this.taskId)
+				this.unCheckStudents = res.data.content
+				console.log("未签到的学生列表" , res.data.content)
 			},
 			onReturn() {
 				uni.navigateBack({})

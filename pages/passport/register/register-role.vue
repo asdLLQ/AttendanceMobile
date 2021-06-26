@@ -39,56 +39,11 @@
 				let _this = this;
 				uni.hideKeyboard();
 				console.log(num);
-				const res = await _this.$myRequest({
-					url:'/users',
-					method: 'POST',
+				let res =  await _this.http.post('/users',null)
+				console.log("校验验证码成功")
+				uni.navigateTo({
+					url:"./register-role?phone="+_this.phone+'&code='+_this.code
 				});
-				if (res.statusCode == 200) {
-					console.log("校验验证码成功")
-					uni.navigateTo({
-						url:"./register-role?phone="+_this.phone+'&code='+_this.code
-					});
-				}
-				/*uni.request({
-					url: 'http://attendance.keepdev.top/api/users',
-					data: {
-						'phone':_this.phone,
-						'role': num,
-						'smsCode':_this.code
-					},
-					method: 'POST',
-					success: (res) => {
-						console.log("start")
-						console.log(res);
-						if (res.statusCode == 200) {
-							console.log("selected")
-							uni.showModal({
-								title: '提示',
-								content: '是否去完善个人信息',
-								success: function (res) {
-									if (res.confirm) {
-										console.log('用户点击确定');
-										uni.navigateTo({
-											url:"register-info"
-										})
-									} else if (res.cancel) {
-										console.log('用户点击取消');
-										uni.switchTab({
-											url:"../course/course"
-										})
-									}
-								}
-							});
-						} else {
-							uni.showToast({
-								title: '出现错误！',
-								icon: "none"
-							});
-							console.log(res);
-							return false;
-						}
-					}
-				});*/
 			},
 		}
 	}

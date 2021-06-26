@@ -82,14 +82,6 @@
 	    "navigationBarTitleText": "班课详情"
 	  }
     },
-	//班课详情-签到列表
-	{
-	  "path": "pages/course/detail/checkin/List"
-	},
-	//班课详情-签到列表-签到详情(仅教师可见)
-	{
-	  "path": "pages/course/detail/checkin/TaskInfo"
-	},
 	//班课详情-学生列表
     {
       "path": "pages/course/detail/students/List"

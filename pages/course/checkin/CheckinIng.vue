@@ -34,37 +34,24 @@
 			}, 5000); 
 		},
 		methods: {
-			finish() {
+			async finish() {
 				clearInterval(this.timer)
 				clearTimeout(this.timer )
 				console.log("finish:" + this.timer)
 				var url = "/checkin-tasks/" + that.taskId + "/ended"
-				that.$myRequest.requestWithToken(url,
-					null, 'POST', (res) => {
-					if (res.statusCode == 200) {
-						console.log("结束签到：" , res.data)
-						uni.switchTab({
-						  url: '../List',
-						})
-					} else{
-						console.log("fails")
-					} 
+				let res = await this.http.post(url,null)
+				console.log("结束签到：" , res.data)
+				uni.switchTab({
+				  url: '../List',
 				})
 			},
 			//获取签到的学生列表----定时刷新
-			getStudentList() {
+			async getStudentList() {
 				var that = this;
 				var url = "/checkin-tasks/" + that.taskId + "/logs"
-				that.$myRequest.requestWithToken(url,
-					null, 'GET', (res) => {
-					if (res.statusCode == 200) {
-						console.log("刷新中：" , res.data.data.content)
-						that.stuList = res.data.data.content
-						
-					} else{
-						console.log("fails")
-					} 
-				})
+				let res = await this.http.get(url,null)
+				console.log("刷新中：" , res.data.content)
+				that.stuList = res.data.content
 			}
 		}
 	}
