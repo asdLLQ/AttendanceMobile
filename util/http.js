@@ -38,12 +38,37 @@ const http = {
 	}
 
 }
+function parseUrl(url) {
+	var urlParseRE = /^\s*(((([^:\/#\?]+:)?(?:(\/\/)((?:(([^:@\/#\?]+)(?:\:([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(\?[^#]+)?)(#.*)?/;
+
+	var matches = urlParseRE.exec(url || "") || [];
+
+	return {
+		href: matches[0] || "",
+		hrefNoHash: matches[1] || "",
+		hrefNoSearch: matches[2] || "",
+		domain: matches[3] || "",
+		protocol: matches[4] || "",
+		doubleSlash: matches[5] || "",
+		authority: matches[6] || "",
+		username: matches[8] || "",
+		password: matches[9] || "",
+		host: matches[10] || "",
+		hostname: matches[11] || "",
+		port: matches[12] || "",
+		pathname: matches[13] || "",
+		directory: matches[14] || "",
+		filename: matches[15] || "",
+		search: matches[16] || "",
+		hash: matches[17] || ""
+	};
+};
 
 //统一异常处理
 const handleError = (status, errMsg) => {
 	uni.showToast({
-		icon:'none',
-		title:errMsg
+		icon: 'none',
+		title: errMsg
 	})
 }
 
@@ -66,9 +91,10 @@ uni.addInterceptor('request', {
 			args.url = BASE_URL + args.url
 		}
 
-		const url = new URL(args.url)
 
-		if (!NOAUTH_URL.includes(url.pathname)) {
+		const path = parseUrl(args.url).pathname
+
+		if (!NOAUTH_URL.includes(path)) {
 			//默认携带token，未登录时，token为''
 			header['Authorization'] = 'Bearer ' + token
 		}
@@ -81,12 +107,12 @@ uni.addInterceptor('request', {
 	 * 请求成功, 似乎不管状态码是什么都会请求这个
 	 * @param {*} args 
 	 */
-	success({ data, statusCode, header, errMsg }) {	
+	success({ data, statusCode, header, errMsg }) {
 		if (statusCode != 200) {
 			//handleError(statusCode, errMsg)
 			uni.showToast({
-				icon:'none',
-				title:data.message
+				icon: 'none',
+				title: data.message
 			})
 		}
 	},
