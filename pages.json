@@ -12,15 +12,21 @@
     {
       "path": "pages/passport/register/Register",
       "style": {
-        // "navigationBarBackgroundColor": "white",
+        "navigationBarTitleText": "注册"
       }
     },
     {
-      "path": "pages/passport/register/Register-role"
+      "path": "pages/passport/register/Register-role",
+	  "style": {
+	    "navigationBarTitleText": "注册"
+	  }
     },
 	//注册信息完善页
     {
-      "path": "pages/passport/register/InfoAdd"
+      "path": "pages/passport/register/InfoAdd",
+	  "style": {
+	    "navigationBarTitleText": "注册"
+	  }
     },
 	//密码重置页
     {
@@ -38,14 +44,14 @@
     {
       "path": "pages/course/creation/Creation",
       "style": {
-        "navigationBarTitleText": "创建班课"
+        "navigationBarTitleText": "班课创建"
       }
     },
 	//创建班课成功页
 	{
 	  "path": "pages/course/creation/Success",
 	  "style": {
-	    "navigationBarTitleText": "",
+	    "navigationBarTitleText": "班课创建",
 	    "enablePullDownRefresh": false
 	  }
 	},

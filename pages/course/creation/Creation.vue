@@ -51,9 +51,9 @@
 			
 			<view class="cu-form-group">
 				<view class="title">上课学期</view>
-				<picker @change="PickerChange" :value="index" :range="picker">
+				 <picker @change="PickerChange" :value="index" :range="picker">
 					<view class="picker">
-						{{index>-1?picker[index]:picker[2]}}
+						{{index>-1?picker[index]:"请选择"}}
 					</view>
 				</picker>
 			</view>
@@ -85,11 +85,20 @@
 
 <script>
 	export default {
-		onLoad(option){
+		async onLoad(option){
 			uni.$on("CHOOSE_SCHOOL",(schoolMajor)=>{
 				this.schoolMajorID=schoolMajor.id;
 				this.schoolMajorName=schoolMajor.parents + '-' + schoolMajor.name;
 			})
+			var that = this
+			this.http.get('/dictionaries/code/semester', '').then((res) => {
+				console.log("result:",res.data.details)
+				res.data.details.forEach(function (item) {
+					console.log(item.name)
+					that.picker.push(item.name)
+				}) 
+			})
+			console.log(this.picker)
 		},
 		data() {
 			return {
@@ -99,7 +108,7 @@
 				time: '',
 				number: '',
 				descirption: '',
-				picker: ['2020-2021-1', '2020-2021-2', '2021-2022-1', '2021-2022-2'],
+				picker:[],
 				date: '2020-09-01',
 				imgList: [],
 				modalName: null,

@@ -1,5 +1,5 @@
 <template>
-	<view class="login">
+	<view>
 		<view class="progress">
 			<view class="cu-progress xs">
 				<view class="bg-blue" :style="[{ width:'100%'}]"></view>
@@ -8,37 +8,33 @@
 		<view class='mytitle'>
 			<text>个人信息完善</text>
 		</view>
-		<view class="cu-list menu" :class="'card-menu margin-top'">
-			<view class="cu-form-group margin-top">
+		<view class="cu-list margin-top card-menu">
+			<view class="cu-form-group">
 				<view class="title">姓名</view>
 				<input type="text" placeholder="请输入" v-model="data.realName"></input>
 			</view>
-			<view class="cu-form-group margin-top">
+			<view class="cu-form-group">
 				<view class="title">性别</view>
-				<!-- <input type="text" placeholder="请输入" v-model="realname"></input> -->
-				<radio-group @change="sexChange">
-					<label>
-						<radio value="1" /><text>男</text>
-					</label>
-					<label>
-						<radio value="2" /><text>女</text>
-					</label>
-				</radio-group>
+				 <picker @change="PickerChange" :value="index" :range="picker">
+					<view class="picker">
+						{{index>-1?picker[index]:"请选择"}}
+					</view>
+				</picker>
 			</view>
-			<view class="cu-form-group margin-top">
+			<view class="cu-form-group">
 				<view class="title">邮箱</view>
 				<input type="text" placeholder="请输入" v-model="data.email" @blur="validate('email')" ></input>
 			</view>
-			<view class="cu-form-group margin-top">
+			<view class="cu-form-group">
 				<view class="title">密码</view>
 				<input type="text"  password  placeholder="请输入" v-model="data.password" @blur="validate('pwd')" ></input>
-			</view><view class="cu-form-group margin-top">
+			</view><view class="cu-form-group">
 				<view class="title">确认密码</view>
 				<input type="text"  password placeholder="请输入" v-model="confirm_pwd" @blur="validate1()"></input>
 			</view>
 		</view>
-		<button class="bg-cyan login-btn margin-top" @tap="fillInfo()">跳过</button>
-		<button class="bg-cyan login-btn margin-top" @tap="fillInfo()">完成</button>
+		<button class="bg-cyan margin-top" @tap="fillInfo()">跳过</button>
+		<button class="bg-cyan margin-top" @tap="fillInfo()">完成</button>
 	</view>
 </template>
 
@@ -47,6 +43,8 @@
 	export default {
 		data() {
 			return {
+				index: -1,
+				picker:[],
 				data: {
 					realName:'',
 					gender:'',
@@ -70,11 +68,19 @@
 				submit: true,
 			}
 		},
-		onLoad(option) {
+		async onLoad(option) {
 			this.data.smsCode = option.smsCode
 			this.data.roles = option.roles=="1"?["students"]:["teacher"],
 			this.data.phone = option.phone
-			console.log(this.data.roles)
+			var that = this
+			this.http.get('/dictionaries/code/sex', '').then((res) => {
+				console.log("result:",res.data.details)
+				res.data.details.forEach(function (item) {
+					console.log(item.name)
+					that.picker.push(item.name)
+				}) 
+			})
+			console.log(this.picker)
 		},
 		methods: {
 			validate(key) {
@@ -97,6 +103,11 @@
 						title:"两次密码不一致",
 					})
 				}
+			},
+			PickerChange(e) {
+				this.index = e.detail.value
+				this.data.gender = this.picker[this.index>0?this.index:0]
+				console.log(this.data.gender)
 			},
 			async fillInfo() {
 				if(this.data.password == '') this.data.password = "123456"
