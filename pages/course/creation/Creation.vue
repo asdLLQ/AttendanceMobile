@@ -14,7 +14,7 @@
 	<view>
 		<form>
 			<view class="cu-list menu" :class="'card-menu margin-top'">
-				<view class="cu-bar bg-white margin-top">
+				<!-- <view class="cu-bar bg-white margin-top">
 					<view class="action">
 						班课封面
 					</view>
@@ -31,7 +31,7 @@
 							<text class='cuIcon-cameraadd'></text>
 						</view>
 					</view>
-				</view>
+				</view> -->
 			<view class="cu-form-group margin-top">
 				<view class="title">课程名称</view>
 				<input placeholder="请输入" name="course" v-model="course"></input>
@@ -40,10 +40,10 @@
 				<view class="title">班级名称</view>
 				<input placeholder="请输入" name="name" v-model="name"></input>
 			</view>
-			<view class="cu-form-group">
+			<!-- <view class="cu-form-group">
 				<view class="title">上课时间</view>
 				<input placeholder="请输入" name="time" v-model="time"></input>
-			</view>
+			</view> -->
 			<view class="cu-form-group">
 				<view class="title">上课人数</view>
 				<input placeholder="请输入" name="number" v-model="number"></input>
@@ -121,13 +121,13 @@
 				let uid = uni.getStorageSync('uid')
 				var data = {
 					name: this.name,
-					"courseClass": this.course,
+					courseClass: this.course,
 					description: this.descirption,
 					state: 0,
 					semester: this.picker[this.index>0?this.index:0],
 					location: this.address,				
 					schoolMajorID: this.schoolMajorID,
-					"teacherId": uid,
+					teacherId: uid,
 				}
 				let url = '/courses/';
 				console.log("courseData:" + this.picker[this.index>0?this.index:3])

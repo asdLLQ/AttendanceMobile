@@ -361,7 +361,7 @@
 	}
 
 	.login-footer {
-		padding: 100rpx 70rpx;
+		padding: 10rpx 70rpx;
 		
 		.footer-tip {
 			align-items: center;

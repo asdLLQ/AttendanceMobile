@@ -19,7 +19,8 @@
             "Push" : {},
             "Share" : {},
             "Speech" : {},
-            "VideoPlayer" : {}
+            "VideoPlayer" : {},
+            "Maps" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -73,7 +74,13 @@
                         "appid" : "101949736"
                     }
                 },
-                "ad" : {}
+                "ad" : {},
+                "maps" : {
+                    "amap" : {
+                        "appkey_ios" : "2fa7d03ecf500fdac1157afb2930e73",
+                        "appkey_android" : "2fa7d03ecf500fdac1157afb2930e736"
+                    }
+                }
             },
             "orientation" : [ "portrait-primary" ],
             "icons" : {

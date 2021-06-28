@@ -65,7 +65,7 @@
 				_this.btnCode = true;
 				
 				var data = {
-					'type':"register",'phone':_this.phone
+					'type':"reset_password",'phone':_this.phone
 				}
 				console.log("获取验证码")
 				let res = await this.http.post('/sms',data)
@@ -81,7 +81,7 @@
 				_this.getCodeText = "重新获取(60)"
 				_this.Timer = setInterval(() => {
 					if (holdTime <= 0) {
-						_this.btnCode = true;
+						_this.btnCode = false;
 						_this.getCodeText = "获取验证码"
 						clearInterval(_this.Timer);
 						return;
@@ -117,7 +117,7 @@
 					smsCode:this.smsCode,
 				}
 				console.log(data)
-				this.http.post('/auth/password',this.data).then((res) =>{
+				this.http.post('/auth/password',data).then((res) =>{
 					console.log("update pwd success!")
 					uni.switchTab({
 						url:'../../personal/my'
