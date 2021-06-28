@@ -13,7 +13,7 @@
 				<text class="cuIcon-back"></text>
 			</view>
 			<view class='login-title'>
-				<text>SIGN UP</text>
+				<text>注册</text>
 			</view>
 			<view class="login-main">
 				<view class="login-list flex border-all">
@@ -41,6 +41,7 @@
 	export default {
 		data() {
 			return {
+				submit:true,
 				phone: "",
 				code: '',
 				confirm_pwd:'',
@@ -63,6 +64,7 @@
 			validate(key) {
 				console.log(key)
 				if(!this.rules[key].rule.test(this[key])){
+					this.submit = false
 					//提示信息
 					uni.showToast({
 						icon: "none",
@@ -117,14 +119,15 @@
 			async onNext() {
 				let _this = this;
 				uni.hideKeyboard()
-				console.log(_this.phone+_this.code);
-				let url = '/sms/register/'+_this.phone+'/'+_this.code
-				let res =  await _this.http.post(url,null)
-				console.log("校验验证码成功")
-				uni.navigateTo({
-					url:"./register-role?phone="+_this.phone+'&code='+_this.code
-				});
-				
+				if(this.submit) {
+					console.log(_this.phone+_this.code);
+					let url = '/sms/register/'+_this.phone+'/'+_this.code
+					let res =  await _this.http.post(url,null)
+					console.log("校验验证码成功")
+					uni.navigateTo({
+						url:"./Register-role?phone="+_this.phone+'&code='+_this.code
+					});
+				}
 			},
 		}
 	}

@@ -65,9 +65,6 @@
 		},
 		data(){
 			return {
-				coverTransform: 'translateY(0px)',
-				coverTransition: '0s',
-				moving: false,
 				user: '',
 			}
 		},
@@ -75,13 +72,13 @@
 			this.getUserInfo()
 		},
         methods: {
-			async getUserInfo() {
-				let that = this
+			getUserInfo() {
 				let uid = uni.getStorageSync('uid')
 				let url = '/users/' + uid
-				let res =  await _this.http.get(url,null)
-				console.log("用户信息：", res.data)
-				that.user = res.data.data
+				this.http.get(url,null).then((data) => {
+					this.user = data.data
+					console.log("用户信息：", this.user)
+				})	
 			},
 			onLogout() {
 				uni.removeStorageSync("token")
@@ -90,7 +87,9 @@
 				})
 			},
 			onForgotPwd() {
-				
+				uni.navigateTo({
+					url:"../passport/password/Reset"
+				})
 			}
         }  
     }  
@@ -202,31 +201,6 @@
 		margin-top: 20rpx;
 		background: #fff;
 		border-radius:10rpx;
-		.sec-header{
-			display:flex;
-			align-items: center;
-			font-size: $font-base;
-			color: $font-color-dark;
-			line-height: 40rpx;
-			margin-left: 30rpx;
-			.yticon{
-				font-size: 44rpx;
-				color: #5eba8f;
-				margin-right: 16rpx;
-				line-height: 40rpx;
-			}
-		}
-		.h-list{
-			white-space: nowrap;
-			padding: 30rpx 30rpx 0;
-			image{
-				display:inline-block;
-				width: 160rpx;
-				height: 160rpx;
-				margin-right: 20rpx;
-				border-radius: 10rpx;
-			}
-		}
 	}
 	
 </style>

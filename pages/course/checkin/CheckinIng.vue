@@ -21,24 +21,24 @@
 		data() {
 			return {
 				taskId: '',
-				timer: '',
 				stuList: '',
 			}
 		},
 		onLoad (option) {
-			this.taskId = option.id
+			const _this = this
+			_this.taskId = option.id
 			console.log(Date.now())
-			this.timer = setInterval(() => {  
+			_this.timer = setInterval(() => {  
 				console.log(Date.now())
-				that.getStudentList()
+				_this.getStudentList()
 			}, 5000); 
 		},
 		methods: {
+			timer() {},
 			async finish() {
 				clearInterval(this.timer)
-				clearTimeout(this.timer )
 				console.log("finish:" + this.timer)
-				var url = "/checkin-tasks/" + that.taskId + "/ended"
+				var url = "/checkin-tasks/" + this.taskId + "/ended"
 				let res = await this.http.post(url,null)
 				console.log("结束签到：" , res.data)
 				uni.switchTab({

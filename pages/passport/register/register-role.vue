@@ -1,5 +1,10 @@
 <template>
 	<view class="login">
+		<view class="progress">
+			<view class="cu-progress xs">
+				<view class="bg-blue" :style="[{ width:'66.6%'}]"></view>
+			</view>
+		</view>
 		<view class='title'>
 			<text>请选择你的角色</text>
 		</view>
@@ -39,10 +44,8 @@
 				let _this = this;
 				uni.hideKeyboard();
 				console.log(num);
-				let res =  await _this.http.post('/users',null)
-				console.log("校验验证码成功")
 				uni.navigateTo({
-					url:"./register-role?phone="+_this.phone+'&code='+_this.code
+					url:"./InfoAdd?phone="+_this.phone+'&smsCode='+_this.code+'&roles='+num
 				});
 			},
 		}

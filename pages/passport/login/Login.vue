@@ -176,8 +176,8 @@
 				}, 1000)
 			},
 			setTimer() {
-				let holdTime = 59,
-					_this = this;
+				let holdTime = 59
+				const _this = this
 				_this.getCodeText = "重新获取(60)"
 				_this.Timer = setInterval(() => {
 					if (holdTime <= 0) {
@@ -192,17 +192,15 @@
 				}, 1000)
 			},
 			onLogin(num){
-				let _this = this;
 				if(num === 1) 
-					_this.data = {'account':_this.phone,'password':_this.password};
+					this.data = {'account':this.phone,'password':this.password};
 				else 
-					_this.data = {'account':_this.phone,'smsCode':_this.code};
-				console.log("登录方式:"+num,  _this.data);
-				_this.login(_this.data);
+					this.data = {'account':this.phone,'smsCode':this.code};
+				console.log("登录方式:"+num,  this.data);
+				this.login(this.data);
 			},
 			//用户名密码(验证码)登录
 			async login(data) {
-				let _this = this;
 				uni.hideKeyboard() //隐藏软键盘
 				console.log(this.phone+ " " + this.password)
 				let res = await this.http.post('/auth/login', data)

@@ -4,7 +4,7 @@ function getMyLocation() {
 			type: 'wgs84',
 			geocode: true, //设置该参数为true可直接获取经纬度及城市信息
 			success: function(res) {
-				console.log(res)
+				//console.log(res)
 				var data = [res.longitude, res.latitude]
 				console.log(data)
 				resolved(data)

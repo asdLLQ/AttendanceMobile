@@ -1,5 +1,5 @@
-//const BASE_URL = 'https://attendance.keepdev.top/api'
-const BASE_URL = 'http://172.17.169.27:8080'
+const BASE_URL = 'https://attendance.keepdev.top/api'
+//const BASE_URL = 'http://172.17.169.27:8080'
 const NOAUTH_URL = ['/auth/login', '/', '/version', '/echo']
 const OVERRIDED_METHODS = ['PUT', 'DELETE', 'PATCH']
 /**
@@ -16,7 +16,6 @@ const http = {
 					else reject(data.message)
 				},
 				fail: (error) => {
-
 					reject(error)
 				}
 			})
@@ -41,43 +40,11 @@ const http = {
 }
 
 //统一异常处理
-const handleError = (status) => {
-	switch (status) {
-		case 400:
-			uni.showToast({
-				icon: 'none',
-				title: '请求描述不正确',
-				duration: 2000
-			});
-			
-		case 401:
-			uni.showToast({
-				icon: 'none',
-				title: '尚未授权',
-				duration: 2000
-			});
-
-		case 404:
-			uni.showToast({
-				icon: 'none',
-				title: '访问路径不存在',
-				duration: 2000
-			});
-			
-		case 403:
-			uni.showToast({
-				icon: 'none',
-				title: '操作不被服务器执行',
-				duration: 2000
-			});	
-			
-		case 500:
-			uni.showToast({
-				icon: 'none',
-				title: '服务器出错了',
-				duration: 2000
-			});
-	}
+const handleError = (status, errMsg) => {
+	uni.showToast({
+		icon:'none',
+		title:errMsg
+	})
 }
 
 uni.addInterceptor('request', {
@@ -116,7 +83,11 @@ uni.addInterceptor('request', {
 	 */
 	success({ data, statusCode, header, errMsg }) {	
 		if (statusCode != 200) {
-			handleError(statusCode)
+			//handleError(statusCode, errMsg)
+			uni.showToast({
+				icon:'none',
+				title:data.message
+			})
 		}
 	},
 	/**

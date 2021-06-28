@@ -2,35 +2,27 @@
  * 设置密码/ 
  */
 <template>
-	<view>
+	<view class="login">
 		<view class="progress">
 			<view class="cu-progress xs">
-				<view class="bg-blue" :style="[{ width:'33.3%'}]"></view>
+				<view class="bg-blue" :style="[{ width:'100%'}]"></view>
 			</view>
 		</view>
-		<view class="login">
-			<view class="back">
-				<text class="cuIcon-back"></text>
-			</view>
-			<view class='login-title'>
-				<text>设置密码</text>
-			</view>
-			<view class="login-main">
-				<view class="login-list flex border-all">
-					<view class="iconfont icon-yanzhengma flex"></view>
-					<view class="login-input">
-						<input type="number" maxlength="11" placeholder="请输入新密码" v-model="password" />
-					</view>
-				</view>
-				<view class="login-list flex border-all">
-					<view class="iconfont icon-yanzhengma flex"></view>
-					<view class="login-input">
-						<input type="number" maxlength="6" placeholder="请再次输入密码" v-model="confirm_password" />
-					</view>
-				</view>
-				<button class="cu-btn login-btn" @tap="setPassword()">完成</button>
+		<view class='mytitle'>
+			<text>忘记密码</text>
+		</view>
+		<view class="cu-list menu" :class="'card-menu margin-top'">
+			
+			<view class="cu-form-group margin-top">
+				<view class="title">密码</view>
+				<input type="text"  password  placeholder="请输入" v-model="data.password" @blur="validate('pwd')" ></input>
+			</view><view class="cu-form-group margin-top">
+				<view class="title">确认密码</view>
+				<input type="text"  password placeholder="请输入" v-model="confirm_pwd" @blur="validate1()"></input>
 			</view>
 		</view>
+		<button class="bg-cyan login-btn margin-top" @tap="fillInfo()">跳过</button>
+		<button class="bg-cyan login-btn margin-top" @tap="fillInfo()">完成</button>
 	</view>
 </template>
 
@@ -39,48 +31,68 @@
 	export default {
 		data() {
 			return {
-				phone: "",
-				confirm_password:'',
 				password:'',
+				confirm_pwd:'',
+				rules:{
+					phone:{
+						rule:/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/,
+						msg:"手机号错误"
+					},
+				},
+				submit: true,
 			}
 		},
-		onLoad() {
-			
+		onLoad(option) {
+			this.data.smsCode = option.smsCode
+			this.data.roles = option.roles=="1"?["students"]:["teacher"],
+			this.data.phone = option.phone
+			console.log(this.data.roles)
 		},
 		methods: {
-			setPassword() {
-				let _this = this;
+			validate(key) {
+				console.log(key)
+				if(!this.rules[key].rule.test(this[key])){
+					this.submit = false
+					//提示信息
+					uni.showToast({
+						icon: "none",
+						title:this.rules[key].msg,
+					})
+					//this.msgErr = this.rules[key].msg
+				}
+			},
+			validate1(){
+				if(this.confirm_pwd != this.data.password) {
+					this.submit = false
+					uni.showToast({
+						icon: "none",
+						title:"两次密码不一致",
+					})
+				}
+			},
+			async fillInfo() {
+				if(this.data.password == '') this.data.password = "123456"
+				if(this.data.realName == '') this.data.realName = "asd"+new Date().getTimezoneOffset()
+				
 				uni.hideKeyboard()
-				console.log( _this.confirm_password+_this.password);
-				uni.request({
-					url: 'http://attendance.keepdev.top/api/users',
-					data: {
-						'phone': _this.phone,
-						'smsCode':_this.code
-					},
-					method: 'POST',
-					success: (res) => {
-						console.log("注册信息发送到服务器")
-						console.log(res);
-						if (res.statusCode == 200) {
-							console.log("注册成功")
-							uni.showToast({
-								title: '注册成功！',
-								icon: "none"
-							});
-							uni.navigateTo({
-								url:"../login/login"
-							});
-						} else {
-							uni.showToast({
-								title: '注册失败',
-								icon: "none"
-							});
-							console.log(res);
-							return false;
-						}
-					}
-				});
+				console.log(this.data)
+				if(this.submit) {
+					let res =  await this.http.post('/auth/register',this.data)
+					console.log("注册成功")
+					uni.navigateTo({
+						url:"../login/Login"
+					});
+				}
+				else {
+					uni.showToast({
+						icon: "none",
+						title:"请按格式填写完信息后再提交",
+					})
+				}
+			},
+			
+			sexChange(e) {
+				console.log("/"+e.detail.value+"/");
 			},
 		}
 	}
@@ -89,96 +101,11 @@
 
 
 <style lang="scss">
-	
-	.progress {
-		margin-top: 0rpx;
-	}
-	
-	.back {
-		font-size: 60rpx;
-		margin: 20rpx 0 0 30rpx;
-	}
-	
-	.login-title {
+	.mytitle {
 		font-size: 70rpx;
-		margin: 70rpx 0 0 100rpx;
+		margin: 60rpx 0 0 100rpx;
 	}
-	
-	.flex{
-		display: flex;
-	}
-	.login {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-		
-	.login-main {
-		flex: 1;
-		padding: 20rpx 70upx;
-
-		.login-list {
-			margin-top: 35upx;
-			height: 90upx;
-			align-items: center;
-			padding: 0 30upx;
-
-			&.border-all {
-				&:after {
-					border: 1px solid #D0D0D0;
-					border-radius: 100upx;
-				}
-			}
-
-			.iconfont {
-				width: 65upx;
-				font-size: 44upx;
-				align-items: center;
-
-				&:after {
-					margin-left: 20upx;
-					content: '';
-					width: 2upx;
-					height: 35upx;
-					background: #D0D0D0;
-					display: block;
-				}
-			}
-
-			.login-input {
-				flex: 1;
-
-				input {
-					font-size: 28upx;
-					color: #333333;
-					padding-left: 20upx;
-				}
-			}
-			
-			.code-sx {
-				content: '';
-				width: 2upx;
-				height: 25upx;
-				background: #D0D0D0;
-				margin-right: 25upx;
-			}
-
-			.codeimg {
-				font-size: 24upx;
-				color: #999999;
-			}
-		}
-
-		.login-btn {
-			margin-top: 70upx;
-			height: 96upx;
-			width: 100%;
-			background: $theme-color;
-			border-radius: 47upx;
-			font-size: 34upx;
-			color: #ffffff;
-		}
+	input {
+		text-align: right;
 	}
 </style>

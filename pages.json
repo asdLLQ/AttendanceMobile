@@ -13,38 +13,19 @@
       "path": "pages/passport/register/Register",
       "style": {
         // "navigationBarBackgroundColor": "white",
-        "app-plus": {
-          "titleNView": false
-        }
       }
     },
     {
-      "path": "pages/passport/register/register-role",
-      "style": {
-        "navigationStyle": "custom",
-        "app-plus": {
-          "titleNView": false
-        }
-      }
+      "path": "pages/passport/register/Register-role"
     },
 	//注册信息完善页
     {
-      "path": "pages/passport/register/InfoAdd",
-      "style": {
-        "navigationStyle": "custom",
-        "app-plus": {
-          "titleNView": false
-        }
-      }
+      "path": "pages/passport/register/InfoAdd"
     },
 	//密码重置页
     {
       "path": "pages/passport/password/Reset",
       "style": {
-        "navigationStyle": "custom",
-        "app-plus": {
-          "titleNView": false
-        }
       }
     },
     {
@@ -95,13 +76,6 @@
       "path": "pages/course/checkin/Gesture",
       "style": {
         "navigationBarTitleText": "手势签到设置",
-        "enablePullDownRefresh": false
-      }
-    },
-    {
-      "path": "pages/course/checkin/OneKey",
-      "style": {
-        "navigationBarTitleText": "",
         "enablePullDownRefresh": false
       }
     },

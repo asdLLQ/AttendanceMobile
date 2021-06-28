@@ -37,6 +37,10 @@
 				let res = await this.http.post(url,data)
 				console.log("签到结果：" , res.data)
 				console.log(res.data.id)
+				uni.showToast({
+					icon:'none',
+					title:"签到成功"
+				})
 				uni.switchTab({
 					url: '../List'
 				})

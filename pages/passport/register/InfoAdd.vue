@@ -1,44 +1,44 @@
 <template>
 	<view class="login">
-		<view class='title'>
+		<view class="progress">
+			<view class="cu-progress xs">
+				<view class="bg-blue" :style="[{ width:'100%'}]"></view>
+			</view>
+		</view>
+		<view class='mytitle'>
 			<text>个人信息完善</text>
 		</view>
-		<view class="login-main">
-			<view class="personal-info">
-				<view></view>	
-				<view class="login-list flex border-all">
-					<view class="login-input">
-						<input type="text" placeholder="姓名" v-model="realname" />
-					</view>
-				</view>
-				<view class="login-list flex border-all">
-					<view class="login-gender">性别
-						<radio-group @change="sexChange">
-							<label>
-								<radio value="1" /><text>男</text>
-							</label>
-							<label>
-								<radio value="2" /><text>女</text>
-							</label>
-						</radio-group>
-					</view>
-				</view>
-				<!-- <view class="cu-form-group">
-					<view class="title">学校院系</view>
-					<picker mode="multiSelector" @change="MultiChange" @columnchange="MultiColumnChange" :value="multiIndex" :range="multiArray">
-						<view class="picker">
-							{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
-						</view>
-					</picker>
-				</view> -->
-				<view class="login-list flex border-all">
-					<view class="login-input">
-						<input type="text" placeholder="邮箱(选填)" v-model="email" />
-					</view>
-				</view>
+		<view class="cu-list menu" :class="'card-menu margin-top'">
+			<view class="cu-form-group margin-top">
+				<view class="title">姓名</view>
+				<input type="text" placeholder="请输入" v-model="data.realName"></input>
 			</view>
-			<button class="cu-btn login-btn" @tap="fillInfo()">完成</button>
+			<view class="cu-form-group margin-top">
+				<view class="title">性别</view>
+				<!-- <input type="text" placeholder="请输入" v-model="realname"></input> -->
+				<radio-group @change="sexChange">
+					<label>
+						<radio value="1" /><text>男</text>
+					</label>
+					<label>
+						<radio value="2" /><text>女</text>
+					</label>
+				</radio-group>
+			</view>
+			<view class="cu-form-group margin-top">
+				<view class="title">邮箱</view>
+				<input type="text" placeholder="请输入" v-model="data.email" @blur="validate('email')" ></input>
+			</view>
+			<view class="cu-form-group margin-top">
+				<view class="title">密码</view>
+				<input type="text"  password  placeholder="请输入" v-model="data.password" @blur="validate('pwd')" ></input>
+			</view><view class="cu-form-group margin-top">
+				<view class="title">确认密码</view>
+				<input type="text"  password placeholder="请输入" v-model="confirm_pwd" @blur="validate1()"></input>
+			</view>
 		</view>
+		<button class="bg-cyan login-btn margin-top" @tap="fillInfo()">跳过</button>
+		<button class="bg-cyan login-btn margin-top" @tap="fillInfo()">完成</button>
 	</view>
 </template>
 
@@ -47,136 +47,80 @@
 	export default {
 		data() {
 			return {
-				/*data:[
-					[realName: 0,],
-					[email: 0,],
-					[gender: 0,],
-					[phone: 0,],
-				],*/
-				phone: "",
-				realname:'',
-				gender:'',
-				email:'',
-				role:'',
-				multiArray: [
-					['福州大学', '福建师范大学'],
-					['数学与计算机科学学院', '物信学院', '经管学院', '外语学院'],
-				],
-				objectMultiArray: [
-					[{
-							id: 0,
-							name: '福州大学'
-						},
-						{
-							id: 1,
-							name: '福建师范大学'
-						}
-					],
-					[{
-							id: 0,
-							name: '数学与计算机科学学院'
-						},
-						{
-							id: 1,
-							name: '物信学院'
-						},
-						{
-							id: 2,
-							name: '经管学院'
-						},
-						{
-							id: 3,
-							name: '外语学院'
-						}
-					]
-				],
-				multiIndex: [0, 0, 0]
+				data: {
+					realName:'',
+					gender:'',
+					email:'',
+					roles:'',
+					password:'',
+					smsCode:'',
+					phone:'',
+				},	
+				confirm_pwd:'',
+				rules:{
+					email:{
+						rule:/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+						msg:"邮箱错误"
+					},
+					pwd:{
+						rule:/^[0-9a-zA-Z]{6,16}$/,
+						msg:"密码应该为6-16位"
+					},
+				},
+				submit: true,
 			}
 		},
-		onLoad() {
-			
+		onLoad(option) {
+			this.data.smsCode = option.smsCode
+			this.data.roles = option.roles=="1"?["students"]:["teacher"],
+			this.data.phone = option.phone
+			console.log(this.data.roles)
 		},
 		methods: {
-			async fillInfo() {
-				let _this = this;
-				uni.hideKeyboard()
-				console.log( _this.realname+_this.email+ _this.gender+_this.phone);
-				const res = await _this.$myRequest({
-					url:'/sms',
-					data:{
-						data
-					},
-					method: 'POST',
-				});
-				
-				if (res.statusCode == 200) {
-					console.log("注册成功")
+			validate(key) {
+				console.log(key)
+				if(!this.rules[key].rule.test(this[key])){
+					this.submit = false
+					//提示信息
 					uni.showToast({
-						title: '注册成功！',
-						icon: "none"
-					});
-					uni.navigateTo({
-						url:"../login/login"
-					});
+						icon: "none",
+						title:this.rules[key].msg,
+					})
+					//this.msgErr = this.rules[key].msg
 				}
-				/*uni.request({
-					url: 'http://attendance.keepdev.top/api/users',
-					data: {
-						'realName': _this.realname,
-						'email': _this.email,
-						'gender': _this.gender,
-						'role': _this.role,
-						'phone': _this.phone,
-						
-					},
-					method: 'POST',
-					success: (res) => {
-						console.log("注册信息发送到服务器")
-						console.log(res);
-						if (res.statusCode == 200) {
-							console.log("注册成功")
-							uni.showToast({
-								title: '注册成功！',
-								icon: "none"
-							});
-							uni.navigateTo({
-								url:"../login/login"
-							});
-						} else {
-							uni.showToast({
-								title: '注册失败',
-								icon: "none"
-							});
-							console.log(res);
-							return false;
-						}
-					}
-				});*/
 			},
-			// genderChange(e) {
-			// 	console.log("/"+e.detail.value+"/");
-			// },
-			// PickerChange(e) {
-			// 	this.index = e.detail.value
-			// },
-			// MultiChange(e) {
-			// 	this.multiIndex = e.detail.value
-			// },
-			MultiColumnChange(e) {
-				let data = {
-					multiArray: this.multiArray,
-					multiIndex: this.multiIndex
-				};
-				data.multiIndex[e.detail.column] = e.detail.value;
-				switch (e.detail.column) {
-					case 0:
-						data.multiArray[1] = ['数学与计算机科学学院', '物信学院', '经管学院', '外语学院'];
-						data.multiIndex[1] = 0;
-						data.multiIndex[2] = 0;
-						break;
+			validate1(){
+				if(this.confirm_pwd != this.data.password) {
+					this.submit = false
+					uni.showToast({
+						icon: "none",
+						title:"两次密码不一致",
+					})
 				}
-				this.multiArray = data.multiArray;
-				this.multiIndex = data.multiIndex;
+			},
+			async fillInfo() {
+				if(this.data.password == '') this.data.password = "123456"
+				if(this.data.realName == '') this.data.realName = this.data.roles[0] +new Date().getTimezoneOffset()
+				
+				uni.hideKeyboard()
+				console.log(this.data)
+				if(this.submit) {
+					let res =  await this.http.post('/auth/register',this.data)
+					console.log("注册成功")
+					uni.navigateTo({
+						url:"../login/Login"
+					});
+				}
+				else {
+					uni.showToast({
+						icon: "none",
+						title:"请按格式填写完信息后再提交",
+					})
+				}
+			},
+			
+			sexChange(e) {
+				console.log("/"+e.detail.value+"/");
 			},
 		}
 	}
@@ -185,107 +129,11 @@
 
 
 <style lang="scss">
-	.title {
+	.mytitle {
 		font-size: 70rpx;
 		margin: 60rpx 0 0 100rpx;
 	}
-	
-	.flex{
-		display: flex;
-	}
-	.login {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-		
-	.login-main {
-		flex: 1;
-		padding: 0 70upx;
-
-		.login-list {
-			margin-top: 35upx;
-			height: 90upx;
-			align-items: center;
-			padding: 0 30upx;
-
-			&.border-all {
-				&:after {
-					border: 1px solid #D0D0D0;
-					border-radius: 100upx;
-				}
-			}
-
-			.iconfont {
-				width: 65upx;
-				font-size: 44upx;
-				align-items: center;
-
-				&:after {
-					margin-left: 20upx;
-					content: '';
-					width: 2upx;
-					height: 35upx;
-					background: #D0D0D0;
-					display: block;
-				}
-			}
-
-			.login-input {
-				flex: 1;
-
-				input {
-					font-size: 28upx;
-					color: #333333;
-					padding-left: 20upx;
-				}
-			}
-			
-			.login-gender {
-				flex: 1;
-				font-size: 30upx;
-				color: #999999;
-				display: flex;
-				justify-content: space-between;
-			}
-
-			.code-sx {
-				content: '';
-				width: 2upx;
-				height: 25upx;
-				background: #D0D0D0;
-				margin-right: 25upx;
-			}
-
-			.codeimg {
-				font-size: 24upx;
-				color: #999999;
-			}
-		}
-
-		.login-btn {
-			margin-top: 70upx;
-			height: 96upx;
-			width: 100%;
-			background: linear-gradient(-90deg, rgba(80, 85, 168, 1), rgba(104, 110, 210, 1));
-			border-radius: 47upx;
-			font-size: 34upx;
-			color: #ffffff;
-		}
-
-		.login-tip {
-			padding-top: 26upx;
-			font-size: 22upx;
-			color: #666666;
-			text-align: center;
-
-			navigator {
-				margin-left: 10upx;
-				display: inline-block;
-				color: #5055A8;
-			}
-		}
+	input {
+		text-align: right;
 	}
 </style>

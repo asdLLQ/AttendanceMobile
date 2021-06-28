@@ -110,7 +110,7 @@
 						icon: 'none',
 					    title: '请至少连接四个点',
 					    duration: 2000,
-						position: 'bottom'
+						//position: 'bottom'
 					});
 				}
 				if(this.segmentNode && this.segmentNode.node){
@@ -218,8 +218,8 @@
 				
 				.dot-outer{
 					background-color: transparent;
-					width: 120rpx;
-					height: 120rpx;
+					width: 80rpx;
+					height: 80rpx;
 					border-radius: 50%;
 					display: flex;
 					justify-content: center;
@@ -227,8 +227,8 @@
 				}
 				.dot{
 					background-color: #dddddd;
-					width: 120rpx;
-					height: 120rpx;
+					width: 80rpx;
+					height: 80rpx;
 					border-radius: 50%;
 				}
 			}

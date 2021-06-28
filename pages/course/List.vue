@@ -3,9 +3,14 @@
  */
 <template>
 	<view>
-		<view class="role-type flex">
+		<!-- <view class="role-type flex">
 			<view v-for="(item,index) in roleList" :key="index" @click="role = index" 
 				:class="{act: role === index}" class="role-type-btn">{{item}}</view>
+		</view> -->
+		<view class="role-type flex">
+			<view @click="onChangeRole(0)" :class="{act: role === 0}" class="role-type-btn">我创建的</view>
+			<view @click="onChangeRole(1)"
+				:class="{act: role === 1}" class="role-type-btn">我加入的</view>	
 		</view>
 		<view v-if="role === 1">
 			<view class="cu-list menu-avatar">
@@ -20,8 +25,8 @@
 						</view>
 					</view>
 					<view class="action">
-						<button class="bg-cyan text-white text-sm" @click="detail(item.code)">查看详情</button>
-						<button class="bg-cyan text-white text-sm" @click="singnUp(item.id)">签到</button>
+						<button class="bg-cyan text-white text-sm" @click="onDetail(item.code)">查看详情</button>
+						<button class="bg-cyan text-white text-sm" @click="onSingnUp(item.id)">签到</button>
 					</view>
 				</view>
 			</view>
@@ -29,19 +34,22 @@
 		<view v-else>
 			<view class="cu-list menu-avatar">
 				<view class="cu-item margin-top" v-for="item in courseList" :key="item.id">
-					<view>{{item.courseClass}}</view>
 					<view class="cu-avatar round lg">
 						<image :src="imageUrl"></image>
 					</view>
 					<view class="content">
-						<view class="text-grey  text-df flex">{{item.name}}</view>
+						<view class="text-grey text-df flex">
+							<!-- <text v-show="item.courseClass != null" class="text-grey text-lg flex">
+								{{item.courseClass}}--</text> -->
+							{{item.name}}
+						</view>
 						<!-- <view class="text-gray text-df flex">教师：{{item.teacherName}}</view> -->
 						
 						<view class="text-gray text-df flex">学期：{{item.semester}}</view>
 						<view class="text-gray text-df flex courseId">班课号：{{item.code}}</view>
 					</view>
 					<view class="action">
-						<button class="bg-cyan text-white text-sm" @click="detail(item.code)">查看详情</button>
+						<button class="bg-cyan text-white text-sm" @click="onDetail(item.code)">查看详情</button>
 						<button class="bg-cyan text-white text-sm" @click="showCheckinModal(item.id)">发起签到</button>
 					</view>
 				</view>
@@ -65,7 +73,7 @@
 		data() {
 			return {
 				// 0代表教师，1代表学生
-				role: 0,
+				role: 1,
 				roleList: ['我创建的', '我加入的'],
 				modalName: null,
 				imageUrl:"../../static/img/course/default.png",
@@ -76,26 +84,21 @@
 			}
 		},
 		methods: {
+			//点击发起签到按钮后弹出的模态框
+			//就只有这里是courseID
 			showCheckinModal(courseID) {
 				const that = this
-				// if (that.getCurrentTask(courseID) != '') {
-				// 	uni.showToast({
-				// 		title:"有签到任务了"
-				// 	})
-				// }
 				that.getCurrentTask(courseID)
-				console.log("已有签到任务ID", that.taskId)	
-				var data = {
+				let data = {
 					courseId: courseID,
 					longitude: that.address[0],
 					latitude: that.address[1],
-					type: 1,
+					type: 0,
 				}
 				console.log("发起签到的信息：",data)
 				uni.showActionSheet({
 				    itemList: ['一键签到', '限时签到', '手势签到'],
 				    success: function (res) {
-				        console.log('选中了第' + (res.tapIndex + 1) + '个签到按钮');
 						// 一键签到
 						if(res.tapIndex === 0) {
 							console.log("一键签到");
@@ -106,11 +109,10 @@
 							    success: function (res) {
 							        if (res.confirm) {
 							            console.log('用户点击确定,发起一键签到');
-										that.http.post("/checkin-tasks", that.data).then((data) => {
-											console.log("发起一键签到结果：")
-											console.log(data.id)
+										that.http.post("/checkin-tasks", data).then((res) => {
+											console.log("发起一键签到结果：",res.data)
 											uni.navigateTo({
-												url: 'checkin/CheckinIng?id=' + data.id
+												url: 'checkin/CheckinIng?id=' + res.data.id
 											})
 										})		
 							        }
@@ -126,7 +128,7 @@
 						else {
 							console.log("手势签到");
 							uni.navigateTo({
-								url: "checkin/Gesture"
+								url: "checkin/Gesture?courseId="+courseID+"&role=0"
 							})
 						}
 				    },
@@ -171,7 +173,7 @@
 			},
 			async showCourse() {
 				let url
-				if(this.role === 0 )
+				if(this.role === 1 )
 					url = '/courses/joined/'+this.uid;
 				else
 					url = '/courses/taught/'+this.uid;
@@ -180,34 +182,47 @@
 				console.log("显示课程" , res.data.content)
 				this.courseList = res.data.content
 			},
-			detail(cid) {
+			onDetail(cid) {
 				uni.navigateTo({
 					url:'./detail/Detail?cid=' + cid
 				});
 			},
 			async getCurrentTask(courseId) {
-				const that = this
-				console.log("签到：")
+				//查询是够有签到任务正在进行中
 				let url = "/checkin-tasks/courses/" + courseId + "/current"
-				this.http.get(url, courseId).then((data) => {
-					console.log("学生点击签到：" , data)
-					console.log("taskId：" , data.id)
-					that.taskId = res.data.id
+				this.http.get(url, courseId).then((res) => {
+					if(res.data) {
+						console.log("有签到任务：" , res.data)
+						let type = res.data.type
+						let taskId = res.data.id
+						uni.showToast({
+							icon:'none',
+							title:"当前有正在进行的签到任务"
+						})
+						// if (type == 0 || type == 1)
+							uni.navigateTo({url: './checkin/CheckinIng?id=' + taskId})
+						// else
+						// 	uni.navigateTo({url: './checkin/CheckinIng?id=' + taskId})
+					}
 				})
 			},
-			singnUp(courseId) {
-				//let taskId = this.getCurrentTask(courseId)
+			async onSingnUp(courseId) {
 				let url = "/checkin-tasks/courses/" + courseId + "/current"
-				this.http.get(url, courseId).then((data) => {
-					console.log("学生点击签到：" , data)
-					console.log("taskId：" , data.id)
-					that.taskId = res.data.id
-					if (that.taskId)
+				this.http.get(url, courseId).then((res) => {
+					console.log("学生点击签到：" , res.data)
+					if (res.data.type == 2)
 						uni.navigateTo({
-						url: './checkin/Checkin?taskId='+ taskId
-					})
+							url: "checkin/Gesture?role=1&taskId="+res.data.id+'&param='+res.data.param
+						})	
+					else
+						uni.navigateTo({
+							url: './checkin/Checkin?taskId='+ res.data.id
+						})
 				})
-				
+			},
+			onChangeRole(val) {
+				this.role = val
+				this.showCourse()
 			}
 		}
 	}
