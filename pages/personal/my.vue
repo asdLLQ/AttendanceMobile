@@ -50,7 +50,6 @@
 				<view @click="onForgotPwd()"><list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="忘记密码"></list-cell></view>
 				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="课程记录" ></list-cell>
 				<list-cell icon="icon-share" iconColor="#9789f7" title="设置" tips=""></list-cell>
-				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏"></list-cell>
 				<view  @click="onLogout()"><list-cell icon="icon-shezhi1" iconColor="#e07472" title="退出登录" border=""></list-cell></view>
 			</view>
 		</view>	
@@ -68,14 +67,14 @@
 				user: '',
 			}
 		},
-		onLoad(){
+		onShow(){
 			this.getUserInfo()
 			
 		},
         methods: {
 			getUserInfo() {
-				let uid = uni.getStorageSync('uid')
-				let url = '/users/' + uid
+				// let uid = uni.getStorageSync('uid')
+				let url = '/users/me'
 				this.http.get(url,null).then((data) => {
 					this.user = data.data
 					console.log("用户信息：", this.user)
@@ -83,7 +82,8 @@
 			},
 			onLogout() {
 				uni.removeStorageSync("token")
-				uni.navigateTo({
+				uni.removeStorageSync("uid")
+				uni.redirectTo({
 					url: '../passport/login/Login'
 				})
 			},

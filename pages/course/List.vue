@@ -66,11 +66,14 @@
 	import {getMyLocation} from '../../util/util.js'
 	export default {
 		async onLoad () {
-			this.uid = uni.getStorageSync('uid')
-			this.address = await getMyLocation();
+			
 		},
-		onShow(){
+	    async onShow(){
+			this.uid = uni.getStorageSync('uid')
+			console.log(this.uid)
+			this.address = await getMyLocation();
 			this.showCourse()
+			
 		},
 		data() {
 			return {

@@ -10,9 +10,12 @@ function getMyLocation() {
 				resolved(data)
 			},
 			fail: function(err) {
-				uni.showToast({
+				console.log("Location Fail",err)
+				uni.showModal({
 					title: '获取地址失败，将导致部分功能不可用',
-					icon: 'none'
+					icon: 'none',
+					duration:10000,
+					
 				});
 				rejected(err)
 			},
