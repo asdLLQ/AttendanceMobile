@@ -39,7 +39,7 @@
 		<view v-if="page === 2">
 			<view class="edit flex">
 				<view class="describe">班课详情</view>
-				<view class="describe" @click="onEdit()"><text>编辑</text></view>
+				<view class="describe" @click="onEdit()"  v-show="role == 0"><text>编辑</text></view>
 			</view>
 			
 			<view class="cu-list menu">
@@ -58,17 +58,21 @@
 			</view>
 			<view class="cu-list menu margin-top">	
 				<view class="cu-form-group">
+					<view>班课号</view>
+					<view class="text-gray flex">{{course.code}}
+						<canvas canvas-id="qrcode" id="qrcode" @click="onPreiewImg"></canvas>
+					</view>
+				</view>
+				<view class="cu-form-group">
 					<view>允许加入</view>
 					<view> <switch @change="onSwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch></view>
 				</view>
 				<view class="cu-form-group">
-					<view>班课号</view>
-					<!-- <input :value="course.code" :disabled="edit"></input>
-					<view class="text-gray">{{course.code}}</view>
+					<view>课程状态</view>
+					<view class="text-gray">{{course.stateName}}</view>
 				</view>
 				<view class="cu-form-group">
 					<view>任课老师</view>
-					<!-- <input :value="course.teacherName" :disabled="edit"></input> -->
 					<view class="text-gray">{{course.teacherName}}</view>
 				</view>
 				<view class="cu-form-group">
@@ -77,22 +81,37 @@
 					<view class="text-gray">{{course.schoolMajorName}}</view>
 				</view>
 			</view>
-			<button class="margin-top bg-cyan lg" v-show="!edit" @click="onCancleEdit()">取消</button>
-			<button class="margin-top bg-cyan lg" v-show="!edit" @click="onSubmitEdit()">完成编辑</button>
-			<button class="margin-top bg-cyan lg" v-show="edit" @click="onFinishCourse()">结束班课</button>
+			<view v-show="role == 0">
+				<button class="margin-top bg-cyan lg" v-show="!edit" @click="onCancleEdit()">取消</button>
+				<button class="margin-top bg-cyan lg" v-show="!edit" @click="onSubmitEdit()">完成编辑</button>
+				<button class="margin-top bg-cyan lg" v-show="edit" 
+						@click="onSetCourseState('2')" :disabled="this.course.state == 2">结束班课</button>
+				<button class="margin-top bg-cyan lg" v-show="this.course.state == 2" @click="onDelCourse()">删除班课</button>
+			</view>
+			
 		</view>
-
     </view>
 </template>
 
 <script>
 	import Stu from '@/components/stu-list/Stu-list.vue'
+	import CODE from '@/components/uni-code'
 	export default {
 		components: {
-			'stu': Stu
+			'cu-custom': CODE,
+			'stu': Stu,
 		},
 		data() {
 			return {
+				cno:'',
+				qrc:{// 二维码配置
+					id: 'qrcode', // canvas的canvas-id
+					size: 25, // 二维码大小
+					level: 4, //等级 0～4
+					bgColor: '#FFFFFF', //二维码背景色 默认白色
+					iconSize: 10, //二维码图标的大小
+					color: '#000' // 二维码颜色 默认黑色
+				},
 				imageUrl:"../../../static/img/course/default.png",
 				cid: '',
 				course:'',
@@ -103,20 +122,33 @@
 				edit: true,
 				picker: ['2020-2021-1', '2020-2021-2', '2021-2022-1', '2021-2022-2'],
 				semesterIndex: '',
+				role:'',
 			}
 		},
 		onLoad(option) {
+			const { windowWidth, windowHeight } = uni.getSystemInfoSync();
+			this.qrc.size=windowWidth*0.06;
 			this.cid = option.cid
+			this.role = option.role
 			console.log(this.courseID)
 			this.searchCourse()
 		},
+		onNavigationBarButtonTap(){
+			uni.switchTab({
+				url:"../List"
+			})
+		},
 		methods: {
 			async searchCourse() {
-				let url = '/courses/code/' + this.cid;
-				console.log("uid:" + this.cid)
-				let res = await this.http.get(url, null)
-				console.log("显示课程详情" , res.data)
-				this.course = res.data
+				const that = this
+				let url = '/courses/code/' + that.cid;
+				console.log("uid:" + that.cid)
+				that.http.get(url, '').then((res) => {
+					console.log("显示课程详情" , res.data)
+					that.course = res.data
+					that.switchA = that.course.state == 0 ?true:false
+					that.findCan()
+				})
 			},
 			async onGetStudents() {
 				this.page = 0;
@@ -138,6 +170,10 @@
 			},
 			onSwitchA(e) {
 				this.switchA = e.detail.value
+				if(this.switchA) this.state = '0'
+				else this.state = '1'
+				console.log(this.state)
+				this.onSetCourseState(this.state)
 			},
 			onPickerChange(e) {
 				this.semesterIndex = e.detail.value
@@ -162,13 +198,48 @@
 			onCancleEdit() {
 				this.edit = !this.edit;
 			},
-			onFinishCourse() {
-				
+			async onSetCourseState(state) {
+				let url = '/courses/'+this.course.id+'/state'
+				let res = await this.http.put(url, state)
+				console.log("修改课程结果" , res.data)
+				this.course = res.data
 			},
 			onGetTaskDetails(taskId) {
 				uni.navigateTo({
 					url: "../checkin/CheckinResult?taskId=" + taskId
 				})
+			},
+			onDelCourse() {
+				let url = '/courses/'+this.course.id
+				this.http.delete(url,'').then((res) => {
+					console.log("删除课程结果" , res.data)
+					uni.switchTab({
+						url:'../List'
+					})
+				})
+			},
+			findCan () {
+				CODE.QRCode({...this.qrc,code: this.course.code});
+			},
+			onPreiewImg() {
+				uni.canvasToTempFilePath({
+					canvasId: 'qrcode',
+					fileType: 'png',
+					destWidth: 200,
+					destHeight:200,
+					success: function(res) {
+						console.log(res.tempFilePath)
+						this.imageUrl = res.tempFilePath
+						console.log(this.imageUrl)
+						// 在这里保存图片
+						uni.previewImage({
+							urls:[this.imageUrl]
+						})
+					},
+					fail: function(error) {
+						console.log(error)
+					},})
+				
 			}
 		}
 	}
@@ -182,7 +253,7 @@
 		font-size: 50rpx;
 	}
 	.nav {
-		background-color: #FFFFFF;
+		background-color: #cff4f8;
 		padding: 20rpx;
 		.nav-item{
 			width: 33.33%;
@@ -195,9 +266,9 @@
 				font-size: 50rpx;
 				margin:10rpx auto;
 			}
-			.checkin{background-color: #19c1e6;}
-			.person{background-color: #ff3d46;}
-			.detail{background-color: #f4ea2a;}
+			.checkin{background-color: #7ed9ff;}
+			.person{background-color: #ffb3b4;}
+			.detail{background-color: #f4ee9b;}
 		}
 	}
 	image {
@@ -213,4 +284,16 @@
 		line-height: 70rpx;
 	}
 	input {text-align: right;font-size: 28rpx;color: #aaaaaa;}
+	.qrcode {
+	    height: 35rpx;
+	    display: flex;
+	    flex-direction: column;
+	    justify-content: center;
+	    align-items: center;
+	}
+	#qrcode{
+	    width: 35rpx;
+	    height: 35rpx;
+	    background-color: #fff;
+	}
 </style>

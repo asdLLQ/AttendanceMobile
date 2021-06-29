@@ -1,4 +1,5 @@
 const BASE_URL = 'https://attendance.keepdev.top/api'
+const BASE_HOST = 'https://attendance.keepdev.top'
 //const BASE_URL = 'http://172.17.169.27:8080'
 const NOAUTH_URL = ['/auth/login', '/', '/version', '/echo']
 const OVERRIDED_METHODS = ['PUT', 'DELETE', 'PATCH']
@@ -9,9 +10,15 @@ const http = {
 	request(method, url, data, header = {}) {
 		return new Promise((reslove, reject) => {
 			uni.request({
-				url, data, header,
+				url,
+				data,
+				header,
 				method,
-				success: ({ data, statusCode, header }) => {
+				success: ({
+					data,
+					statusCode,
+					header
+				}) => {
 					if (statusCode == 200) reslove(data)
 					else reject(data.message)
 				},
@@ -35,11 +42,37 @@ const http = {
 	},
 	patch(url, data, header = {}) {
 		return this.request('PATCH', url, data, header)
+	},
+	upload(url, filePath, name) {
+		const token = uni.getStorageSync('token')
+		
+		if (!url.startsWith('http')) {
+			// request 触发前拼接 url 
+			url = BASE_URL + url
+		}
+		const header= {'X-HTTP-Method-Override': 'PUT'}
+		header['Authorization'] = 'Bearer ' + token
+	
+		const fail= (err)=>reject(err);
+		return new Promise((reslove, reject) => {
+			uni.uploadFile({
+				url,
+				filePath,
+				name,
+				header,
+				success:(uploadFileRes) =>reslove(JSON.parse(uploadFileRes.data)),
+				fail:(err)=>{
+					reject(err)
+				}
+			});
+		});
 	}
 
 }
+
 function parseUrl(url) {
-	var urlParseRE = /^\s*(((([^:\/#\?]+:)?(?:(\/\/)((?:(([^:@\/#\?]+)(?:\:([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(\?[^#]+)?)(#.*)?/;
+	var urlParseRE =
+		/^\s*(((([^:\/#\?]+:)?(?:(\/\/)((?:(([^:@\/#\?]+)(?:\:([^:@\/#\?]+))?)@)?(([^:\/#\?\]\[]+|\[[^\/\]@#?]+\])(?:\:([0-9]+))?))?)?)?((\/?(?:[^\/\?#]+\/+)*)([^\?#]*)))?(\?[^#]+)?)(#.*)?/;
 
 	var matches = urlParseRE.exec(url || "") || [];
 
@@ -78,6 +111,9 @@ uni.addInterceptor('request', {
 	 * @param {*} args 
 	 */
 	invoke(args) {
+		if(args.method!='GET'){
+			console.log("invoke",args.url)
+		}
 		const token = uni.getStorageSync('token')
 		let method = args.method.toUpperCase()
 		let header = {}
@@ -98,7 +134,10 @@ uni.addInterceptor('request', {
 			//默认携带token，未登录时，token为''
 			header['Authorization'] = 'Bearer ' + token
 		}
-		args.header = { ...header, ...args.header }
+		args.header = {
+			...header,
+			...args.header
+		}
 		args.method = method
 
 
@@ -107,7 +146,12 @@ uni.addInterceptor('request', {
 	 * 请求成功, 似乎不管状态码是什么都会请求这个
 	 * @param {*} args 
 	 */
-	success({ data, statusCode, header, errMsg }) {
+	success({
+		data,
+		statusCode,
+		header,
+		errMsg
+	}) {
 		if (statusCode != 200) {
 			//handleError(statusCode, errMsg)
 			uni.showToast({
@@ -132,4 +176,4 @@ uni.addInterceptor('request', {
 	// }
 })
 
-export default http;
+export default {http,BASE_URL,BASE_HOST};

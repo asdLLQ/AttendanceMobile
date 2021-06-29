@@ -3,8 +3,8 @@
 		
 		<view class="user-section">
 			<view class="user-info-box">
-				<view class="portrait-box">
-					<image class="portrait" :src="'/static/missing-face.png'"></image>
+				<view class="portrait-box" @click="onReplaceImg()">
+					<image class="portrait" :src="user.avatar==null?'/static/missing-face.png':BASE_HOST+user.avatar"></image>
 				</view>
 				<view class="info-box">
 					<view class="username">{{user.realName}}</view>
@@ -70,6 +70,7 @@
 		},
 		onLoad(){
 			this.getUserInfo()
+			
 		},
         methods: {
 			getUserInfo() {
@@ -90,6 +91,25 @@
 				uni.navigateTo({
 					url:"../passport/password/Reset"
 				})
+			},
+			onReplaceImg() {
+				const that = this
+				uni.chooseImage({
+				    count: 1, //默认9
+				    sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+				    sourceType: ['album'], //从相册选择
+				    success: async function (res) {
+				        console.log(res.tempFilePaths[0]);
+						let url = '/users/me/avatar'
+						const r = await that.http.upload(url,res.tempFilePaths[0],'avatar')
+						console.log(r)
+						that.user.avatar =r.data
+						// that.http.put(url,res.tempFilePaths[0]).then((res) => {
+						// 	console.log("修改头像返回结果：", res.data)
+						// 	that.user = res.data
+						// })
+				    }
+				});
 			}
         }  
     }  

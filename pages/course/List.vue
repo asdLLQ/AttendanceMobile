@@ -16,7 +16,7 @@
 			<view class="cu-list menu-avatar">
 				<view class="cu-item margin-top" v-for="item in courseList" :key="item.id">
 					<view class="cu-avatar round lg">
-						<image :src="imageUrl"></image>
+						<image :src="item.state==2?imageUrlEnd:imageUrl"></image>
 					</view>
 					<view class="content">
 						<view class="text-grey  text-xsl flex">{{item.name}}</view>
@@ -25,7 +25,7 @@
 						</view>
 					</view>
 					<view class="action">
-						<button class="bg-cyan text-white text-sm" @click="onDetail(item.code)">查看详情</button>
+						<button class="bg-cyan text-white text-sm" @click="onDetail(item.code,1)">查看详情</button>
 						<button class="bg-cyan text-white text-sm" @click="onSingnUp(item.id)">签到</button>
 					</view>
 				</view>
@@ -34,8 +34,8 @@
 		<view v-else>
 			<view class="cu-list menu-avatar">
 				<view class="cu-item margin-top" v-for="item in courseList" :key="item.id">
-					<view class="cu-avatar round lg">
-						<image :src="imageUrl"></image>
+					<view class="cu-avatar round xl">
+						<image :src="item.state==2?imageUrlEnd:imageUrl"></image>
 					</view>
 					<view class="content">
 						<view class="text-grey text-df flex">
@@ -49,14 +49,14 @@
 						<view class="text-gray text-df flex courseId">班课号：{{item.code}}</view>
 					</view>
 					<view class="action">
-						<button class="bg-cyan text-white text-sm" @click="onDetail(item.code)">查看详情</button>
+						<button class="bg-cyan text-white text-sm" @click="onDetail(item.code,0)">查看详情</button>
 						<button class="bg-cyan text-white text-sm" @click="showCheckinModal(item.id)">发起签到</button>
 					</view>
 				</view>
 			</view>
 		</view>
 
-		<view class="button-add-location" @click="showCourseModal()" v-show="role === 0">
+		<view class="button-add-location" @click="showCourseModal()">
 			<image src="../../static/img/tabbar/tab_add.png"></image>
 		</view>
 	</view>
@@ -67,8 +67,10 @@
 	export default {
 		async onLoad () {
 			this.uid = uni.getStorageSync('uid')
-		 	this.showCourse()
 			this.address = await getMyLocation();
+		},
+		onShow(){
+			this.showCourse()
 		},
 		data() {
 			return {
@@ -77,6 +79,7 @@
 				roleList: ['我创建的', '我加入的'],
 				modalName: null,
 				imageUrl:"../../static/img/course/default.png",
+				imageUrlEnd:"../../static/img/course/finish.png",
 				uid: '',
 				courseList:'',
 				address: [],
@@ -159,7 +162,7 @@
 								success: function (res) {
 									const cno = res.result;
 									uni.navigateTo({
-										url: './detail/Detail?id=' + cno
+										url: './join/CodeSearch?code=' + cno
 									});
 			
 								}
@@ -182,10 +185,10 @@
 				console.log("显示课程" , res.data.content)
 				this.courseList = res.data.content
 			},
-			onDetail(cid) {
+			onDetail(cid,role) {
 				uni.navigateTo({
-					url:'./detail/Detail?cid=' + cid
-				});
+					url:'./detail/Detail?cid='+cid+'&role='+role
+				})
 			},
 			async getCurrentTask(courseId) {
 				//查询是够有签到任务正在进行中
@@ -230,8 +233,8 @@
 
 <style lang="scss">
 	image {
-		width: 100upx;
-		height: 100upx;
+		width: 110upx;
+		height: 110upx;
 		border-radius: 20%;
 	}
 	button {

@@ -37,7 +37,8 @@
     {
       "path": "pages/course/List",
       "style": {
-        "navigationBarTitleText": "我的班课"
+        "navigationBarTitleText": "我的班课",
+		"enablePullDownRefresh":true
       }
     },
 	//创建班课页
@@ -66,12 +67,23 @@
     {
       "path": "pages/course/detail/Detail",
 	  "style": {
-	    "navigationBarTitleText": "班课详情"
+	    "navigationBarTitleText": "班课详情",
+		"app-plus": {
+			"bounce": "none", //关闭窗口回弹效果
+			"titleNView": {
+				"buttons": [{ //原生标题栏按钮配置,
+					"type":"none",
+					"text":"返回",
+					"float":"left",
+					"fontSize":"31rpx"
+				}]
+		   }
+		}
 	  }
     },
 	//班课详情-学生列表
     {
-      "path": "pages/course/detail/students/List"
+      "path": "pages/course/detail/students/Member"
     },
 	//班课详情-学生列表-学生信息
     {
@@ -112,7 +124,18 @@
     {
       "path": "pages/orgnization/School",
       "style": {
-        "navigationBarTitleText": "选择院校"
+        "navigationBarTitleText": "选择院校",
+		"app-plus": {
+			"bounce": "none", //关闭窗口回弹效果
+			"titleNView": {
+				"buttons": [{ //原生标题栏按钮配置,
+					"type":"none",
+					"text":"取消",
+					"float":"left",
+					"fontSize":"31rpx"
+				}]
+		   }
+		}
       }
     },
 	//个人中心页
@@ -137,7 +160,6 @@
 			"navigationBarTitleText": "签到",
 			"enablePullDownRefresh": false
 		}
-		
 	}
     ],
 

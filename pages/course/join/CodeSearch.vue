@@ -3,7 +3,7 @@
  */
 <template>
 	<view class="login-main">
-		<view class="personal-info">
+		<view class="personal-info" v-show="isShowSearch">
 			<view class="login-list flex border-all">
 				<view class="login-input">
 					<input type="text" placeholder="请输入班课号" v-model="courseID" />
@@ -33,14 +33,19 @@
 	export default {
 		data() {
 			return {
+				isShowSearch:true,
 				courseID: "",
 				course:'',
 				imageUrl:"/static/img/course/default.png",
 				res: false,
 			}
 		},
-		onLoad() {
-			
+		onLoad(option) {
+			this.courseID = option.code
+			if(this.courseID) {
+				this.isShowSearch = false
+				this.searchCourse()
+			}
 		},
 		methods: {
 			async searchCourse() {
@@ -57,11 +62,14 @@
 			},
 			async joinCourse(courseID) {
 				let uid = uni.getStorageSync('uid')
-				let url = '/courses/student/' + uid +'/'+ courseID;
+				let url = '/courses/students/' + uid +'/'+ this.courseID;
 				let res = await this.http.post(url, null)
 				console.log("显示课程详情" , res.data)
 				uni.showToast({
 					title:"加入班课成功！"
+				})
+				uni.switchTab({
+					url:'../List'
 				})
 			}
 		}

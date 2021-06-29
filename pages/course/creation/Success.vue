@@ -25,6 +25,9 @@
 <script>
 	import CODE from '@/components/uni-code';
 	export default {
+		components: {
+			'cu-custom': CODE
+		},
 		data() {
 			return {
 				cno:'',

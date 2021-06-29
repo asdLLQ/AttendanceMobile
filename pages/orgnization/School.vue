@@ -33,6 +33,10 @@
 				stack:[],
 			}
 		},
+		onNavigationBarButtonTap() {
+			this.stack[this.stack.length-1]
+			uni.navigateBack()
+		},
 		methods: {
 			async getSchool (item = null) {
 				let _this = this;

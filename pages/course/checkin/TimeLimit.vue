@@ -36,7 +36,7 @@
 			</view>
 		</view>
 		<!-- 手动结束签到按钮 -->
-		<button class="bg-cyan footer" @click="start()" v-show="isStart">开始签到</button>
+		<button class="bg-cyan footer" @click="start()" v-show="isStart">发起签到</button>
 		<button class="bg-cyan footer" @click="finish()" v-show="!isStart">结束签到</button>
 	</view>
 </template>

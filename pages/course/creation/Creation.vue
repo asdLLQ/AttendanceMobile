@@ -88,17 +88,16 @@
 		async onLoad(option){
 			uni.$on("CHOOSE_SCHOOL",(schoolMajor)=>{
 				this.schoolMajorID=schoolMajor.id;
-				this.schoolMajorName=schoolMajor.parents + '-' + schoolMajor.name;
+				this.schoolMajorName=schoolMajor.fullName
 			})
 			var that = this
 			this.http.get('/dictionaries/code/semester', '').then((res) => {
 				console.log("result:",res.data.details)
-				res.data.details.forEach(function (item) {
-					console.log(item.name)
-					that.picker.push(item.name)
-				}) 
+				that.picker = res.data.details.map(item =>{
+					return item.name
+				})
 			})
-			console.log(this.picker)
+			console.log("this.picker",this.picker)
 		},
 		data() {
 			return {
