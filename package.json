@@ -1,0 +1,11 @@
+{
+    "id": "gzz-gesture",
+    "name": "手势图案解锁",
+    "version": "1.0.0",
+    "description": "该组件使用 js 和 css 实现简单的手势解锁",
+    "keywords": [
+        "手势解锁",
+        "图案解锁",
+        "手势密码"
+    ]
+}

@@ -1,0 +1,166 @@
+{
+  "pages": [
+    {
+      "path": "pages/passport/login/Login",
+      "style": {
+        "navigationStyle": "custom",
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/passport/register/Register",
+      "style": {
+        "navigationBarTitleText": "注册"
+      }
+    },
+    {
+      "path": "pages/passport/register/Register-role",
+	  "style": {
+	    "navigationBarTitleText": "注册"
+	  }
+    },
+	//注册信息完善页
+    {
+      "path": "pages/passport/register/InfoAdd",
+	  "style": {
+	    "navigationBarTitleText": "注册"
+	  }
+    },
+	//密码重置页
+    {
+      "path": "pages/passport/password/Reset",
+      "style": {
+      }
+    },
+    {
+      "path": "pages/course/List",
+      "style": {
+        "navigationBarTitleText": "我的班课"
+      }
+    },
+	//创建班课页
+    {
+      "path": "pages/course/creation/Creation",
+      "style": {
+        "navigationBarTitleText": "班课创建"
+      }
+    },
+	//创建班课成功页
+	{
+	  "path": "pages/course/creation/Success",
+	  "style": {
+	    "navigationBarTitleText": "班课创建",
+	    "enablePullDownRefresh": false
+	  }
+	},
+	//输入班课号查找班课页面
+	{
+	  "path": "pages/course/join/CodeSearch",
+	  "style": {
+	    "navigationBarTitleText": "加入班课"
+	  }
+	},
+	//班课详情
+    {
+      "path": "pages/course/detail/Detail",
+	  "style": {
+	    "navigationBarTitleText": "班课详情"
+	  }
+    },
+	//班课详情-学生列表
+    {
+      "path": "pages/course/detail/students/List"
+    },
+	//班课详情-学生列表-学生信息
+    {
+      "path": "pages/course/detail/students/Member"
+    },
+	//签到
+    {
+      "path": "pages/course/checkin/Gesture",
+      "style": {
+        "navigationBarTitleText": "手势签到设置",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/course/checkin/TimeLimit",
+      "style": {
+        "navigationBarTitleText": "限时签到",
+        "enablePullDownRefresh": false
+      }
+    },
+	{
+		"path" : "pages/course/checkin/CheckinIng",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "签到中",
+			"enablePullDownRefresh": false
+		} 
+	},
+	{
+		"path" : "pages/course/checkin/CheckinResult",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "签到结果",
+			"enablePullDownRefresh": false
+		} 
+	},
+	//组织结构页
+    {
+      "path": "pages/orgnization/School",
+      "style": {
+        "navigationBarTitleText": "选择院校"
+      }
+    },
+	//个人中心页
+	{
+	  "path": "pages/personal/my",
+	  "style": {
+	    "navigationBarTitleText": "个人中心"
+	  }
+	},
+    {
+		"path" : "components/stu-list/Stu-list",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false
+		}
+    },
+	{
+		"path" : "pages/course/checkin/Checkin",
+		"style" :                                                                                    
+		{
+			"navigationBarTitleText": "签到",
+			"enablePullDownRefresh": false
+		}
+		
+	}
+    ],
+
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#1CBBB4",
+    "backgroundColor": "#f8f8f8"
+  },
+  "tabBar": {
+    "selectedColor": "#1CBBB4", //底部文字点击之后的颜色
+    "list": [
+      {
+        "pagePath": "pages/course/List",
+        "iconPath": "static/img/tabbar/tab_course.png",
+        "selectedIconPath": "static/img/tabbar/tab_course_active.png",
+        "text": "课程"
+      },
+      {
+        "pagePath": "pages/personal/my",
+        "iconPath": "static/img/tabbar/tab_person.png",
+        "selectedIconPath": "static/img/tabbar/tab_person_active.png",
+        "text": "我的"
+      }
+    ]
+  }
+}

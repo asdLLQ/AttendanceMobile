@@ -1,1 +1,0 @@
-<view>资源<textarea data-event-opts="{{[['input',[['__set_model',['','data','$event',[]]]]]]}}" value="{{data}}" bindinput="__e"></textarea><view><view-tabbar vue-id="7f4b6fc2-1" tabIndex="1" bind:__l="__l"></view-tabbar></view></view>
