@@ -7,4 +7,6 @@ HTTP拦截器 https://github.com/asdLLQ/AttendanceMobile/blob/main/util/http.js
 
 API https://github.com/asdLLQ/AttendanceMobile/blob/main/util/util.js
 
-API调用（签到获取位置、日期格式等等） https://github.com/asdLLQ/AttendanceMobile/tree/main/pages/passport/login https://github.com/asdLLQ/AttendanceMobile/blob/main/pages/course/checkin/TimeLimit.vue
+API调用（签到获取位置、日期格式等等） 
+https://github.com/asdLLQ/AttendanceMobile/tree/main/pages/passport/login 
+https://github.com/asdLLQ/AttendanceMobile/blob/main/pages/course/checkin/TimeLimit.vue
