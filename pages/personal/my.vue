@@ -1,6 +1,5 @@
 <template>  
-    <view class="container">  
-		
+    <view class="container">
 		<view class="user-section">
 			<view class="user-info-box">
 				<view class="portrait-box" @click="onReplaceImg()">
@@ -49,8 +48,12 @@
 			<view class="history-section icon">
 				<view @click="onForgotPwd()"><list-cell icon="icon-iconfontweixin" iconColor="#e07472" title="忘记密码"></list-cell></view>
 				<list-cell icon="icon-dizhi" iconColor="#5fcda2" title="课程记录" ></list-cell>
-				<list-cell icon="icon-share" iconColor="#9789f7" title="设置" tips=""></list-cell>
+				<view  @click="onSet()"><list-cell icon="icon-share" iconColor="#9789f7" title="设置" tips=""></list-cell></view>
 				<view  @click="onLogout()"><list-cell icon="icon-shezhi1" iconColor="#e07472" title="退出登录" border=""></list-cell></view>
+			</view>
+			<view v-show="set">
+				<input v-model="base_url"></input>
+				<button @click="onSetUrl()">提交</button>
 			</view>
 		</view>	
     </view>  
@@ -65,11 +68,12 @@
 		data(){
 			return {
 				user: '',
+				set: false,
+				base_url:'',
 			}
 		},
 		onShow(){
 			this.getUserInfo()
-			
 		},
         methods: {
 			getUserInfo() {
@@ -110,7 +114,16 @@
 						// })
 				    }
 				});
-			}
+			},
+			onSet(){
+				this.set = !this.set
+				this.base_url = this.http.getBaseUrl()
+			},
+			onSetUrl() {
+				console.log(this.set)
+				this.http.setBaseUrl(this.base_url)
+				this.set = !this.set
+			}	
         }  
     }  
 </script>  

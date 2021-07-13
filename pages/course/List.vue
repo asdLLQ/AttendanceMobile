@@ -16,7 +16,7 @@
 			<view class="cu-list menu-avatar">
 				<view class="cu-item margin-top" v-for="item in courseList" :key="item.id">
 					<view class="cu-avatar round lg">
-						<image :src="item.state==2?imageUrlEnd:imageUrl"></image>
+						<image :src="item.state==2?imageUrlEnd:(item.avatar ? BASE_HOST+item.avatar :imageUrl)"></image>
 					</view>
 					<view class="content">
 						<view class="text-grey  text-xsl flex">{{item.name}}</view>
@@ -35,7 +35,7 @@
 			<view class="cu-list menu-avatar">
 				<view class="cu-item margin-top" v-for="item in courseList" :key="item.id">
 					<view class="cu-avatar round xl">
-						<image :src="item.state==2?imageUrlEnd:imageUrl"></image>
+						<image :src="item.state==2?imageUrlEnd:(item.avatar ? BASE_HOST+item.avatar :imageUrl)"></image>
 					</view>
 					<view class="content">
 						<view class="text-grey text-df flex">
@@ -69,11 +69,35 @@
 			
 		},
 	    async onShow(){
+			const that =this
+			uni.showLoading({
+				
+			})
 			this.uid = uni.getStorageSync('uid')
+			uni.hideLoading()
+			this.showCourse()
 			console.log(this.uid)
 			this.address = await getMyLocation();
-			this.showCourse()
-			
+			// uni.getLocation({
+			// 	type: 'gcj02',
+			// 	success: function(res) {
+			// 		uni.showModal({
+			// 			title: 'gps:'+[res.longitude, res.latitude]+res,
+			// 			icon: 'none',
+			// 			duration:10000,
+			// 		});
+			// 		that.address = [res.longitude, res.latitude]
+			// 	},
+			// 	fail: function(err) {
+			// 		console.log("Location Fail",err)
+			// 		console.log("Location Fail code",AMapLocation.getErrorCode())
+			// 		uni.showModal({
+			// 			title: '获取地址失败，将导致部分功能不可用',
+			// 			icon: 'none',
+			// 			duration:10000,
+			// 		});
+			// 	},
+			// });
 		},
 		data() {
 			return {
@@ -87,14 +111,20 @@
 				courseList:'',
 				address: [],
 				taskId: '',
+				current_task:false,
 			}
 		},
 		methods: {
 			//点击发起签到按钮后弹出的模态框
 			//就只有这里是courseID
-			showCheckinModal(courseID) {
+			async showCheckinModal(courseID) {
 				const that = this
-				that.getCurrentTask(courseID)
+				uni.showLoading({
+					
+				})
+				const current = await that.getCurrentTask(courseID)
+				console.log("await that.getCurrentTask(courseID):",current)
+				uni.hideLoading();
 				let data = {
 					courseId: courseID,
 					longitude: that.address[0],
@@ -102,6 +132,10 @@
 					type: 0,
 				}
 				console.log("发起签到的信息：",data)
+				if(this.current_task) {
+					console.log("已有签到: ",this.current_task)
+					return;
+				}
 				uni.showActionSheet({
 				    itemList: ['一键签到', '限时签到', '手势签到'],
 				    success: function (res) {
@@ -113,15 +147,16 @@
 							    content: '一键签到将马上开始，请让学生做好准备',
 								confirmText: '好的',
 							    success: function (res) {
-							        if (res.confirm) {
-							            console.log('用户点击确定,发起一键签到');
-										that.http.post("/checkin-tasks", data).then((res) => {
-											console.log("发起一键签到结果：",res.data)
-											uni.navigateTo({
-												url: 'checkin/CheckinIng?id=' + res.data.id
-											})
-										})		
+							        if (!res.confirm) {
+							            return
 							        }
+									console.log('用户点击确定,发起一键签到');
+									that.http.post("/checkin-tasks", data).then((res) => {
+										console.log("发起一键签到结果：",res.data)
+										uni.navigateTo({
+											url: 'checkin/CheckinIng?id=' + res.data.id
+										})
+									})		
 							    }
 							});
 						} // 限时签到
@@ -134,7 +169,7 @@
 						else {
 							console.log("手势签到");
 							uni.navigateTo({
-								url: "checkin/Gesture?courseId="+courseID+"&role=0"
+								url: "checkin/Gesture?courseId="+courseID
 							})
 						}
 				    },
@@ -179,7 +214,7 @@
 			},
 			async showCourse() {
 				let url
-				if(this.role === 1 )
+				if(this.role == 1)
 					url = '/courses/joined/'+this.uid;
 				else
 					url = '/courses/taught/'+this.uid;
@@ -196,34 +231,44 @@
 			async getCurrentTask(courseId) {
 				//查询是够有签到任务正在进行中
 				let url = "/checkin-tasks/courses/" + courseId + "/current"
-				this.http.get(url, courseId).then((res) => {
-					if(res.data) {
-						console.log("有签到任务：" , res.data)
-						let type = res.data.type
-						let taskId = res.data.id
-						uni.showToast({
-							icon:'none',
-							title:"当前有正在进行的签到任务"
-						})
-						// if (type == 0 || type == 1)
-							uni.navigateTo({url: './checkin/CheckinIng?id=' + taskId})
-						// else
-						// 	uni.navigateTo({url: './checkin/CheckinIng?id=' + taskId})
-					}
+				let res= await this.http.get(url, null);
+				if(!res.data) {
+					this.current_task = false
+					return false
+				}
+				console.log("有签到任务：" , res.data)
+				let type = res.data.type
+				let taskId = res.data.id
+				uni.showToast({
+					icon:'none',
+					title:"当前有正在进行的签到任务"
 				})
+				// if (type == 0 || type == 1)
+				uni.navigateTo({url: './checkin/CheckinIng?id=' + taskId})
+				// else
+				// 	uni.navigateTo({url: './checkin/CheckinIng?id=' + taskId})
+				this.current_task = true
+				return true
 			},
 			async onSingnUp(courseId) {
 				let url = "/checkin-tasks/courses/" + courseId + "/current"
 				this.http.get(url, courseId).then((res) => {
 					console.log("学生点击签到：" , res.data)
-					if (res.data.type == 2)
-						uni.navigateTo({
-							url: "checkin/Gesture?role=1&taskId="+res.data.id+'&param='+res.data.param
-						})	
-					else
-						uni.navigateTo({
-							url: './checkin/Checkin?taskId='+ res.data.id
+					if(res.data == null) 
+						uni.showToast({
+							title:"目前暂无发起的签到",
+							icon:'none'
 						})
+					else {
+						if (res.data.type == 2)
+							uni.navigateTo({
+								url: "checkin/GestureStu?taskId="+res.data.id+'&param='+res.data.param
+							})	
+						else
+							uni.navigateTo({
+								url: './checkin/Checkin?taskId='+ res.data.id
+							})
+					}
 				})
 			},
 			onChangeRole(val) {

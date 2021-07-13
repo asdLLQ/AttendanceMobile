@@ -5,7 +5,7 @@
 			<view class="title">已签到学生: </view>
 		</view>
 		<view v-for="item in stuList" :key="item.id">
-			<stu :name="item.stuName" :number="item.stuId" descrip="已签到"></stu>
+			<stu :name="item.stuName" :number="item.stuId" descrip="已签到" :distance="item.distance"></stu>
 		</view>
 		<!-- 手动结束签到按钮 -->
 		<button class="bg-cyan footer" @click="finish()">结束签到</button>
@@ -21,22 +21,41 @@
 		data() {
 			return {
 				taskId: '',
-				stuList: '',
+				stuList: [],
+				timer:'',
 			}
 		},
+		onHide(){
+			console.log(" hide")
+			this.stopTimer();
+		},
+		onUnload(){
+			console.log(" unload")
+			this.stopTimer();
+		},
 		onLoad (option) {
+			
 			const _this = this
 			_this.taskId = option.id
-			console.log(Date.now())
-			_this.timer = setInterval(() => {  
-				console.log(Date.now())
+			this.getStudentList()
+		
+			
+		},
+		onShow(){
+			const _this = this;
+			this.timer = setInterval(() => {
 				_this.getStudentList()
 			}, 5000); 
 		},
 		methods: {
-			timer() {},
+			stopTimer(){
+				if(this.timer){
+					clearInterval(this.timer)
+					this.timer = null;
+				}
+			},
 			async finish() {
-				clearInterval(this.timer)
+				this.stopTimer()
 				console.log("finish:" + this.timer)
 				var url = "/checkin-tasks/" + this.taskId + "/ended"
 				let res = await this.http.post(url,null)

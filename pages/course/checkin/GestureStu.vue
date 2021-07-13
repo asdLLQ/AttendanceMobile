@@ -5,13 +5,11 @@
 	<view class="my-page">
 		<view class="my-descrip">
 			<view>
-				通过滑动创建一个签到手势并现场传达给学生，学生输入正确手势完成签到。
+				根据老师现场传达的手势，滑动输入正确手势完成签到。
 			</view>
 		</view>
 		<gesture-password @change="gestureChange"></gesture-password>
-		
-		<button class="bg-cyan lg" @click="onReset()">重设</button>
-		<button class="bg-cyan lg margin-top" @click="onStart()">发起签到</button>
+		<button class="bg-cyan lg margin-top" @click="onCheckin()">签到</button>
 	</view>	
 </template>
 
@@ -32,17 +30,16 @@
 				param:'',
 			}
 		},
-		onLoad(option) {
+		onLoad(option){
 			this.courseId = option.courseId
 			this.taskId = option.taskId
 			this.param = option.param
+			this.uid =  uni.getStorageSync("uid")
 		},
-		async onShow() {
+		async onShow(option) {
 			this.address = await getMyLocation();
 			
-			this.uid = uni.getStorageSync("uid")
 		},
-		
 		methods: {
 			gestureChange(points){
 				this.points = points.join(",")
@@ -50,6 +47,42 @@
 			},
 			onReset() {
 				uni.$emit('clearDraw')
+			},
+			async onCheckin() {
+				console.log(`checking:${this.param} , ${this.points}`)
+				if(this.param == this.points) {
+					let url = '/checkin-tasks/'+ this.taskId + "/logs";
+					let data = {
+						uid: this.uid,
+						taskId: this.taskId,
+						longitude: this.address[0],
+						latitude: this.address[1],
+					}
+					console.log(data)
+					let res = await this.http.post(url,data)
+					console.log("签到结果：" , res.data)
+					console.log(res.data.id)
+					uni.showModal({
+					    title:"签到成功！！",
+					   showCancel:false,
+					    success: function (res) {
+					        uni.switchTab({
+					        	url: '../List'
+					        })
+					    }
+					});
+				
+					
+				}else{
+					const that = this
+					uni.showToast({
+						icon:"none",
+						title:"手势错误！",
+						complete() {
+							that.onReset();
+						}
+					})
+				}
 			},
 			async onStart() {
 				let data = {
@@ -62,8 +95,8 @@
 				console.log('用户发起限时签到', data);
 				this.http.post("/checkin-tasks", data).then((res) => {
 					console.log("发起手势签到结果：",res.data)
-					uni.redirectTo({
-						url: './CheckinIng?id=' + res.data.id
+					uni.navigateBack({
+						
 					})
 				})
 			},

@@ -95,7 +95,8 @@
 			},
 			timeUp() {
 				clearInterval(this.timer)
-				this.$emit('timeup')
+				console.log("countDown, timeup")
+				uni.$emit('timeup')
 			},
 			countDown() {
 				let seconds = this.seconds
@@ -124,9 +125,6 @@
 				this.h = hour
 				this.i = minute
 				this.s = second
-				if(this.d == '00' && this.h == '00' && this.i == '00' && this.s == '00') {
-					uni.$emit('finish',{msg:'倒计时结束'});
-				}
 			},
 			startData() {
 				this.seconds = this.toSeconds(this.day, this.hour, this.minute, this.second)

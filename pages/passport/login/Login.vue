@@ -72,7 +72,7 @@
 
 <script>
 	import api from "@/util/api.js"
-	
+	import {getMyLocation} from '@/util/util.js'
 	export default {
 		data() {
 			return {
@@ -102,9 +102,10 @@
 				}
 			}
 		},
-		onLoad() {
+		async onLoad() {
 			//this.$myRequest.patch('/echo',{data:"content"},(res)=>{console.log("PATCH:",res.data)})
 			this.checkGuide();
+			this.address = await getMyLocation()
 		},
 		methods: {
 			//检测是否有启动缓存，如果没有，就是第一次启动，第一次启动就去 欢迎页
@@ -203,11 +204,11 @@
 				uni.hideKeyboard() //隐藏软键盘
 				console.log(this.phone+ " " + this.password)
 				let res = await this.http.post('/auth/login', data)
-				console.log(res)
+				console.log("这里跳转：",res)
 				uni.setStorageSync('token', res.data.token)
 				uni.setStorageSync('uid', res.data.uid)
 				uni.switchTab({
-				  url: '../../course/List',
+				  url: "../../course/List"
 				})
 			},
 			//第三方登录--QQ

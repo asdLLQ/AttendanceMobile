@@ -10,7 +10,7 @@
 				</view>
 			</view>
 		</view>
-		<button class="cu-btn login-btn" @click="searchCourse()">搜索</button>
+		<button class="cu-btn login-btn" @click="searchCourse()" v-show="isShowSearch">搜索</button>
 		
 		<view class="footer-tip flex" v-show="res">结果</view>
 		<view class="result"  v-for="item in course" :key="item.id">

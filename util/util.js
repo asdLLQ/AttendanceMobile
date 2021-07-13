@@ -1,21 +1,22 @@
 function getMyLocation() {
 	return new Promise((resolved, rejected) => {
 		uni.getLocation({
-			type: 'wgs84',
+			type: 'gcj02',
 			geocode: true, //设置该参数为true可直接获取经纬度及城市信息
 			success: function(res) {
 				//console.log(res)
 				var data = [res.longitude, res.latitude]
-				console.log(data)
+				console.log("data",data)
 				resolved(data)
 			},
 			fail: function(err) {
 				console.log("Location Fail",err)
+				uni.setStorageSync('address',[1,1])
+				//console.log("Location Fail code",AMapLocation.getErrorCode())
 				uni.showModal({
 					title: '获取地址失败，将导致部分功能不可用',
 					icon: 'none',
 					duration:10000,
-					
 				});
 				rejected(err)
 			},

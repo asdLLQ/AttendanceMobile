@@ -37,9 +37,10 @@
 		</view>
 		<!-- 班课详情 -->
 		<view v-if="page === 2">
-			<view class="edit flex">
+			
+			<view class=" cu-bar bg-white justify-center margin-top solid-bottom">
 				<view class="describe">班课详情</view>
-				<view class="describe" @click="onEdit()"  v-show="role == 0"><text>编辑</text></view>
+				<view class="edit text-lg margin-right " @click="onEdit()"  v-show="role == 0">编辑</view>
 			</view>
 			
 			<view class="cu-list menu">
@@ -60,12 +61,11 @@
 				<view class="cu-form-group">
 					<view>班课号</view>
 					<view class="text-gray flex">{{course.code}}
-						<canvas canvas-id="qrcode" id="qrcode" @click="onPreiewImg"></canvas>
 					</view>
 				</view>
 				<view class="cu-form-group">
 					<view>允许加入</view>
-					<view> <switch @change="onSwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch></view>
+					<view> <switch :disabled="role==1" @change="onSwitchA" :class="switchA?'checked':''" :checked="switchA?true:false"></switch></view>
 				</view>
 				<view class="cu-form-group">
 					<view>课程状态</view>
@@ -88,7 +88,14 @@
 						@click="onSetCourseState('2')" :disabled="this.course.state == 2">结束班课</button>
 				<button class="margin-top bg-cyan lg" v-show="this.course.state == 2" @click="onDelCourse()">删除班课</button>
 			</view>
-			
+			<view class="cu-bar bg-white justify-center margin-top solid-bottom">
+				二维码
+			</view>
+			<view class="qr-container cu-form-group">
+				
+				<canvas canvas-id="qrcode" id="qrcode" @click="onPreiewImg"></canvas>
+			</view>
+		
 		</view>
     </view>
 </template>
@@ -106,7 +113,7 @@
 				cno:'',
 				qrc:{// 二维码配置
 					id: 'qrcode', // canvas的canvas-id
-					size: 25, // 二维码大小
+					size: 0, // 二维码大小
 					level: 4, //等级 0～4
 					bgColor: '#FFFFFF', //二维码背景色 默认白色
 					iconSize: 10, //二维码图标的大小
@@ -123,11 +130,12 @@
 				picker: ['2020-2021-1', '2020-2021-2', '2021-2022-1', '2021-2022-2'],
 				semesterIndex: '',
 				role:'',
+				qrcodeUrl:"",
 			}
 		},
 		onLoad(option) {
 			const { windowWidth, windowHeight } = uni.getSystemInfoSync();
-			this.qrc.size=windowWidth*0.06;
+			this.qrc.size=windowWidth*0.6;
 			this.cid = option.cid
 			this.role = option.role
 			console.log(this.courseID)
@@ -154,14 +162,22 @@
 				this.page = 0;
 				let url = '/courses/' + this.course.id + '/students';
 				console.log("uid:" + url)
+				uni.showLoading({
+					
+				})
 				let res = await this.http.get(url, null)
+				uni.hideLoading()
 				this.students = res.data.content
 			},
 			async onGetTasks() {
 				this.page = 1;
 				let url = '/checkin-tasks/courses/' + this.course.id;
 				console.log("uid:" + url)
+				uni.showLoading({
+					
+				})
 				let res = await this.http.get(url, null)
+				uni.hideLoading()
 				this.tasks = res.data.content
 				console.log("签到任务列表：" , this.tasks)
 			},
@@ -219,14 +235,13 @@
 				})
 			},
 			findCan () {
-				CODE.QRCode({...this.qrc,code: this.course.code});
-			},
-			onPreiewImg() {
+				CODE.QRCode({...this.qrc,code: this.course.code})
+				qrcodeUrl
 				uni.canvasToTempFilePath({
 					canvasId: 'qrcode',
 					fileType: 'png',
-					destWidth: 200,
-					destHeight:200,
+					destWidth: 100,
+					destHeight:100,
 					success: function(res) {
 						console.log(res.tempFilePath)
 						this.imageUrl = res.tempFilePath
@@ -239,6 +254,9 @@
 					fail: function(error) {
 						console.log(error)
 					},})
+			},
+			onPreiewImg() {
+				
 				
 			}
 		}
@@ -276,24 +294,34 @@
 		height: 50upx;
 		border-radius: 50%;
 	}
-	.edit {justify-content:space-between;font-size: 100rpx;
-		text {color:#0FAEFF}
+	.edit {
+		// justify-content:space-between;
+		// font-size: 100rpx;
+		color:#0FAEFF;
+		position: absolute;
+		right: 10rpx;
 	}
 	.describe {
 		font-size: 30rpx;
 		line-height: 70rpx;
 	}
 	input {text-align: right;font-size: 28rpx;color: #aaaaaa;}
-	.qrcode {
-	    height: 35rpx;
-	    display: flex;
-	    flex-direction: column;
-	    justify-content: center;
-	    align-items: center;
-	}
+	// .qrcode {
+	//     height: 350rpx;
+	//     display: flex;
+	//     flex-direction: column;
+	//     justify-content: center;
+	//     align-items: center;
+	// }
 	#qrcode{
-	    width: 35rpx;
-	    height: 35rpx;
+	    width: 60%;
+	    height: 460rpx;
 	    background-color: #fff;
 	}
+	.qr-container{
+		margin-bottom: 10rpx;
+		min-height: 460rpx;
+		display: flex;
+			justify-content: center;
+		}
 </style>

@@ -1,5 +1,5 @@
-const BASE_URL = 'https://attendance.keepdev.top/api'
-const BASE_HOST = 'https://attendance.keepdev.top'
+let BASE_URL = 'https://attendance.keepdev.top/api'
+let BASE_HOST = 'https://attendance.keepdev.top'
 //const BASE_URL = 'http://172.17.169.27:8080'
 const NOAUTH_URL = ['/auth/login', '/', '/version', '/echo']
 const OVERRIDED_METHODS = ['PUT', 'DELETE', 'PATCH']
@@ -7,6 +7,10 @@ const OVERRIDED_METHODS = ['PUT', 'DELETE', 'PATCH']
  *  Http Promise 封装
  */
 const http = {
+	setBaseUrl:(url)=>{
+		BASE_URL = url;
+	},
+	getBaseUrl:()=>BASE_URL,
 	request(method, url, data, header = {}) {
 		return new Promise((reslove, reject) => {
 			uni.request({

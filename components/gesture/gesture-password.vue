@@ -192,6 +192,12 @@
 					});
 				}
 			})
+			uni.$on('clearDraw',()=>{
+				this.clearDraw();
+			})
+		},
+		destroyed(){
+			uni.$off('clearDraw',()=>{})
 		}
 	}
 </script>

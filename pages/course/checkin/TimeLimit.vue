@@ -32,7 +32,7 @@
 		<view>
 			<!-- <stu-list name="张三" number="200327062" descrip="已签到"></stu-list> -->
 			<view v-for="(item,index) in stuList" :key="item.id">
-				<stu :name="item.stuName" :number="item.stuId" descrip="已签到"></stu>
+				<stu :name="item.stuName" :number="item.stuId" descrip="已签到" :distance="item.distance"></stu>
 			</view>
 		</view>
 		<!-- 手动结束签到按钮 -->
@@ -57,20 +57,40 @@
 				timesIndex: [0,1],
 				isStart: true,edit: false,
 				setMin: 0,setHour: 0,
-				checkStudents: '',
+				checkStudents: [],
 				courseId:'',
 				address: [],
 				current: '',deadline: '',
-				timer:null,timer2:null,
+				timer:null,
 				taskId: '',
 				stuList: '',
 			}
 		},
 		async onLoad(option) {
-			this.address = await getMyLocation();
 			this.courseId = option.courseId
+			console.log(this.courseId,option.courseId)
+			this.address = await getMyLocation();
+		},
+		
+		onHide(){
+			console.log(" hide")
+			this.stopTimer();
+		},
+		onUnload(){
+			console.log(" unload")
+			this.stopTimer();
+		},
+			
+		onShow() {
+			
 		},
 		methods: {
+			stopTimer(){
+				if(this.timer){
+					clearInterval(this.timer)
+					this.timer = null;
+				}
+			},
 			bindTimeChange(e){
 				console.log('picker发送选择改变，携带值为', e.target.value)
 				this.timesIndex = e.target.value
@@ -94,29 +114,32 @@
 				this.taskId = res.data.id
 				this.isStart = false
 				const that = this
+				uni.$once('timeup',() => {
+					console.log('监听到事件来自 finish ，携带参数 msg 为：')
+					that.finish("时间到")
+				})
 				//监听倒计时是否结束
-				that.timer = setInterval(() => {
-					console.log("start")
-					uni.$on('finish',function(data){
-						console.log('监听到事件来自 finish ，携带参数 msg 为：' + data.msg)
-						that.finish()
-					})
-				}, 1000);
+				// that.timer = setInterval(() => {
+				// 	console.log("start")
+					
+				// }, 1000);
 				//刷新学生签到列表
-				that.timer2 = setInterval(() => {
+				that.timer = setInterval(() => {
 					that.getStudentList()
-				}, 10000);
+				}, 3000);
 			},
 
-			finish() {
-				clearInterval(this.timer)
-				clearInterval(this.timer2)
+			finish(title="提示") {
+				
+				// 手动结束和时间到都会调用
+				this.stopTimer();
 				console.log("结束签到")
 				var url = "/checkin-tasks/" + this.taskId + "/ended"
 				// let res = await this.http.post(url,null)
 				uni.showModal({
-					title: '提示',
+					title,
 					content: '签到结束',
+					
 					success: function (res) {
 					    if (res.confirm) {
 							uni.switchTab({
@@ -124,6 +147,10 @@
 							})		
 						}
 					}
+				})
+				this.isStart = false
+				uni.navigateTo({
+					url:"./CheckinResult?taskId="+this.taskId
 				})
 			},
 			//获取签到的学生列表----定时刷新

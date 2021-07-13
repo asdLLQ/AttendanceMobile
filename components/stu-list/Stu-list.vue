@@ -12,8 +12,11 @@
 				<view >{{name}}</view>
 				<view class="text-gray">{{number}}</view>
 			</view>
-			<view class="score flex">
-				<view class="text-orange flex">{{descrip}}
+			<view class="content">
+				<view class="text-orange ">{{descrip}}
+					<!-- <view class="cuIcon-right"></view> -->
+				</view>
+				<view v-if="distance!==''" class="text-gray ">{{distance.toFixed(1)}} m
 					<!-- <view class="cuIcon-right"></view> -->
 				</view>
 			</view>
@@ -44,6 +47,10 @@
 				type: String,
 				default: '/static/default.png'
 			},
+			distance:{
+				type:String,
+				default:""
+			}
 			
 		},
 		data() {

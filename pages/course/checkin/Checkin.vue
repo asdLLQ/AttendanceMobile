@@ -13,8 +13,8 @@
 	export default {
 		async onLoad(option) {
 			this.taskId = option.taskId
-			this.address = await getMyLocation()
-			this.uid = await uni.getStorageSync("uid")
+			this.uid = uni.getStorageSync("uid")
+			this.address =  await getMyLocation()
 		},
 		data() {
 			return {
@@ -37,13 +37,16 @@
 				let res = await this.http.post(url,data)
 				console.log("签到结果：" , res.data)
 				console.log(res.data.id)
-				uni.showToast({
-					icon:'none',
-					title:"签到成功"
-				})
-				uni.switchTab({
-					url: '../List'
-				})
+				uni.showModal({
+				    title:"签到成功！！",
+				   showCancel:false,
+				    success: function (res) {
+				        uni.switchTab({
+				        	url: '../List'
+				        })
+				    }
+				});
+			
 			}
 		}
 	}

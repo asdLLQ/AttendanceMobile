@@ -15,7 +15,7 @@
 				<view>{{checkStudents.length}}人</view>
 			</view>
 			<view v-for="(item,index) in checkStudents" :key="item.id">
-				<stu :name="item.stuName" :number="item.stuId" :descrip="item.experience + '经验值'"></stu>
+				<stu :name="item.stuName" :number="item.stuId" :descrip="item.experience + '经验值'" :distance="item.distance"></stu>
 			</view>
 		</view>
 		<view  class="margin-top">
@@ -57,7 +57,9 @@
 				console.log("未签到的学生列表" , res.data.content)
 			},
 			onReturn() {
-				uni.navigateBack({})
+				uni.switchTab({
+					url:"../List"
+				})
 			}
 		}
 	}
